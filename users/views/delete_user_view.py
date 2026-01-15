@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from users.utils.anonymize_user import anonymize_user
+#from users.utils.anonymize_user import anonymize_user
 
 class DeleteUserView(APIView):
     """
@@ -18,7 +18,7 @@ class DeleteUserView(APIView):
         user = request.user
         
         try:
-            anonymize_user(user)
+            #anonymize_user(user)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             # Optionally, you could print the error for debugging purposes

@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from users.models import User
 from events.models import Event
-from events.models import Notification
 from events.utils.send_reminder_email import send_reminder_email
 
 class Command(BaseCommand):
