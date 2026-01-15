@@ -9,16 +9,6 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--faqs',
-            action='store_true',
-            help='Generate FAQs from the JSONL data file.',
-        )
-        parser.add_argument(
-            '--tiers',
-            action='store_true',
-            help='Generate Tiers and Prices from the tiers.jsonl data file.',
-        )
-        parser.add_argument(
             '--terms',
             action='store_true',
             help='Generate Terms and Conditions from HTML data files.',
