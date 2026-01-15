@@ -12,7 +12,6 @@ import { Letter } from '../components/Letter';
 import { CtaCard } from '../components/CtaCard';
 import { CreateEventLink } from '../components/CreateEventLink';
 import { Hero } from '../components/Hero';
-import { ArticleCarousel } from '../components/ArticleCarousel';
 import TrustFeature from '../components/TrustFeature';
 
 const HomePage = () => {
@@ -65,9 +64,6 @@ const HomePage = () => {
           title="Questions? We have answers."
         />
       </section>
-      <div className="mt-16" id="blog">
-        <ArticleCarousel />
-      </div>
     </main>
   );
 };
