@@ -1,7 +1,5 @@
 # ForeverFlower
 
-Calendar apps are for meetings. ForeverFlower is for consequences. Single reminders get buried, missed or just lost. ForeverFlower repeats reminders until they’re acknowledged and it uses multi-channel escalation. From email and text to emergency contacts. High stakes deadlines such as visa or IUD expiries, trademark or domain renewals and even warranties, patents or business licences, deserve to have a reminder system that treats them as life and death, not just another dentist appointment. So check out ForeverFlower today, and find out how it feels to offload the “don’t forget” part of your brain, once and for all.
-
 **Live Site:** [https://www.foreverflower.app/]
 
 ## Tech Stack
@@ -19,7 +17,7 @@ Calendar apps are for meetings. ForeverFlower is for consequences. Single remind
 The Django project is organized into several applications:
 
 *   `users`: Manages the custom user model, authentication, and user profile data including emergency contacts.
-*   `events`: Handles the creation, management, and scheduling of reminder events and their associated notifications.
+*   `events`: Handles the creation, management, and scheduling of events and handles contracts. 
 *   `payments`: Integrates with Stripe to process payments for different service tiers.
 *   `data_management`: Manages static and semi-static content like FAQs and Terms & Conditions.
 
@@ -146,9 +144,6 @@ The script performs the following actions:
 ### Custom Management Commands
 
 The project includes several custom Django management commands to help with development:
-
-*   `python manage.py generate --faqs`: Populates the database with FAQ data.
-*   `python manage.py generate --tiers`: Populates the database with pricing tier data.
 *   `python manage.py generate --terms`: Populates the database with the latest terms and conditions.
 *   `python manage.py fix_site_domains`: Corrects the domain name in the Django Sites framework, which is useful for local development.
 
