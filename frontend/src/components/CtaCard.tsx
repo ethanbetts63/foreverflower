@@ -1,44 +1,67 @@
-import React, { useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useState, useMemo } from 'react';
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 
+// Define a type for the breakdown for better type safety
+type Breakdown = {
+  fee_per_delivery: number;
+  years: number;
+  deliveries_per_year: number;
+  // include other properties if needed
+};
+
 export const CtaCard: React.FC = () => {
+  const [view, setView] = useState<'upfront' | 'subscription'>('upfront');
+  
+  // Shared state
   const [bouquetBudget, setBouquetBudget] = useState(75);
   const [deliveriesPerYear, setDeliveriesPerYear] = useState(1);
+  
+  // Upfront-only state
   const [years, setYears] = useState(5);
 
+  // API/Calculation result state
   const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
+  const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleCalculate = async () => {
+  // --- Instant Calculations for Subscription view ---
+  const feePerDelivery = useMemo(() => Math.max(bouquetBudget * 0.05, 15), [bouquetBudget]);
+  const pricePerDelivery = useMemo(() => bouquetBudget + feePerDelivery, [bouquetBudget, feePerDelivery]);
+
+  // --- Discount Calculation for Upfront view ---
+  const upfrontDiscount = useMemo(() => {
+    if (!upfrontPrice || !breakdown) return null;
+    const totalSubscriptionCost = (breakdown.fee_per_delivery + bouquetBudget) * breakdown.deliveries_per_year * breakdown.years;
+    if (totalSubscriptionCost === 0) return null;
+    const discount = (1 - (upfrontPrice / totalSubscriptionCost)) * 100;
+    return Math.round(discount);
+  }, [upfrontPrice, breakdown, bouquetBudget]);
+  
+  // --- API Handler ---
+  const handleCalculateUpfront = async () => {
     setIsLoading(true);
     setError(null);
     setUpfrontPrice(null);
+    setBreakdown(null);
 
     try {
       const response = await fetch('/api/events/calculate-price/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bouquet_budget: bouquetBudget,
           deliveries_per_year: deliveriesPerYear,
           years: years,
         }),
       });
-
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong');
-      }
-
+      if (!response.ok) throw new Error(data.error || 'Something went wrong');
       setUpfrontPrice(data.upfront_price);
-
+      setBreakdown(data.breakdown);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -46,66 +69,67 @@ export const CtaCard: React.FC = () => {
     }
   };
 
+  const renderUpfrontCalculator = () => (
+    <>
+      <div className="space-y-6">
+        <div className="grid gap-2">
+          <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
+          <Slider id="budget-slider" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
+          <Slider id="deliveries-slider" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
+          <Slider id="years-slider" min={1} max={25} step={1} value={[years]} onValueChange={(v) => setYears(v[0])} />
+        </div>
+      </div>
+      <div className="mt-6 text-center">
+        <Button onClick={handleCalculateUpfront} disabled={isLoading} className="w-full">{isLoading ? 'Calculating...' : 'Calculate Upfront Cost'}</Button>
+      </div>
+      <div className="mt-4 text-center h-12 flex flex-col items-center justify-center">
+        {upfrontPrice !== null && (
+          <>
+            <div className="text-2xl font-bold">${upfrontPrice.toLocaleString()}</div>
+            {upfrontDiscount !== null && <p className="text-xs text-gray-600">That's a ~{upfrontDiscount}% savings compared to paying per delivery!</p>}
+          </>
+        )}
+        {error && <div className="text-red-500 text-sm">{error}</div>}
+      </div>
+    </>
+  );
+
+  const renderSubscriptionCalculator = () => (
+    <>
+      <div className="space-y-6">
+        <div className="grid gap-2">
+          <Label htmlFor="budget-slider-sub" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
+          <Slider id="budget-slider-sub" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="deliveries-slider-sub" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
+          <Slider id="deliveries-slider-sub" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
+        </div>
+      </div>
+       <div className="mt-4 pt-4 border-t border-gray-200 text-center">
+        <Label className="text-sm text-gray-600">Price Per Delivery</Label>
+        <div className="text-2xl font-bold mt-1">${pricePerDelivery.toFixed(2)}</div>
+         <p className="text-xs text-gray-600 mt-2">Planning for {years} years or more? Switch to 'Pay Upfront' to save on the total cost.</p>
+       </div>
+    </>
+  );
+
   return (
     <Card className="w-full bg-white text-gray-900 rounded-none sm:rounded-xl border-0">
-      <CardContent className="p-6 text-black">
-        <h2 className="text-xl font-bold mb-4 text-center">Price Calculator</h2>
-        
-        <div className="space-y-6">
-          {/* Bouquet Budget Slider */}
-          <div className="grid gap-2">
-            <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
-            <Slider
-              id="budget-slider"
-              min={75}
-              max={500}
-              step={5}
-              value={[bouquetBudget]}
-              onValueChange={(value) => setBouquetBudget(value[0])}
-            />
-          </div>
-
-          {/* Deliveries Per Year Slider */}
-          <div className="grid gap-2">
-            <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
-            <Slider
-              id="deliveries-slider"
-              min={1}
-              max={12}
-              step={1}
-              value={[deliveriesPerYear]}
-              onValueChange={(value) => setDeliveriesPerYear(value[0])}
-            />
-          </div>
-
-          {/* Years Slider */}
-          <div className="grid gap-2">
-            <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
-            <Slider
-              id="years-slider"
-              min={1}
-              max={25}
-              step={1}
-              value={[years]}
-              onValueChange={(value) => setYears(value[0])}
-            />
-          </div>
+      <CardHeader className="p-4">
+        <div className="flex justify-center bg-muted p-1 rounded-md">
+          <button onClick={() => setView('upfront')} className={`w-1/2 px-4 py-2 text-sm font-bold rounded ${view === 'upfront' ? 'bg-primary text-primary-foreground' : 'text-black'}`}>Pay Upfront</button>
+          <button onClick={() => setView('subscription')} className={`w-1/2 px-4 py-2 text-sm font-bold rounded ${view === 'subscription' ? 'bg-primary text-primary-foreground' : 'text-black'}`}>Subscription</button>
         </div>
-
-        <div className="mt-6 text-center">
-          <Button onClick={handleCalculate} disabled={isLoading} className="w-full">
-            {isLoading ? 'Calculating...' : 'Calculate Upfront Cost'}
-          </Button>
-        </div>
-
-        <div className="mt-4 text-center h-12 flex items-center justify-center">
-          {upfrontPrice !== null && (
-            <div className="text-2xl font-bold">
-              ${upfrontPrice.toLocaleString()}
-            </div>
-          )}
-          {error && <div className="text-red-500 text-sm">{error}</div>}
-        </div>
+      </CardHeader>
+      <CardContent className="p-4 pt-0 text-black">
+        {view === 'upfront' ? renderUpfrontCalculator() : renderSubscriptionCalculator()}
       </CardContent>
     </Card>
   );
