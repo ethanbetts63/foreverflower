@@ -42,16 +42,16 @@
 }
 
 :root {
+  --primary: #97b29e;
+  --secondary: oklch(84.524% 0.0603 334.948);
   --radius: 0.625rem;
-  --background: oklch(0.25 0.08 264);
+  --background: oklch(84.001% 0.04865 356.6);
   --foreground: oklch(0.95 0.01 264);
   --card: oklch(0.28 0.08 264);
   --card-foreground: oklch(0.98 0.01 264);
   --popover: oklch(0.22 0.07 264);
   --popover-foreground: oklch(0.98 0.01 264);
-  --primary: oklch(0.53 0.21 264);
   --primary-foreground: oklch(0.99 0.01 264);
-  --secondary: oklch(0.35 0.07 264);
   --secondary-foreground: oklch(0.98 0.01 264);
   --muted: oklch(0.35 0.07 264);
   --muted-foreground: oklch(0.7 0.02 264);
