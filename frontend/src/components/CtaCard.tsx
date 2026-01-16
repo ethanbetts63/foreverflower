@@ -113,7 +113,7 @@ export const CtaCard: React.FC = () => {
   );
 
   return (
-    <Card className="w-full bg-white text-gray-900 rounded-none sm:rounded-xl border-0">
+    <Card className="w-full bg-white shadow-md text-gray-900 rounded-none sm:rounded-xl border-0">
       <CardHeader className="p-4 text-center">
         <h2 className="font-bold text-3xl italic text-black font-['Playfair_Display',_serif] mb-4">
           FOREVERFLOWER

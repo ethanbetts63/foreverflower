@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const NavBar: React.FC = () => {
   return (
-    <header className="sticky top-0 z-50 w-full border-[var(--color3)] bg-[var(--color3)]">
+    <header className="sticky top-0 z-50 w-full border-[var(--color2)] bg-[var(--color3)]">
       <div className="relative flex h-20 w-full items-center justify-end px-4">
         
         {/* Center Title */}
