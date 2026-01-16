@@ -1,4 +1,4 @@
-import heroImage from '../assets/hero.png';
+import heroImage from '../assets/hero1.png';
 
 import Seo from '../components/Seo';
 import { ProductCarousel } from '../components/ProductCarousel';

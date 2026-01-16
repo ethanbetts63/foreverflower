@@ -15,7 +15,7 @@ export const CreateEventLink: React.FC<CreateEventLinkProps> = ({ children, clas
       to="/event-gate"
       className={cn(buttonVariants({ variant, size, className }))}
     >
-      {children || 'Secure Your Reminder'}
+      {children || 'Create Event'}
     </Link>
   );
 };
