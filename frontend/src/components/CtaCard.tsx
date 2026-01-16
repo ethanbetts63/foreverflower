@@ -9,6 +9,7 @@ type Breakdown = {
   fee_per_delivery: number;
   years: number;
   deliveries_per_year: number;
+  upfront_savings_percentage: number;
   // include other properties if needed
 };
 
@@ -32,15 +33,6 @@ export const CtaCard: React.FC = () => {
   const feePerDelivery = useMemo(() => Math.max(bouquetBudget * 0.05, 15), [bouquetBudget]);
   const pricePerDelivery = useMemo(() => bouquetBudget + feePerDelivery, [bouquetBudget, feePerDelivery]);
 
-  // --- Discount Calculation for Upfront view ---
-  const upfrontDiscount = useMemo(() => {
-    if (!upfrontPrice || !breakdown) return null;
-    const totalSubscriptionCost = (breakdown.fee_per_delivery + bouquetBudget) * breakdown.deliveries_per_year * breakdown.years;
-    if (totalSubscriptionCost === 0) return null;
-    const discount = (1 - (upfrontPrice / totalSubscriptionCost)) * 100;
-    return Math.round(discount);
-  }, [upfrontPrice, breakdown, bouquetBudget]);
-  
   // --- API Handler ---
   const handleCalculateUpfront = async () => {
     setIsLoading(true);
@@ -92,7 +84,7 @@ export const CtaCard: React.FC = () => {
         {upfrontPrice !== null && (
           <>
             <div className="text-2xl font-bold">${upfrontPrice.toLocaleString()}</div>
-            {upfrontDiscount !== null && <p className="text-xs text-gray-600">That's a ~{upfrontDiscount}% savings compared to paying per delivery!</p>}
+            {breakdown?.upfront_savings_percentage && <p className="text-xs text-gray-600">That's a ~{breakdown.upfront_savings_percentage}% savings compared to paying per delivery!</p>}
           </>
         )}
         {error && <div className="text-red-500 text-sm">{error}</div>}
@@ -122,7 +114,10 @@ export const CtaCard: React.FC = () => {
 
   return (
     <Card className="w-full bg-white text-gray-900 rounded-none sm:rounded-xl border-0">
-      <CardHeader className="p-4">
+      <CardHeader className="p-4 text-center">
+        <h2 className="font-bold text-3xl italic text-black font-['Playfair_Display',_serif] mb-4">
+          FOREVERFLOWER
+        </h2>
         <div className="flex justify-center bg-muted p-1 rounded-md">
           <button onClick={() => setView('upfront')} className={`w-1/2 px-4 py-2 text-sm font-bold rounded ${view === 'upfront' ? 'bg-primary text-primary-foreground' : 'text-black'}`}>Pay Upfront</button>
           <button onClick={() => setView('subscription')} className={`w-1/2 px-4 py-2 text-sm font-bold rounded ${view === 'subscription' ? 'bg-primary text-primary-foreground' : 'text-black'}`}>Subscription</button>

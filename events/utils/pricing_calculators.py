@@ -4,7 +4,7 @@ def forever_flower_upfront_price(
     years,                 # N
     commission_pct=0.05,   # 5%
     min_fee_per_delivery=15,
-    annual_real_return=0.02,  # r (conservative)
+    annual_real_return=0.04,  # r (conservative)
 ):
     """
     Returns:
@@ -31,6 +31,16 @@ def forever_flower_upfront_price(
     upfront_price = total_cost_year * annuity_factor
     total_service_fee = fee_year * annuity_factor
 
+    # For comparison, calculate the total nominal cost if paid via subscription
+    price_per_delivery = bouquet_budget + fee_per_delivery
+    total_subscription_cost = price_per_delivery * deliveries_per_year * N
+    
+    # Calculate the savings percentage
+    if total_subscription_cost > 0:
+        savings_percentage = (1 - (upfront_price / total_subscription_cost)) * 100
+    else:
+        savings_percentage = 0
+
     breakdown = {
         "flower_cost_year": flower_cost_year,
         "fee_year": fee_year,
@@ -39,6 +49,7 @@ def forever_flower_upfront_price(
         "total_service_fee": round(total_service_fee, 2),
         "assumed_return": r,
         "years": N,
+        "upfront_savings_percentage": round(savings_percentage),
     }
 
     return round(upfront_price, 2), breakdown

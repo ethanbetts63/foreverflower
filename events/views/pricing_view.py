@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from data_management.utils.pricing_calculators import forever_flower_upfront_price
+from events.utils.pricing_calculators import forever_flower_upfront_price
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
