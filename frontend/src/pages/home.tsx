@@ -1,9 +1,4 @@
-import heroImage from '../assets/hero.webp';
-import hero320 from '../assets/hero-320w.webp';
-import hero640 from '../assets/hero-640w.webp';
-import hero768 from '../assets/hero-768w.webp';
-import hero1024 from '../assets/hero-1024w.webp';
-import hero1280 from '../assets/hero-1280w.webp';
+import heroImage from '../assets/hero.png';
 
 import Seo from '../components/Seo';
 import { ProductCarousel } from '../components/ProductCarousel';
@@ -12,7 +7,6 @@ import { Letter } from '../components/Letter';
 import { CtaCard } from '../components/CtaCard';
 import { CreateEventLink } from '../components/CreateEventLink';
 import { Hero } from '../components/Hero';
-import TrustFeature from '../components/TrustFeature';
 
 const HomePage = () => {
   return (
@@ -24,10 +18,9 @@ const HomePage = () => {
         ogImage="/og-images/og-homepage.webp"
       />
       <Hero
-        title={<>Reminders that don't take <span className='italic'>silence</span> for an answer.</>}
-        subtitle={<>Calendars are for time management. ForeverFlower is for risk management.  When a critical deadline hits, we don't just ping you—we trigger an <span className= "italic font-bold underline">escalating hierarchy of notifications</span> — from emails to emergency contacts. </>}
+        title={<>The gift that <span className='italic'>keeps</span> on giving.</>}
+        subtitle={<>The most romantic gestures are those that plan for a future together. Choose the date, set the budget, and we quietly ensure flowers are delivered year after year - turning one decision into a lifetime of meaningful moments. <span className= "italic font-bold underline"></span></>}
         imageSrc={heroImage}
-        srcSet={`${hero320} 320w, ${hero640} 640w, ${hero768} 768w, ${hero1024} 1024w, ${hero1280} 1280w`}
         imageAlt="A man sinking into a wormhole, sorrounded by examples of missed deadlines, to symbolize forgetting important events"
         ctaElement={<CreateEventLink size="lg" className="text-lg" />}
       />
@@ -43,9 +36,6 @@ const HomePage = () => {
         {/* Main Content Column (2/3 width) */}
         <div className="lg:col-span-2 bg-background text-primary-foreground rounded-lg px-0 sm:p-8 md:p-8 lg:p-8 flex flex-col gap-0 sm:gap-8">
           <Letter />
-          <section>
-            <TrustFeature />
-          </section>
           <section className="lg:hidden">
             <CtaCard />
           </section>
