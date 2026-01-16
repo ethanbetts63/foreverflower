@@ -4,6 +4,7 @@ import { FaqV2 } from '../components/FaqV2';
 import { Letter } from '../components/Letter';
 import { CtaCard } from '../components/CtaCard';
 import { HeroV2 } from '../components/HeroV2';
+import { DeliverySection } from '../components/DeliverySection';
 
 
 const HomePage = () => {
@@ -24,6 +25,8 @@ const HomePage = () => {
       <section className="bg-primary mb-10">
         <ProductCarousel />
       </section>
+
+      <DeliverySection />
 
 
 
