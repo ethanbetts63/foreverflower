@@ -1,14 +1,10 @@
-import heroImage from '../assets/hero1.png';
-
 import Seo from '../components/Seo';
 import { ProductCarousel } from '../components/ProductCarousel';
 import { FaqV2 } from '../components/FaqV2';
 import { Letter } from '../components/Letter';
 import { CtaCard } from '../components/CtaCard';
-import { CreateEventLink } from '../components/CreateEventLink';
-import { Hero } from '../components/Hero';
 import { HeroV2 } from '../components/HeroV2';
-import { PriceCalculator } from '../components/PriceCalculator';
+
 
 const HomePage = () => {
   return (
@@ -29,12 +25,7 @@ const HomePage = () => {
         <ProductCarousel />
       </section>
 
-      {/* --- Price Calculator Section --- */}
-      <section className="py-12 md:py-20">
-        <div className="container mx-auto px-4">
-          <PriceCalculator />
-        </div>
-      </section>
+
 
       {/* --- Main Content & Sticky Sidebar --- */}
       <div className="container mx-auto px-0 sm:px-4 lg:grid lg:grid-cols-3 lg:gap-8">

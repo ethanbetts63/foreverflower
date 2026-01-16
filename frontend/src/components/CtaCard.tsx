@@ -1,120 +1,110 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Check } from 'lucide-react';
-import logo from '../assets/logo.webp';
-import logo320 from '../assets/logo-320w.webp';
-import logo640 from '../assets/logo-640w.webp';
-import logo768 from '../assets/logo-768w.webp';
-import logo1024 from '../assets/logo-1024w.webp';
-import logo1280 from '../assets/logo-1280w.webp';
-import { CreateEventLink } from './CreateEventLink';
-
-const tierData = {
-  automated: {
-    name: 'Automated',
-    price: '$0.00',
-    features: [
-      "Primary emails",
-      "Secondary emails",
-      "Text via primary mobile",
-    ],
-  },
-  advanced: {
-    name: 'Advanced',
-    price: '$4.99',
-    features: [
-      "Everything in Automated",
-      "Secondary phone number",
-      "Emergency contact",
-      "Phone calls",
-    ],
-  },
-  fullEscalation: {
-    name: 'Full Escalation',
-    price: '$8.99',
-    features: [
-      "Everything in Advanced",
-      "Manual admin outreach via social media"
-    ],
-  }
-};
-
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
 
 export const CtaCard: React.FC = () => {
-  const [selectedTier, setSelectedTier] = useState<'automated' | 'advanced' | 'fullEscalation'>('advanced');
+  const [bouquetBudget, setBouquetBudget] = useState(75);
+  const [deliveriesPerYear, setDeliveriesPerYear] = useState(1);
+  const [years, setYears] = useState(5);
 
-  const currentTier = tierData[selectedTier];
+  const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleCalculate = async () => {
+    setIsLoading(true);
+    setError(null);
+    setUpfrontPrice(null);
+
+    try {
+      const response = await fetch('/api/events/calculate-price/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bouquet_budget: bouquetBudget,
+          deliveries_per_year: deliveriesPerYear,
+          years: years,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong');
+      }
+
+      setUpfrontPrice(data.upfront_price);
+
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Card className="w-full bg-white text-gray-900 rounded-none sm:rounded-xl border-0">
-      <CardHeader className="text-center">
-        <div className="flex justify-center items-center gap-3 mb-4">
-            <div className="flex items-center justify-center h-12 w-12 bg-primary rounded-lg">
-                    <img
-                        width="367"
-                        height="367"
-                        src={logo}
-                        srcSet={`${logo320} 320w, ${logo640} 640w, ${logo768} 768w, ${logo1024} 1024w, ${logo1280} 1280w`}
-                        sizes="48px"
-                        alt="Future Reminder Logo"
-                        className="h-full w-full object-contain"
-                    />
-            </div>
-            <h2 className="text-3xl leading-none font-semibold"><span className="bg-primary text-primary-foreground px-2 py-1 rounded-md italic underline">ForeverFlower</span></h2>
+      <CardContent className="p-6 text-black">
+        <h2 className="text-xl font-bold mb-4 text-center">Price Calculator</h2>
+        
+        <div className="space-y-6">
+          {/* Bouquet Budget Slider */}
+          <div className="grid gap-2">
+            <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
+            <Slider
+              id="budget-slider"
+              min={75}
+              max={500}
+              step={5}
+              value={[bouquetBudget]}
+              onValueChange={(value) => setBouquetBudget(value[0])}
+            />
+          </div>
+
+          {/* Deliveries Per Year Slider */}
+          <div className="grid gap-2">
+            <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
+            <Slider
+              id="deliveries-slider"
+              min={1}
+              max={12}
+              step={1}
+              value={[deliveriesPerYear]}
+              onValueChange={(value) => setDeliveriesPerYear(value[0])}
+            />
+          </div>
+
+          {/* Years Slider */}
+          <div className="grid gap-2">
+            <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
+            <Slider
+              id="years-slider"
+              min={1}
+              max={25}
+              step={1}
+              value={[years]}
+              onValueChange={(value) => setYears(value[0])}
+            />
+          </div>
         </div>
 
-        {/* Tier Switcher */}
-        <div className="flex justify-center bg-muted p-1 rounded-md">
-          <button 
-            onClick={() => setSelectedTier('automated')}
-            className={`w-1/3 px-4 py-2 text-sm font-bold rounded ${selectedTier === 'automated' ? 'bg-primary text-primary-foreground' : 'text-white'}`}
-          >
-            Automated
-          </button>
-          <button
-            onClick={() => setSelectedTier('advanced')}
-            className={`w-1/3 px-4 py-2 text-sm font-bold rounded ${selectedTier === 'advanced' ? 'bg-primary text-primary-foreground' : 'text-white'}`}
-          >
-            Advanced
-          </button>
-          <button 
-            onClick={() => setSelectedTier('fullEscalation')}
-            className={`w-1/3 px-4 py-2 text-sm font-bold rounded ${selectedTier === 'fullEscalation' ? 'bg-primary text-primary-foreground' : 'text-white'}`}
-          >
-            Full Escalation
-          </button>
+        <div className="mt-6 text-center">
+          <Button onClick={handleCalculate} disabled={isLoading} className="w-full">
+            {isLoading ? 'Calculating...' : 'Calculate Upfront Cost'}
+          </Button>
         </div>
-      </CardHeader>
-      <CardContent className="px-4 sm:px-6">
-        <div className="flex flex-col gap-4">
-            <p className="text-center text-3xl font-bold mt-2">
-              {currentTier.price}
-              {(selectedTier === 'advanced' || selectedTier === 'fullEscalation') && (
-                <span className="text-base font-normal text-grey-600 ml-2">
-                  (per event)
-                </span>
-              )}
-            </p>
-            <div>
-                <h3 className="font-semibold text-md mb-2">What’s included?</h3>
-                <ul className="space-y-2 text-sm">
-                    {currentTier.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2">
-                            <Check className="h-4 w-4 mt-1 text-green-500 flex-shrink-0" />
-                            <span>{feature}</span>
-                        </li>
-                    ))}
-                </ul>
+
+        <div className="mt-4 text-center h-12 flex items-center justify-center">
+          {upfrontPrice !== null && (
+            <div className="text-2xl font-bold">
+              ${upfrontPrice.toLocaleString()}
             </div>
-            <div>
-                <h3 className="font-semibold text-md mb-2">How does it work?</h3>
-                <p className="text-sm">
-                    We need as many ways to contact you as possible, the name and date of the event and when you want the reminders to start.
-                </p>
-            </div>
-            <CreateEventLink className="w-full h-12 text-lg mt-2">
-              Secure Your Reminder
-            </CreateEventLink>
+          )}
+          {error && <div className="text-red-500 text-sm">{error}</div>}
         </div>
       </CardContent>
     </Card>
