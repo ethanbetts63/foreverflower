@@ -22,11 +22,7 @@ const featurePoints = [
 export const ProductCarousel = () => {
   return (
     <div className="w-full py-6">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold tracking-tight text-center text-primary-foreground mb-2">The FOREVERFLOWER System</h2>
-        <p className="text-lg text-primary-foreground text-center mb-8">
-            Never forget an important occasion again. Set up your flower deliveries once, and we'll handle the rest.
-        </p>
+      <div className="container mx-auto px-4 pt-4">
         <div className="flex flex-wrap justify-center gap-6 pb-4">
           {featurePoints.map((item) => (
             <div key={item.level} className="flex-shrink-0 w-80 bg-white rounded-xl shadow-md p-6 transform transition-transform hover:-translate-y-1">
