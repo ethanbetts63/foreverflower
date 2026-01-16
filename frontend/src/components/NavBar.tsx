@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const NavBar: React.FC = () => {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-[var(--color4)] bg-[var(--color3)]">
       <div className="container flex h-20 items-center px-4">
         
         {/* Left Spacer */}
@@ -12,7 +12,7 @@ const NavBar: React.FC = () => {
 
         {/* Center Title */}
         <div className="flex-1 text-center">
-            <Link to="/" className="font-bold text-2xl italic">
+            <Link to="/" className="font-bold text-4xl italic text-black font-['Playfair_Display',_serif]">
                 FOREVERFLOWER
             </Link>
         </div>

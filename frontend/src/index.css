@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -49,7 +50,7 @@
   --color3: hsl(347, 100%, 87%);
   --color4: hsl(353, 100%, 98%);
   --radius: 0.625rem;
-  --background: hsl(0, 0%, 98%);
+  --background: white;
   --foreground: oklch(0.95 0.01 264);
   --card: #86A788;
   --card-foreground: oklch(0.98 0.01 264);
@@ -95,5 +96,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Playfair Display', serif;
   }
 }
