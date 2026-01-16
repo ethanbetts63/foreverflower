@@ -19,7 +19,7 @@ const HomePage = () => {
       />
       <HeroV2
         title={<>The gift that <span className='italic'>keeps</span> on giving.</>}
-        subtitle={<>The most romantic gestures are those that plan for a future together. Choose the date, set the budget, and we quietly ensure flowers are delivered year after year - turning one decision into a lifetime of meaningful moments.</>}
+        subtitle={<>The most romantic gestures are those that plan for a future together. Choose the date, set the budget, and we ensure flowers are delivered year after year - turning one decision into a lifetime of meaningful moments.</>}
       />
       
       {/* --- Hierarchy Section --- */}

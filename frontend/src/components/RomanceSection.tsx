@@ -6,7 +6,7 @@ const features = [
   "Our service is discreet. You won't find our branding on the bouquets, preserving the personal touch of your gesture.",
   "Include a unique, personal message with each delivery, or write one timeless note. It's your story to tell.",
   "Pay upfront and save — Organizing years worth of flowers at once means a discount, just like any bulk purchase.",
-    "Planning ahead is an act of care, not a substitute for romance. We handle the logistics so you can focus on the love."
+  "Planning ahead is an act of care, not a substitute for romance. A completely unique gift, and bespoke gift is gift that can stand out."
 ];
 
 export const RomanceSection: React.FC = () => {

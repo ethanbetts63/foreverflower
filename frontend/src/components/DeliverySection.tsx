@@ -39,7 +39,7 @@ export const DeliverySection: React.FC = () => {
             </ul>
 
             <p className="text-lg italic">
-              Our role is simple: quietly make sure flowers arrive, every time.
+              Our role is simple: make sure flowers arrive, every time.
             </p>
           </div>
         </div>

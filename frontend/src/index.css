@@ -49,6 +49,7 @@
   --color2: hsl(141, 33%, 92%);
   --color3: hsl(347, 100%, 87%);
   --color4: hsl(353, 100%, 98%);
+  --color5: hsl(347, 100%, 97%);
   --radius: 0.625rem;
   --background: white;
   --foreground: oklch(0.95 0.01 264);
@@ -94,6 +95,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Playfair Display', serif;
