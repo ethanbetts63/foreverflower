@@ -71,7 +71,7 @@ export const FaqV2: React.FC<FaqV2Props> = ({ title }) => {
           <div className="flex flex-col items-center gap-4">
             {homeFaqs.map((faq, index) => (
               <div key={index} className="w-full md:w-2/3 lg:w-2/3">
-                <Card className="bg-white text-gray-900 rounded-lg shadow-md">
+                <Card className="bg-white text-gray-900 rounded-lg shadow-lg border-0">
                   <CardContent className="p-0">
                     <div
                       className="flex justify-between items-center p-4 cursor-pointer"
