@@ -10,6 +10,18 @@ import { OtherServices } from '../components/OtherServices';
 
 
 const HomePage = () => {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ForeverFlower",
+    "url": "https://www.foreverflower.app",
+    "logo": "https://www.foreverflower.app/favicon.ico",
+    "founder": {
+      "@type": "Person",
+      "name": "Ethan Betts"
+    }
+  };
+
   return (
     <main>
       <Seo
@@ -17,6 +29,7 @@ const HomePage = () => {
         description="The most romantic gestures are those that plan for a future together. Choose the date, set the budget, and we ensure flowers are delivered year after year - turning one decision into a lifetime of meaningful moments."
         canonicalPath="/"
         ogImage="/og-images/og-homepage.webp"
+        structuredData={organizationSchema}
       />
       <HeroV2
         title={<>The gift that <span className='italic'>keeps</span> on giving.</>}
