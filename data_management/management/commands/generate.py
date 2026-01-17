@@ -1,6 +1,4 @@
 from django.core.management.base import BaseCommand
-from data_management.utils.generation_utils.faq_generator import FaqUpdateOrchestrator
-from data_management.utils.generation_utils.tier_generator import TierUpdateOrchestrator
 from data_management.utils.generation_utils.terms_generator import TermsUpdateOrchestrator
 from data_management.utils.archive_db.database_archiver import DatabaseArchiver
 
@@ -21,18 +19,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         something_generated = False
-        if options['faqs']:
-            something_generated = True
-            self.stdout.write(self.style.SUCCESS('Starting FAQ generation...'))
-            orchestrator = FaqUpdateOrchestrator(command=self)
-            orchestrator.run()
-
-        if options['tiers']:
-            something_generated = True
-            self.stdout.write(self.style.SUCCESS('Starting Tier and Price generation...'))
-            orchestrator = TierUpdateOrchestrator(command=self)
-            orchestrator.run()
-
         if options['terms']:
             something_generated = True
             self.stdout.write(self.style.SUCCESS('Starting Terms and Conditions generation...'))
@@ -47,5 +33,5 @@ class Command(BaseCommand):
 
         if not something_generated:
             self.stdout.write(self.style.WARNING(
-                'No generation flag specified. Please use --faqs, --tiers, or other available options.'
+                'No generation flag specified. Please use --terms, --archive, or other available options.'
             ))
