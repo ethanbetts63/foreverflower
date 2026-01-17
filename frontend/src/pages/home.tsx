@@ -34,32 +34,36 @@ const HomePage = () => {
 
 
       {/* --- Main Content & Sticky Sidebar --- */}
-      <div className="container bg-[var(--color4)] mx-auto px-0 sm:px-4 lg:grid lg:grid-cols-3 lg:gap-8">
-        
-        {/* Main Content Column (2/3 width) */}
-        <div className="lg:col-span-2 text-primary-foreground rounded-lg px-0 sm:p-8 md:p-8 lg:p-8 flex flex-col gap-0 sm:gap-8">
-          <Letter />
-          <section className="lg:hidden">
-            <CtaCard />
-          </section>
-        </div>
-
-        {/* Sticky Sidebar Column (1/3 width) */}
-        <aside className="hidden lg:block">
-          <div className="sticky mb-7 mt-6 top-24">
-            <CtaCard />
+      <div className="bg-[var(--color4)] py-8">
+        <div className="container mx-auto px-0 sm:px-4 lg:grid lg:grid-cols-3 lg:gap-8">
+          
+          {/* Main Content Column (2/3 width) */}
+          <div className="lg:col-span-2 text-primary-foreground rounded-lg px-0 sm:p-8 md:p-8 lg:p-8 flex flex-col gap-0 sm:gap-8">
+            <Letter />
+            <section className="lg:hidden">
+              <CtaCard />
+            </section>
           </div>
-        </aside>
 
+          {/* Sticky Sidebar Column (1/3 width) */}
+          <aside className="hidden lg:block">
+            <div className="sticky mb-7 mt-6 top-24">
+              <CtaCard />
+            </div>
+          </aside>
+
+        </div>
       </div>
 
       <OtherServices />
       
-      <section className="mb-16">
-        <FaqV2
-          title="Questions? We have answers."
-        />
-      </section>
+      <div className="bg-[var(--color4)]">
+        <section className="pb-8">
+          <FaqV2
+            title="Questions? We have answers."
+          />
+        </section>
+      </div>
     </main>
   );
 };

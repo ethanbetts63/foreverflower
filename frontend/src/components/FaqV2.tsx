@@ -65,9 +65,9 @@ export const FaqV2: React.FC<FaqV2Props> = ({ title }) => {
   return (
     <>
       {generateJsonLd()}
-      <div className="pt-20 pb-2">
+      <div className="pt-10 pb-2">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-white mb-8">{title}</h2>
+          <h2 className="text-4xl font-bold text-center text-black mb-8">{title}</h2>
           <div className="flex flex-col items-center gap-4">
             {homeFaqs.map((faq, index) => (
               <div key={index} className="w-full md:w-2/3 lg:w-2/3">
