@@ -13,8 +13,8 @@ const HomePage = () => {
   return (
     <main>
       <Seo
-        title="ForeverFlower | Persistent reminders for important or distant events."
-        description="Standard calendars fail for distant or important events. ForeverFlower uses an escalating hierarchy of notifications to ensure you never miss a critical deadline or event again."
+        title="ForeverFlower | Flower Subscription Service"
+        description="The most romantic gestures are those that plan for a future together. Choose the date, set the budget, and we ensure flowers are delivered year after year - turning one decision into a lifetime of meaningful moments."
         canonicalPath="/"
         ogImage="/og-images/og-homepage.webp"
       />
