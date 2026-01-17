@@ -20,10 +20,10 @@ const Footer: React.FC = () => {
                             <img
                                 width="367"
                                 height="367"
-                                className="h-10 w-auto"
+                                className="h-20 w-auto"
                                 src={logo}
                                 srcSet={`${logo320} 320w, ${logo640} 640w, ${logo768} 768w, ${logo1024} 1024w, ${logo1280} 1280w`}
-                                sizes="40px"
+                                sizes="80px"
                                 alt="Future Reminder Logo"
                             />
             <p className="text-sm">&copy; {currentYear} ForeverFlower. All rights reserved.</p>
