@@ -4,36 +4,27 @@ export const Letter: React.FC = () => {
   return (
     <section className="px-4 sm:px-0 pb-4 sm:pb-0">
       <div className="">
-        <h2 className="text-center text-4xl md:text-5xl font-bold tracking-tight text-primary-foreground mb-4">
-          Forgetfulness is <span className= "italic underline font-bold">expensive</span>.
+        <h2 className="text-center text-4xl md:text-5xl font-bold tracking-tight text-primary-foreground mb-8">
+          How do I say 'I love you' when I’m no longer there to say it?
         </h2>
-        <p className="italic text-center text-xl text-primary-foreground mb-8"> 
-          ForeverFlower isn't.
-        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-8 text-lg text-primary-foreground">
           <div className="flex flex-col gap-4">
             <p>
-              We all have obligations that matter far more than calendar reminders were ever designed to handle. Visa or IUD expiries, trademark or domain renewals and even warranties, patents or business licences. Things that are harmless today but catastrophic when the deadline quietly slips by.
+              I imagined a man in his sunset years, looking at the woman who walked beside him for decades. He wanted to ensure that on every anniversary after he was gone, she would <span className="font-bold">still hear his voice</span> through the language of flowers.
             </p>
             <p>
-              <span className="font-bold italic underline">Calendar apps are for dentists appointments.</span> Not high-consequence events. That gap costs people real money, real stress, and real consequences. Worst of all, it usually happens silently. You don’t realize what you forgot until the fallout arrives.
+              It felt radical, perhaps even impossible. But it was too beautiful to ignore. 
             </p>
             <p>
-               ForeverFlower exists to eliminate that silence.
-            </p>
-            <p>
-              It’s a <span className="font-bold italic underline">set-and-forget</span> system. You add something once, then forget about us. That’s the point. 
+              We built this to turn a temporary bloom into a permanent bridge—allowing love to <span className="font-bold">defy the calendar</span> and keep a promise that even time cannot break.
             </p>
           </div>
           <div className="flex flex-col gap-4">
             <p>
-              We won’t bother you until the date you tell us to. But once that date arrives, we won't stop until you acknowledge us.
+              We soon realized that you don't have to be dying for it to be a great gift. ForeverFlower is just as much for the son who wants to ensure his mother feels cherished every May, or the partner who wants to guarantee a decade of birthdays are celebrated with style.
             </p>
             <p>
-              <span className="font-bold italic underline">Single notifications get missed.</span> So we repeat them on a structured schedule. Emails change. Phone numbers change. People change. So we collect backups. Sometimes everything goes wrong at once. That’s why we include emergency contacts. Finally, we can have admin reach out manually via social media.
-            </p>
-            <p>
-              It’s not complicated or bloated—it’s a safety net for your long-memory. Feel free to poke around, set up your first reminder, and see how it feels to finally <span className="font-bold italic underline">offload the “don’t forget”</span> part of your brain.
+              It's for the person who wants to be known as <span className="font-bold">the one who always remembers</span>—the one whose love isn't just felt today, but is promised for every year to come.
             </p>
             <div>
               <p>Ethan Betts.</p>

@@ -6,20 +6,24 @@ import { ChevronDown } from 'lucide-react';
 // Hardcoded FAQ data for the homepage
 const homeFaqs: FaqItem[] = [
   {
-    "question": "Are there any recurring fees?",
-    "answer": "No. The price is upfront. You shouldn't even have to think about us until its time to remind you of your important event. So reaccuring fees just wouldn't fit. If you would like to make a recurring event we will provide that option but by default everything is a one time fee payed upfront."
+    "question": "Will I get reminders or confirmations?",
+    "answer": "You will receive a reminder email 1 week and 1 day before the delivery date. They are not confirmation emails so you do not need to respond. They are simply to remind you."
   },
   {
-    "question": "What if you can’t reach me?",
-    "answer": "We designed a robust system, but we are not magicians. Our system is designed to escalate. We try your email. Then we try your phone. Then we try your backup email. Finally, we try your emergency contact. But if your numbers are dead, your emails bounce, the emergency contact fails and socials prove to be unreliable, then the line of communication ends there. We can only be as robust as the information you give us."
+    "question": "What is your refund policy?",
+    "answer": "We can’t unsend flowers. But everything up until that point is fair game."
   },
   {
-    "question": "Are you liable if I miss a deadline?",
-    "answer": "No. ForeverFlower is designed to be a safety net, not the main event. Think of us like the reserve parachute. You should still pack your main parachute (your calendar, your lawyer, your own memory) with care. We are here to catch you if those primary systems fail. While we have built incredible redundancy into our code and servers, technology — like life — is unpredictable. By using ForeverFlower, you agree that we provide a layer of security, but the ultimate responsibility for your obligations remains with you."
+    "question": "Can I increase or decrease the budget later?",
+    "answer": "Yes you can. For subscriptions this is as simple as increasing the subscription amount. For upfront payment plans, by lowering the cost of each bouquet we can increase the frequency or duration of the plan. By increasing the cost of each bouquet, we can do the opposite, or you can top off the amount, to maintain or increase the quality of the bouquets."
   },
   {
-    "question": "How do you use my data?",
-    "answer": "Sparingly. We are in the business of reminders, not data brokerage. We do not sell your data. We do not analyze your deadlines to serve you ads. We only ask for information that is functionally necessary to contact you (emails, phone numbers, etc.). That’s it. You are the customer, not the product."
+    "question": "What countries do you operate in?",
+    "answer": "Currently we operate in the EU (Europe), United Kingdom, North America (USA & Canada), Australia and New Zealand."
+  },
+  {
+    "question": "Is delivery included in the price?",
+    "answer": "Cost of delivery is included in your yearly flower budget. Our service fee is placed seperately on top for transparency."
   }
 ];
 
