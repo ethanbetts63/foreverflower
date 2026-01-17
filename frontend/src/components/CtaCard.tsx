@@ -66,15 +66,15 @@ export const CtaCard: React.FC = () => {
       <div className="space-y-6">
         <div className="grid gap-2">
           <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
-          <Slider id="budget-slider" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
+          <Slider id="budget-slider" aria-label="Bouquet Budget" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
-          <Slider id="deliveries-slider" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
+          <Slider id="deliveries-slider" aria-label="Deliveries Per Year" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
-          <Slider id="years-slider" min={1} max={25} step={1} value={[years]} onValueChange={(v) => setYears(v[0])} />
+          <Slider id="years-slider" aria-label="Years" min={1} max={25} step={1} value={[years]} onValueChange={(v) => setYears(v[0])} />
         </div>
       </div>
       <div className="mt-6 text-center">
@@ -97,11 +97,11 @@ export const CtaCard: React.FC = () => {
       <div className="space-y-6">
         <div className="grid gap-2">
           <Label htmlFor="budget-slider-sub" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
-          <Slider id="budget-slider-sub" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
+          <Slider id="budget-slider-sub" aria-label="Bouquet Budget" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="deliveries-slider-sub" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
-          <Slider id="deliveries-slider-sub" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
+          <Slider id="deliveries-slider-sub" aria-label="Deliveries Per Year" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
         </div>
       </div>
        <div className="mt-4 pt-4 border-t border-gray-200 text-center">
