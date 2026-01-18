@@ -12,7 +12,7 @@ const ContactDetails: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                     <p className="mb-4">
-                        ForeverFlower fills a few niche gaps in the flower market. There are no annual flower subscriptions, there are no options for upfront payment for subscriptions, there are no options for sending flowers far into the future, there are no flower subscriptions built so that you can pass custody over to the person receiving the gift and all flower subscriptions are regionally based. ForeverFlower can operate in any region where flowers can be delivered. It’s essentially a bouquet organizing middle man
+                        ForeverFlower fills a few niche gaps in the flower market. There are no annual flower subscriptions, there are no options for upfront payment for subscriptions, there are no options for sending flowers far into the future, there are no flower subscriptions built so that you can pass custody over to the person receiving the gift and all flower subscriptions are regionally based. ForeverFlower can operate in any region where flowers can be delivered. It’s a bouquet organizing middle man but by allowing customers to pay upfront we leverage the time value of money to actually decrease the upfront cost and essentially negate our service fee.
                     </p>
                 </CardContent>
             </Card>
