@@ -1,5 +1,5 @@
 import React from 'react';
-import heroImage from '../assets/hero.webp';
+import heroImage from '../assets/hero1.webp';
 import { Hero } from '../components/Hero';
 import ContactDetails from '../components/ContactDetails';
 import OtherSites from '../components/OtherSites';
@@ -66,9 +66,10 @@ const ContactPage: React.FC = () => {
                 imageAlt="A pin up board of postnotes with various reminder icons"
             />
             
-            <ContactDetails />
-
-            <OtherSites sites={otherSitesData} />
+            <div style={{ backgroundColor: 'var(--color4)' }}>
+                <ContactDetails />
+                <OtherSites sites={otherSitesData} />
+            </div>
         </div>
     );
 };

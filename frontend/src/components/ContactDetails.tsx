@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 const ContactDetails: React.FC = () => {
     return (
         <div className="container mx-auto px-4 py-8 ">
-            <Card className="bg-white text-black">
+            <Card className="bg-white text-black border-0 shadow-md">
                 <CardHeader>
                     <CardTitle className="flex items-center text-2xl">
                         The ForeverFlower Elavator Pitch:
