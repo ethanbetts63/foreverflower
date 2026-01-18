@@ -10,9 +10,6 @@ import { Card, CardContent } from "./ui/card";
 import { getFaqs } from '@/api';
 import type { FaqItem } from '@/types';
 
-
-
-
 interface FaqProps {
   title: string;
   subtitle?: string;
