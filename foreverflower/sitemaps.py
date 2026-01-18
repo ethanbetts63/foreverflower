@@ -11,6 +11,7 @@ class StaticViewSitemap(Sitemap):
         return [
             '/',
             '/login',
+            '/contact'
         ]
 
     def location(self, item):

@@ -3,16 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const ContactDetails: React.FC = () => {
     return (
-        <div className="container mx-auto px-4 py-8">
-            <Card>
+        <div className="container mx-auto px-4 py-8 ">
+            <Card className="bg-white text-black">
                 <CardHeader>
                     <CardTitle className="flex items-center text-2xl">
-                        The ForeverFlower Elavator Pitch
+                        The ForeverFlower Elavator Pitch:
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="mb-4">
-                        Calendar apps are for meetings. ForeverFlower is for consequences. Single reminders get buried, missed or just lost. ForeverFlower repeats reminders until they’re acknowledged and it uses multi-channel escalation. From email and text, to calls and emergency contacts. High stakes deadlines such as visa or IUD expiries, trademark or domain renewals and even warranties, patents or business licences, deserve to have a reminder system that treats them as life and death, not just another dentist appointment. So check out ForeverFlower today, and find out how it feels to offload the “don’t forget” part of your brain, once and for all.
+                        ForeverFlower fills a few niche gaps in the flower market. There are no annual flower subscriptions, there are no options for upfront payment for subscriptions, there are no options for sending flowers far into the future, there are no flower subscriptions built so that you can pass custody over to the person receiving the gift and all flower subscriptions are regionally based. ForeverFlower can operate in any region where flowers can be delivered. It’s essentially a bouquet organizing middle man
                     </p>
                 </CardContent>
             </Card>

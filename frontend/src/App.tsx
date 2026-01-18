@@ -26,6 +26,7 @@ const BlocklistSuccessPage = lazy(() => import('./pages/flow/BlocklistSuccessPag
 const TermsAndConditionsPage = lazy(() => import('./pages/TermsAndConditionsPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordConfirmPage = lazy(() => import('./pages/ResetPasswordConfirmPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
 
 // --- Lazy-loaded Admin Pages ---
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
@@ -51,6 +52,7 @@ function App() {
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<HomePage />} />
+                <Route path="/contact" element={<ContactPage />} />
                 <Route path="/confirmation/:eventId" element={<ConfirmationPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
