@@ -105,7 +105,7 @@ const BestFlowerSubscriptionServicesNZ = () => {
           <p>Each approach has a slightly different strength — choice, price, or craft quality — so your best option depends on what you value most in regular flower deliveries.</p>
         </div>
       </ArticleLayout>
-      <section className="mt-16">
+      <section>
         <ArticleCarousel exclude="/articles/best-flower-subscription-services-nz" />
       </section>
     </>

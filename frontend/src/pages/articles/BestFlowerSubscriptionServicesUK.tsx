@@ -107,7 +107,7 @@ const BestFlowerSubscriptionServicesUK = () => {
           <p>No matter your preference — budget, presentation, or overall experience — there’s a UK flower subscription that matches your needs.</p>
         </div>
       </ArticleLayout>
-      <section className="mt-16">
+      <section>
         <ArticleCarousel exclude="/articles/best-flower-subscription-services-uk" />
       </section>
     </>

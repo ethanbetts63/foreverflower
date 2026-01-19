@@ -106,7 +106,7 @@ const BestFlowerDeliverySydney = () => {
           <p>Whether you’re surprising someone at the last minute, celebrating a milestone, or just brightening someone’s day, one of these services will likely suit your needs.</p>
         </div>
       </ArticleLayout>
-      <section className="mt-16">
+      <section>
         <ArticleCarousel exclude="/articles/best-flower-delivery-sydney" />
       </section>
     </>

@@ -109,7 +109,7 @@ const BestFlowerDeliveryPerth = () => {
           <p>Which service is best depends on whether you value design, speed, or price, but for most occasions, one of these three will cover your needs.</p>
         </div>
       </ArticleLayout>
-      <section className="mt-16">
+      <section>
         <ArticleCarousel exclude="/articles/best-flower-delivery-perth" />
       </section>
     </>

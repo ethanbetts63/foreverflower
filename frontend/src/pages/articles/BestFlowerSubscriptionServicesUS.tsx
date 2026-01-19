@@ -99,7 +99,7 @@ const TestArticle = () => {
           <hr className="my-8 border-gray-600" />
         </div>
       </ArticleLayout>
-      <section className="mt-16">
+      <section>
         <ArticleCarousel exclude="/articles/best-flower-subscription-services-us" />
       </section>
     </>

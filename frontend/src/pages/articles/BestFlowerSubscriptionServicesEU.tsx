@@ -106,8 +106,8 @@ const BestFlowerSubscriptionServicesEU = () => {
           <p>Each option suits a slightly different audience — whether cost-conscious, quality-focused, or flexibility-oriented — making it easier to find a subscription that works across multiple European countries.</p>
         </div>
       </ArticleLayout>
-      <section className="mt-16">
-        <ArticleCarousel exclude="/articles/best-flower-subscription-services-eu" />
+      <section>
+                <ArticleCarousel exclude="/articles/best-flower-subscription-services-eu" />
       </section>
     </>
   );

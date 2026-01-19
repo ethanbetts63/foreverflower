@@ -33,7 +33,7 @@ export const ArticleLayout: React.FC<ArticleLayoutProps> = ({ title, subtitle, i
               {children}
             </div>
             {faqItems && (
-              <section className="bg-white text-gray-900 rounded-lg">
+              <section className="bg-transparent text-gray-900 rounded-lg">
                 <div className="container mx-auto px-4">
                   <FaqV2
                     title="Have Questions?"

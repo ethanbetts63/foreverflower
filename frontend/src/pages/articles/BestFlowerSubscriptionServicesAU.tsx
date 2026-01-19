@@ -117,7 +117,7 @@ const BestFlowerSubscriptionServicesAU = () => {
           <p>East End Flower Market delivers larger, florist-level quality arrangements.</p>
         </div>
       </ArticleLayout>
-      <section className="mt-16">
+      <section>
         <ArticleCarousel exclude="/articles/best-flower-subscription-services-au" />
       </section>
     </>
