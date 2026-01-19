@@ -3,12 +3,20 @@ import type { FaqItem } from '@/types';
 export const faqs: { [key: string]: FaqItem[] } = {
   "best-flower-subscription-services-us": [
     {
-      "question": "This is a test question?",
-      "answer": "This is a test answer."
+      "question": "What's the best overall flower subscription in the US?",
+      "answer": "UrbanStems is the best all-around choice. It offers a great balance of modern design, high-quality bouquets, flexible subscription management, and free shipping, making it a reliable and premium-feeling service."
     },
     {
-      "question": "This is another test question?",
-      "answer": "This is another test answer."
+      "question": "Which US flower subscription is the most affordable?",
+      "answer": "The Bouqs Co. is the most affordable mainstream option. With prices starting around $48 per delivery and bouquets sourced directly from farms, it provides excellent value for the money."
+    },
+    {
+      "question": "I want my subscription flowers to last as long as possible. What's the best service for that?",
+      "answer": "For longevity, BloomsyBox is the clear winner. Their flowers are shipped directly from certified farms and are known to last for well over two weeks with proper care, making them the best choice if freshness is your top priority."
+    },
+    {
+      "question": "Do these subscription services offer free shipping?",
+      "answer": "Yes, both UrbanStems and The Bouqs Co. offer free shipping on their subscription deliveries, which is a significant advantage. BloomsyBox also includes shipping in their base price."
     }
   ],
   "best-flower-subscription-services-au": [
