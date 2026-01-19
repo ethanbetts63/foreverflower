@@ -12,6 +12,12 @@ import floristImage640 from '../assets/florist-640w.webp';
 import floristImage768 from '../assets/florist-768w.webp';
 import floristImage1024 from '../assets/florist-1024w.webp';
 import floristImage1280 from '../assets/florist-1280w.webp';
+import kitchenImage from '../assets/kitchen.webp';
+import kitchenImage320 from '../assets/kitchen-320w.webp';
+import kitchenImage640 from '../assets/kitchen-640w.webp';
+import kitchenImage768 from '../assets/kitchen-768w.webp';
+import kitchenImage1024 from '../assets/kitchen-1024w.webp';
+import kitchenImage1280 from '../assets/kitchen-1280w.webp';
 
 const articles = [
   {
@@ -27,6 +33,20 @@ const articles = [
     srcSet: `${floristImage320} 320w, ${floristImage640} 640w, ${floristImage768} 768w, ${floristImage1024} 1024w, ${floristImage1280} 1280w`,
     link: '/articles/best-flower-subscription-services-au',
     alt: 'A guide to the best flower subscription services in Australia'
+  },
+  {
+    title: 'The Best Flower Subscription Services in the United Kingdom (2026 Guide)',
+    imageSrc: kitchenImage,
+    srcSet: `${kitchenImage320} 320w, ${kitchenImage640} 640w, ${kitchenImage768} 768w, ${kitchenImage1024} 1024w, ${kitchenImage1280} 1280w`,
+    link: '/articles/best-flower-subscription-services-uk',
+    alt: 'A guide to the best flower subscription services in the UK'
+  },
+  {
+    title: 'The Best Flower Subscription Services in Europe (2026 Guide)',
+    imageSrc: floristImage,
+    srcSet: `${floristImage320} 320w, ${floristImage640} 640w, ${floristImage768} 768w, ${floristImage1024} 1024w, ${floristImage1280} 1280w`,
+    link: '/articles/best-flower-subscription-services-eu',
+    alt: 'A guide to the best flower subscription services in Europe'
   }
 ];
 
