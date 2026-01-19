@@ -1,31 +1,31 @@
 import { Link } from 'react-router-dom';
 import { ArticleCarousel } from '../components/ArticleCarousel';
 import Seo from '../components/Seo';
-import futureSelfImage from '../assets/solar_letters.webp';
+import deliveryImage from '../assets/delivery.webp';
 
 const BlogExplorePage = () => {
   const prominentArticle = {
-    title: 'How to Write a Letter to Your Future Self',
-    imageSrc: futureSelfImage,
-    link: '/articles/letter-to-future-self',
-    alt: 'Conceptual image about sending messages to the future',
-    description: 'A thoughtful guide on crafting a meaningful message to your future self, capturing your current hopes, dreams, and life lessons. Explore why this practice is more than just nostalgia.'
+    title: 'The Best Flower Subscription Services in the United States (2026 Guide)',
+    imageSrc: deliveryImage,
+    link: '/articles/best-flower-subscription-services-us',
+    alt: 'A guide to the best flower subscription services in the US',
+    description: 'An in-depth guide to the best flower subscription services in the US, broken down by best overall, cheapest, and highest quality.'
   };
 
   return (
     <>
       <Seo
-        title="FutureReminder Blog"
-        description="Explore articles, insights, and guides on long-term planning, personal growth, and making sure you never forget the important stuff."
+        title="ForeverFlower Blog"
+        description="Explore articles, insights, and guides on long-term floral planning, personal growth, and making sure you never forget the important stuff."
         canonicalPath="/articles"
         ogType="website"
       />
       <div className="bg-primary text-primary-foreground">
         {/* Hero Section */}
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">FutureReminder Blog</h1>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">ForeverFlower Blog</h1>
           <p className="text-lg md:text-xl max-w-3xl mx-auto">
-            Insights, guides, and inspiration for long-term planning. We explore ideas to help you connect with your future self and remember what matters most.
+            Insights, guides, and inspiration for long-term floral planning. We explore ideas to help you connect with your future self and remember what matters most.
           </p>
         </div>
 
