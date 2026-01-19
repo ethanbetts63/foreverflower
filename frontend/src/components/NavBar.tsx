@@ -2,11 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import logo from '../assets/logo.webp';
-import logo320 from '../assets/logo-320w.webp';
-import logo640 from '../assets/logo-640w.webp';
-import logo768 from '../assets/logo-768w.webp';
-import logo1024 from '../assets/logo-1024w.webp';
-import logo1280 from '../assets/logo-1280w.webp';
+import logo128 from '../assets/logo-128w.webp';
+import logo192 from '../assets/logo-192w.webp';
+import logo256 from '../assets/logo-256w.webp';
 
 const NavBar: React.FC = () => {
   return (
@@ -19,7 +17,7 @@ const NavBar: React.FC = () => {
               width="367"
               height="367"
               src={logo} 
-              srcSet={`${logo320} 320w, ${logo640} 640w, ${logo768} 768w, ${logo1024} 1024w, ${logo1280} 1280w`}
+              srcSet={`${logo128} 128w, ${logo192} 192w, ${logo256} 256w`}
               sizes="64px"
               alt="ForeverFlower Logo" 
               className="h-16 w-auto" 
