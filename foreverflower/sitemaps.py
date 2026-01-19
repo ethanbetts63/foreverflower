@@ -19,6 +19,7 @@ class StaticViewSitemap(Sitemap):
             '/articles/best-flower-subscription-services-eu',
             '/articles/best-flower-subscription-services-nz',
             '/articles/best-flower-delivery-perth',
+            '/articles/best-flower-delivery-sydney',
         ]
 
     def location(self, item):

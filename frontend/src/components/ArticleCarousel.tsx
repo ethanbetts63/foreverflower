@@ -61,6 +61,13 @@ const articles = [
     srcSet: `${kitchenImage320} 320w, ${kitchenImage640} 640w, ${kitchenImage768} 768w, ${kitchenImage1024} 1024w, ${kitchenImage1280} 1280w`,
     link: '/articles/best-flower-delivery-perth',
     alt: 'A guide to the best flower delivery services in Perth'
+  },
+  {
+    title: 'The Best Flower Delivery Services in Sydney (2026 Guide)',
+    imageSrc: floristImage,
+    srcSet: `${floristImage320} 320w, ${floristImage640} 640w, ${floristImage768} 768w, ${floristImage1024} 1024w, ${floristImage1280} 1280w`,
+    link: '/articles/best-flower-delivery-sydney',
+    alt: 'A guide to the best flower delivery services in Sydney'
   }
 ];
 
