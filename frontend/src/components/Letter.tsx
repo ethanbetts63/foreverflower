@@ -16,7 +16,7 @@ export const Letter: React.FC = () => {
               It felt radical, perhaps even impossible. But it was too beautiful to ignore. 
             </p>
             <p>
-              We built this to turn a temporary bloom into a permanent bridge—allowing love to <span className="font-bold">defy the calendar</span> and keep a promise that even time cannot break.
+              So we built ForeverFlower, to turn a temporary bloom into a permanent bridge—allowing love to <span className="font-bold">defy the calendar</span> and keep a promise that even time cannot break.
             </p>
           </div>
           <div className="flex flex-col gap-4">
