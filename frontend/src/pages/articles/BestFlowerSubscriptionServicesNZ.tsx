@@ -1,5 +1,5 @@
 import { ArticleLayout } from '../../components/ArticleLayout';
-import articleImage from '../../assets/delivery.webp';
+import articleImage from '../../assets/florist_packing2.webp';
 import { ArticleCarousel } from '../../components/ArticleCarousel';
 import Seo from '../../components/Seo';
 

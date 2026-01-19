@@ -27,7 +27,7 @@ export const ArticleLayout: React.FC<ArticleLayoutProps> = ({ title, subtitle, i
       <div className="container mx-auto px-4 mt-6">
         
         {/* Main Content Column (Full width) */}
-        <div className="bg-background text-primary-foreground rounded-lg px-4 md:p-0 lg:px-16 flex flex-col gap-8 max-w-4xl mx-auto">
+        <div style={{ backgroundColor: 'var(--color4)' }} className="text-primary-foreground rounded-lg px-4 md:p-0 lg:px-16 flex flex-col gap-8 max-w-4xl mx-auto">
           <div>
             {children}
           </div>

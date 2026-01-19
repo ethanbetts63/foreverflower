@@ -18,6 +18,9 @@ import kitchenImage640 from '../assets/kitchen-640w.webp';
 import kitchenImage768 from '../assets/kitchen-768w.webp';
 import kitchenImage1024 from '../assets/kitchen-1024w.webp';
 import kitchenImage1280 from '../assets/kitchen-1280w.webp';
+import delivery1Image from '../assets/delivery1.webp';
+import floristPackingImage from '../assets/florist_packing.webp';
+import floristPacking2Image from '../assets/florist_packing2.webp';
 
 const articles = [
   {
@@ -50,22 +53,22 @@ const articles = [
   },
   {
     title: 'The Best Flower Subscription Services in New Zealand (2026 Guide)',
-    imageSrc: deliveryImage,
-    srcSet: `${deliveryImage320} 320w, ${deliveryImage640} 640w, ${deliveryImage768} 768w, ${deliveryImage1024} 1024w, ${deliveryImage1280} 1280w`,
+    imageSrc: floristPacking2Image,
+    srcSet: `${floristPacking2Image} 320w, ${floristPacking2Image} 640w, ${floristPacking2Image} 768w, ${floristPacking2Image} 1024w, ${floristPacking2Image} 1280w`,
     link: '/articles/best-flower-subscription-services-nz',
     alt: 'A guide to the best flower subscription services in New Zealand'
   },
   {
     title: 'The Best Flower Delivery Services in Perth (2026 Guide)',
-    imageSrc: kitchenImage,
-    srcSet: `${kitchenImage320} 320w, ${kitchenImage640} 640w, ${kitchenImage768} 768w, ${kitchenImage1024} 1024w, ${kitchenImage1280} 1280w`,
+    imageSrc: floristPackingImage,
+    srcSet: `${floristPackingImage} 320w, ${floristPackingImage} 640w, ${floristPackingImage} 768w, ${floristPackingImage} 1024w, ${floristPackingImage} 1280w`,
     link: '/articles/best-flower-delivery-perth',
     alt: 'A guide to the best flower delivery services in Perth'
   },
   {
     title: 'The Best Flower Delivery Services in Sydney (2026 Guide)',
-    imageSrc: floristImage,
-    srcSet: `${floristImage320} 320w, ${floristImage640} 640w, ${floristImage768} 768w, ${floristImage1024} 1024w, ${floristImage1280} 1280w`,
+    imageSrc: delivery1Image,
+    srcSet: `${delivery1Image} 320w, ${delivery1Image} 640w, ${delivery1Image} 768w, ${delivery1Image} 1024w, ${delivery1Image} 1280w`,
     link: '/articles/best-flower-delivery-sydney',
     alt: 'A guide to the best flower delivery services in Sydney'
   }
