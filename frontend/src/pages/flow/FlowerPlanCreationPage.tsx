@@ -1,125 +1,132 @@
-// frontend/src/pages/flow/EventCreationPage.tsx
-import React, { useState, useEffect } from 'react';
+// foreverflower/frontend/src/pages/flow/FlowerPlanCreationPage.tsx
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox'; // Added Checkbox import
-import { toast } from 'sonner';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { createAuthenticatedEvent, getUserProfile, getEmergencyContacts } from '@/api';
-import { EventCreationForm, type EventCreationData } from '@/forms/EventCreationForm';
-import Summary from '@/components/Summary';
-import type { UserProfile, EmergencyContact } from '@/types';
 import Seo from '@/components/Seo';
+import { toast } from 'sonner';
 
-const EventCreationPage: React.FC = () => {
+type Breakdown = {
+  fee_per_delivery: number;
+  years: number;
+  deliveries_per_year: number;
+  upfront_savings_percentage: number;
+};
+
+const FlowerPlanCreationPage: React.FC = () => {
     const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [profile, setProfile] = useState<UserProfile | null>(null);
-    const [contacts, setContacts] = useState<EmergencyContact[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [agreedToTerms, setAgreedToTerms] = useState(false); // Added state for terms agreement
+    const { isAuthenticated } = useAuth();
+    
+    // State for the form
+    const [bouquetBudget, setBouquetBudget] = useState(75);
+    const [deliveriesPerYear, setDeliveriesPerYear] = useState(1);
+    const [years, setYears] = useState(5);
+
+    // API/Calculation result state
+    const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
+    const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        setIsLoading(true);
-        Promise.all([getUserProfile(), getEmergencyContacts()])
-            .then(([userProfile, emergencyContacts]) => {
-                setProfile(userProfile);
-                setContacts(emergencyContacts);
-            })
-            .catch(error => {
-                toast.error("Failed to load user data.", {
-                    description: error.message || "Could not fetch your details.",
-                });
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }, []);
+        if (!isAuthenticated) {
+            toast.error("You must be logged in to create a flower plan.");
+            navigate('/login');
+        }
+    }, [isAuthenticated, navigate]);
 
-    const handleFormSubmit = async (data: EventCreationData) => {
-        setIsSubmitting(true);
+    const handleCalculateUpfront = async () => {
+        setIsLoading(true);
+        setError(null);
+        setUpfrontPrice(null);
+        setBreakdown(null);
+
         try {
-            const newEvent = await createAuthenticatedEvent(data);
-            toast.success("Event created successfully!");
-            navigate(`/events/${newEvent.id}/activate`, { state: { event: newEvent } });
-        } catch (error: any) {
-            toast.error("Failed to create event", {
-                description: error.message || "An unknown error occurred."
+            const response = await fetch('/api/events/calculate-price/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    bouquet_budget: bouquetBudget,
+                    deliveries_per_year: deliveriesPerYear,
+                    years: years,
+                }),
             });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Something went wrong');
+            setUpfrontPrice(data.upfront_price);
+            setBreakdown(data.breakdown);
+        } catch (err: any) {
+            setError(err.message);
         } finally {
-            setIsSubmitting(false);
+            setIsLoading(false);
         }
     };
     
-    if (isLoading) {
-        return (
-            <div className="container mx-auto flex justify-center items-center h-screen">
-                <Spinner className="w-8 h-8 mr-2" /> <p>Loading...</p>
-            </div>
-        );
+    const handleCreatePlan = () => {
+        // TODO: Implement plan creation logic
+        toast.info("Plan creation not implemented yet.");
+    }
+
+    if (!isAuthenticated) {
+        return null; // Render nothing while redirecting
     }
 
     return (
-        <div className="container mx-auto max-w-6xl py-8">
-            <Seo title="Create Event | ForeverFlower" />
-            <div className="flex flex-col md:flex-row gap-8">
-                {/* Main Content Column */}
-                <div className="w-full md:w-2/3">
-                    <Card className="bg-foreground text-background">
-                        <CardHeader>
-                            <CardTitle className="text-3xl">Create Your Event</CardTitle>
-                            <CardDescription className="text-black">
-                                Finally, tell us about the event you want to be reminded of.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <EventCreationForm
-                                initialData={{}} // Always a new event
-                                onSubmit={handleFormSubmit}
-                            />
-                        </CardContent>
-                        <CardFooter className="flex justify-between items-center"> {/* Changed to justify-between to space out checkbox and button */}
-                            <div className="flex items-center space-x-2">
-                                <Checkbox
-                                    id="terms"
-                                    checked={agreedToTerms}
-                                    onCheckedChange={(checked: boolean) => setAgreedToTerms(checked)}
-                                />
-                                <label
-                                    htmlFor="terms"
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-black"
-                                >
-                                    I agree to the{" "}
-                                    <a
-                                        href="https://www.foreverflower.app/terms-and-conditions"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-500 hover:underline"
-                                    >
-                                        Terms and Conditions
-                                    </a>
-                                </label>
+        <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
+            <div className="container mx-auto max-w-2xl py-12">
+                <Seo title="Create Plan | ForeverFlower" />
+                <Card className="bg-white text-black border-none shadow-md">
+                    <CardHeader>
+                        <CardTitle className="text-3xl">Step 2: Create Your Flower Plan</CardTitle>
+                        <CardDescription className="text-black">
+                            Design your perfect long-term flower plan. Pay upfront and save!
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
+                                <Slider id="budget-slider" aria-label="Bouquet Budget" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
                             </div>
-                            <Button
-                                size="lg"
-                                disabled={isSubmitting || !agreedToTerms}
-                                onClick={() => document.getElementById('event-creation-submit')?.click()}
-                                className="bg-blue-600 hover:bg-blue-700 text-white"
-                            >
-                                {isSubmitting && <Spinner className="mr-2 h-4 w-4" />}
-                                Finish & Create Event
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                </div>
-                {/* Right Summary Column */}
-                <div className="w-full md:w-1/3">
-                    <Summary user={profile || undefined} emergencyContacts={contacts} />
-                </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
+                                <Slider id="deliveries-slider" aria-label="Deliveries Per Year" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
+                                <Slider id="years-slider" aria-label="Years" min={1} max={25} step={1} value={[years]} onValueChange={(v) => setYears(v[0])} />
+                            </div>
+                        </div>
+                        <div className="mt-6 text-center">
+                            <Button onClick={handleCalculateUpfront} disabled={isLoading} className="w-full">{isLoading ? <Spinner className="mr-2 h-4 w-4" /> : 'Calculate Upfront Cost'}</Button>
+                        </div>
+                        <div className="mt-4 text-center h-12 flex flex-col items-center justify-center">
+                            {upfrontPrice !== null && (
+                            <>
+                                <div className="text-2xl font-bold">${upfrontPrice.toLocaleString()}</div>
+                                {breakdown?.upfront_savings_percentage && <p className="text-xs text-gray-600">That's a ~{breakdown.upfront_savings_percentage}% savings compared to paying per delivery!</p>}
+                            </>
+                            )}
+                            {error && <div className="text-red-500 text-sm">{error}</div>}
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end">
+                        <Button 
+                            size="lg"
+                            disabled={!upfrontPrice}
+                            onClick={handleCreatePlan}
+                        >
+                            Next: Confirm & Pay
+                        </Button>
+                    </CardFooter>
+                </Card>
             </div>
         </div>
     );
 };
 
-export default EventCreationPage;
+export default FlowerPlanCreationPage;
