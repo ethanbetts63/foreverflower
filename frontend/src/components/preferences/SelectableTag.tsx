@@ -13,7 +13,7 @@ export const SelectableTag: React.FC<SelectableTagProps> = ({ label, isSelected,
     <Badge
       variant={isSelected ? "default" : "outline"}
       onClick={onClick}
-      className="cursor-pointer transition-all duration-200 text-base"
+      className="cursor-pointer transition-all duration-200 text-base text-black"
     >
       {label}
     </Badge>

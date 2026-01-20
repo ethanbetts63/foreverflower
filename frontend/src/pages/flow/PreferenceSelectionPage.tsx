@@ -150,11 +150,11 @@ const PreferenceSelectionPage: React.FC = () => {
                         {/* Flower Types Section */}
                         <div>
                             <h3 className="text-xl font-semibold mb-2">Flower Types</h3>
-                            <p className="text-sm text-gray-600 mb-4">Select your favorite flower types and any you'd prefer not to receive.</p>
+                            <p className="text-sm text-gray-600 mb-4">Select their favorite flowers and flowers you know they don't like. We will try our best to find a florist that delivers in your area for your budget that matches your preferences.</p>
                             <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div>
                                     <h4 className="font-medium mb-3 text-center">My absolute favorites</h4>
-                                    <div className="flex flex-wrap gap-2 justify-center">
+                                    <div className="flex flex-wrap gap-2 justify-center ">
                                         {flowerTypes.map(ft => (
                                             <SelectableTag
                                                 key={ft.id}
@@ -166,7 +166,7 @@ const PreferenceSelectionPage: React.FC = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 className="font-medium mb-3 text-center">Not for me</h4>
+                                    <h4 className="font-medium mb-3 text-center">Not these please!</h4>
                                     <div className="flex flex-wrap gap-2 justify-center">
                                         {flowerTypes.map(ft => (
                                             <SelectableTag
