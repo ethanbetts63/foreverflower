@@ -9,7 +9,7 @@ const LoginPage = () => {
         description="Access your ForeverFlower account to manage your critical long-term events and view your notification settings."
         canonicalPath="/login"
       />
-      <div className="w-full max-w-sm md:max-w-4xl">
+      <div className="w-full max-w-sm md:max-w-md">
         <LoginForm />
       </div>
     </div>

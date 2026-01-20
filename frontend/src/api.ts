@@ -138,6 +138,17 @@ export async function activateFreeEvent(eventId: number): Promise<Event> {
 
 // --- FlowerPlan Endpoints ---
 
+export interface Color {
+    id: number;
+    name: string;
+    hex_code: string;
+}
+
+export interface FlowerType {
+    id: number;
+    name: string;
+}
+
 export interface FlowerPlan {
     id: number;
     user: number;
@@ -152,9 +163,27 @@ export interface FlowerPlan {
     rejected_flower_types: number[];
 }
 
+export async function getColors(): Promise<Color[]> {
+    const response = await authedFetch('/api/events/colors/');
+    return handleResponse(response);
+}
+
+export async function getFlowerTypes(): Promise<FlowerType[]> {
+    const response = await authedFetch('/api/events/flower-types/');
+    return handleResponse(response);
+}
+
 export async function createFlowerPlan(planData: { bouquet_budget: number, deliveries_per_year: number, years: number }): Promise<FlowerPlan> {
     const response = await authedFetch('/api/events/flower-plans/', {
         method: 'POST',
+        body: JSON.stringify(planData),
+    });
+    return handleResponse(response);
+}
+
+export async function updateFlowerPlan(planId: string, planData: Partial<FlowerPlan>): Promise<FlowerPlan> {
+    const response = await authedFetch(`/api/events/flower-plans/${planId}/`, {
+        method: 'PATCH',
         body: JSON.stringify(planData),
     });
     return handleResponse(response);

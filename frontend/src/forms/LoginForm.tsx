@@ -40,9 +40,9 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6 ", className)} {...props}>
       <Card className="overflow-hidden p-0 bg-white text-black shadow-md border-none">
-        <CardContent className="grid p-0 md:grid-cols-2">
+        <CardContent className="p-0">
           
           <div className="p-6 md:p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -105,7 +105,7 @@ export function LoginForm({
               </Button>
               
               {/* Signup Link */}
-              <div className="text-center text-sm text-muted-foreground">
+              <div className="text-center text-sm text-black">
                 Don&apos;t have an account?{" "}
                 <Link to="/event-gate" className="underline underline-offset-2 hover:underline hover:text-primary">
                   Create an Event

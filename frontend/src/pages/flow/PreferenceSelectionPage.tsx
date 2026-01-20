@@ -1,154 +1,294 @@
 // foreverflower/frontend/src/pages/flow/PreferenceSelectionPage.tsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
-
-// Mock data types for now - will be replaced with API-fetched data
-interface ApiColor {
-    id: number;
-    name: string;
-    hex_code: string;
-}
-
-interface ApiFlowerType {
-    id: number;
-    name: string;
-}
+import { getColors, getFlowerTypes, updateFlowerPlan, Color, FlowerType } from '@/api';
+import { ColorSwatch, SelectableTag } from '@/components/preferences';
+import { Separator } from '@/components/ui/separator';
 
 const PreferenceSelectionPage: React.FC = () => {
+    const { planId } = useParams<{ planId: string }>();
     const navigate = useNavigate();
-    const { isAuthenticated, token } = useAuth();
-    const { planId } = useParams<{ planId: string }>(); // Assuming the flower plan ID is in the URL
+    const { isAuthenticated } = useAuth();
 
-    // State for available options
-    const [availableColors, setAvailableColors] = useState<ApiColor[]>([]);
-    const [availableFlowerTypes, setAvailableFlowerTypes] = useState<ApiFlowerType[]>([]);
-    
-    // State for user selections
+    // Data fetching state
+    const [colors, setColors] = useState<Color[]>([]);
+    const [flowerTypes, setFlowerTypes] = useState<FlowerType[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    // Selection state
     const [preferredColors, setPreferredColors] = useState<number[]>([]);
     const [rejectedColors, setRejectedColors] = useState<number[]>([]);
     const [preferredFlowerTypes, setPreferredFlowerTypes] = useState<number[]>([]);
     const [rejectedFlowerTypes, setRejectedFlowerTypes] = useState<number[]>([]);
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
     useEffect(() => {
         if (!isAuthenticated) {
-            toast.error("You must be logged in to set preferences.");
+            toast.error("You must be logged in to manage preferences.");
             navigate('/login');
             return;
         }
+        if (!planId) {
+            toast.error("No flower plan specified.");
+            navigate('/book-flow');
+            return;
+        }
 
-        const fetchOptions = async () => {
+        const fetchData = async () => {
             setIsLoading(true);
             try {
-                // In a real implementation, replace fetch with our api utility
-                const colorsPromise = fetch('/api/events/colors/', { headers: { 'Authorization': `Bearer ${token}` } });
-                const flowerTypesPromise = fetch('/api/events/flower-types/', { headers: { 'Authorization': `Bearer ${token}` } });
-
-                const [colorsResponse, flowerTypesResponse] = await Promise.all([colorsPromise, flowerTypesPromise]);
-                
-                if (!colorsResponse.ok || !flowerTypesResponse.ok) {
-                    throw new Error('Failed to fetch preference options.');
-                }
-
-                const colorsData: ApiColor[] = await colorsResponse.json();
-                const flowerTypesData: ApiFlowerType[] = await flowerTypesResponse.json();
-
-                setAvailableColors(colorsData);
-                setAvailableFlowerTypes(flowerTypesData);
-
-            } catch (error) {
-                toast.error((error as Error).message);
+                const [colorsData, flowerTypesData] = await Promise.all([
+                    getColors(),
+                    getFlowerTypes()
+                ]);
+                setColors(colorsData);
+                setFlowerTypes(flowerTypesData);
+            } catch (err) {
+                setError("Failed to load preference options. Please try again later.");
+                toast.error("Failed to load preference options.");
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchOptions();
-    }, [isAuthenticated, navigate, token]);
+        fetchData();
+    }, [isAuthenticated, navigate, planId]);
+    
+    const handleToggle = (id: number, list: number[], setList: React.Dispatch<React.SetStateAction<number[]>>, otherList: number[], setOtherList: React.Dispatch<React.SetStateAction<number[]>>) => {
+        // If it's in the other list, remove it from there first
+        if (otherList.includes(id)) {
+            setOtherList(prev => prev.filter(itemId => itemId !== id));
+        }
+        // Then toggle it in the current list
+        setList(prev => prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]);
+    };
 
-    const handleSaveChanges = async () => {
-        setIsSubmitting(true);
+    const handleSave = async () => {
+        if (!planId) return;
+        setIsSaving(true);
         try {
-            // This is where the PATCH request to update the flower plan would go
-            // e.g., await api.updateFlowerPlan(planId, { ... });
-            toast.success("Preferences saved successfully!");
-            // Navigate to the next step, e.g., payment or summary
-            navigate(`/`); 
-        } catch (error) {
-            toast.error("Failed to save preferences.");
+            await updateFlowerPlan(planId, {
+                preferred_colors: preferredColors,
+                rejected_colors: rejectedColors,
+                preferred_flower_types: preferredFlowerTypes,
+                rejected_flower_types: rejectedFlowerTypes,
+            });
+            toast.success("Preferences saved!");
+            navigate(`/flower-plan/${planId}/confirmation`); 
+        } catch (err) {
+            toast.error("Failed to save preferences. Please try again.");
         } finally {
-            setIsSubmitting(false);
+            setIsSaving(false);
         }
     };
     
-    if (!isAuthenticated) {
-        return null; // Render nothing while redirecting
+    const handleSkip = () => {
+        toast.info("You can add preferences later from your dashboard.");
+        navigate(`/flower-plan/${planId}/confirmation`);
     }
 
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Spinner className="h-12 w-12" />
-            </div>
-        );
+    if (!isAuthenticated) return null; // Redirecting
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
+    if (error) return <div className="text-center py-12 text-red-500">Failed to edit, 0 occurrences found for old_string (// foreverflower/frontend/src/pages/flow/PreferenceSelectionPage.tsx
+import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Seo from '@/components/Seo';
+import { toast } from 'sonner';
+import { useEffect } from 'react';
+
+const PreferenceSelectionPage = () => {
+    const { planId } = useParams();
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            toast.error("You must be logged in to access this page.");
+            navigate('/login');
+        }
+    }, [isAuthenticated, navigate]);
+
+    if (!isAuthenticated) {
+        return null; // or a loading spinner while redirecting
     }
 
     return (
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
+            <div className="container mx-auto max-w-2xl py-12">
+                <Seo title="Select Preferences | ForeverFlower" />
+                <Card className="bg-white text-black border-none shadow-md">
+                    <CardHeader>
+                        <CardTitle className="text-3xl">Step 3: Preferences (Optional)</CardTitle>
+                        <CardDescription className="text-black">
+                            Help us tailor your bouquets by telling us what you like. Plan ID: {planId}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p>Placeholder for color and flower type selection UI.</p>
+                    </CardContent>
+                     <CardFooter className="flex justify-end">
+                        <Button size="lg">
+                            Next: Review & Confirm
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        </div>
+    );
+};
+
+export default PreferenceSelectionPage;
+). Original old_string was (// foreverflower/frontend/src/pages/flow/PreferenceSelectionPage.tsx
+import React from 'react';
+import { useParams, useNavigate } => 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Seo from '@/components/Seo';
+import { toast } from 'sonner';
+import { useEffect } from 'react';
+
+const PreferenceSelectionPage = () => {
+    const { planId } = useParams();
+    const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            toast.error("You must be logged in to access this page.");
+            navigate('/login');
+        }
+    }, [isAuthenticated, navigate]);
+
+    if (!isAuthenticated) {
+        return null; // or a loading spinner while redirecting
+    }
+
+    return (
+        <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
+            <div className="container mx-auto max-w-2xl py-12">
+                <Seo title="Select Preferences | ForeverFlower" />
+                <Card className="bg-white text-black border-none shadow-md">
+                    <CardHeader>
+                        <CardTitle className="text-3xl">Step 3: Preferences (Optional)</CardTitle>
+                        <CardDescription className="text-black">
+                            Help us tailor your bouquets by telling us what you like. Plan ID: {planId}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p>Placeholder for color and flower type selection UI.</p>
+                    </CardContent>
+                     <CardFooter className="flex justify-end">
+                        <Button size="lg">
+                            Next: Review & Confirm
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        </div>
+    );
+};
+
+export default PreferenceSelectionPage;
+) in C:\Users\ethan\coding\foreverflower\frontend\src\pages\flow\PreferenceSelectionPage.tsx. No edits made. The exact text in old_string was not found. Ensure you're not escaping content incorrectly and check whitespace, indentation, and context. Use read_file tool to verify.</div>;
+
+    return (
+        <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-4xl py-12">
-                <Seo title="Set Preferences | ForeverFlower" />
+                <Seo title="Select Preferences | ForeverFlower" />
                 <Card className="bg-white text-black border-none shadow-md">
                     <CardHeader>
                         <CardTitle className="text-3xl">Step 3: Add Your Preferences (Optional)</CardTitle>
                         <CardDescription className="text-black">
-                            Help us tailor your deliveries. Select your favorite (and not-so-favorite) colors and flowers.
+                            Let us know what you love and what you don't. This helps our florists create bouquets you'll adore.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-8">
-                        {/* Color Selections will go here */}
-                        <div id="color-preferences">
-                            <h3 className="text-xl font-semibold mb-4 border-b pb-2">Color Preferences</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Colors Section */}
+                        <div>
+                            <h3 className="text-xl font-semibold mb-2">Colors</h3>
+                            <p className="text-sm text-gray-600 mb-4">Choose colors you'd like to see more of, and any you'd like to avoid.</p>
+                            <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div>
-                                    <h4 className="font-medium mb-3">Your Favorites</h4>
-                                    <div className="p-4 rounded-lg bg-gray-50 min-h-[100px]">Placeholder for preferred color swatches</div>
+                                    <h4 className="font-medium mb-3 text-center">I'd love these colors</h4>
+                                    <div className="flex flex-wrap gap-3 justify-center">
+                                        {colors.map(color => (
+                                            <ColorSwatch 
+                                                key={color.id} 
+                                                hex={color.hex_code}
+                                                isSelected={preferredColors.includes(color.id)}
+                                                onClick={() => handleToggle(color.id, preferredColors, setPreferredColors, rejectedColors, setRejectedColors)}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                                 <div>
-                                    <h4 className="font-medium mb-3">Colors to Avoid</h4>
-                                    <div className="p-4 rounded-lg bg-gray-50 min-h-[100px]">Placeholder for rejected color swatches</div>
+                                    <h4 className="font-medium mb-3 text-center">Please, no thanks!</h4>
+                                     <div className="flex flex-wrap gap-3 justify-center">
+                                        {colors.map(color => (
+                                            <ColorSwatch 
+                                                key={color.id} 
+                                                hex={color.hex_code}
+                                                isSelected={rejectedColors.includes(color.id)}
+                                                onClick={() => handleToggle(color.id, rejectedColors, setRejectedColors, preferredColors, setPreferredColors)}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Flower Type Selections will go here */}
-                        <div id="flower-type-preferences">
-                            <h3 className="text-xl font-semibold mb-4 border-b pb-2">Flower Preferences</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <Separator />
+                        
+                        {/* Flower Types Section */}
+                        <div>
+                            <h3 className="text-xl font-semibold mb-2">Flower Types</h3>
+                            <p className="text-sm text-gray-600 mb-4">Select your favorite flower types and any you'd prefer not to receive.</p>
+                            <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div>
-                                    <h4 className="font-medium mb-3">Your Favorites</h4>
-                                    <div className="p-4 rounded-lg bg-gray-50 min-h-[100px]">Placeholder for preferred flower type tags</div>
+                                    <h4 className="font-medium mb-3 text-center">My absolute favorites</h4>
+                                    <div className="flex flex-wrap gap-2 justify-center">
+                                        {flowerTypes.map(ft => (
+                                            <SelectableTag
+                                                key={ft.id}
+                                                label={ft.name}
+                                                isSelected={preferredFlowerTypes.includes(ft.id)}
+                                                onClick={() => handleToggle(ft.id, preferredFlowerTypes, setPreferredFlowerTypes, rejectedFlowerTypes, setRejectedFlowerTypes)}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                                 <div>
-                                    <h4 className="font-medium mb-3">Flowers to Avoid</h4>
-                                    <div className="p-4 rounded-lg bg-gray-50 min-h-[100px]">Placeholder for rejected flower type tags</div>
+                                    <h4 className="font-medium mb-3 text-center">Not for me</h4>
+                                    <div className="flex flex-wrap gap-2 justify-center">
+                                        {flowerTypes.map(ft => (
+                                            <SelectableTag
+                                                key={ft.id}
+                                                label={ft.name}
+                                                isSelected={rejectedFlowerTypes.includes(ft.id)}
+                                                onClick={() => handleToggle(ft.id, rejectedFlowerTypes, setRejectedFlowerTypes, preferredFlowerTypes, setPreferredFlowerTypes)}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                     </CardContent>
-                    <CardFooter className="flex justify-between items-center">
-                        <Button variant="ghost" onClick={() => navigate('/')}>Skip for Now</Button>
-                        <Button size="lg" disabled={isSubmitting} onClick={handleSaveChanges}>
-                            {isSubmitting && <Spinner className="mr-2 h-4 w-4" />}
-                            Save & Continue
+                    <CardFooter className="flex justify-between">
+                        <Button variant="ghost" onClick={handleSkip}>Skip for Now</Button>
+                        <Button size="lg" onClick={handleSave} disabled={isSaving}>
+                            {isSaving ? <Spinner className="mr-2 h-4 w-4" /> : 'Save & Continue'}
                         </Button>
                     </CardFooter>
                 </Card>
