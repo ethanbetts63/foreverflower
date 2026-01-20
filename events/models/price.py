@@ -26,16 +26,6 @@ class Price(models.Model):
         help_text="The budget for each individual bouquet."
     )
     # Calculated price details
-    subtotal = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        help_text="The subtotal before taxes."
-    )
-    tax = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        help_text="The calculated tax."
-    )
     total_amount = models.DecimalField(
         max_digits=10,
         decimal_places=2,

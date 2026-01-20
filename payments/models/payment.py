@@ -16,19 +16,11 @@ class Payment(models.Model):
         on_delete=models.CASCADE, 
         related_name='payments'
     )
-    price = models.ForeignKey(
-        'payments.Price',
-        on_delete=models.PROTECT, # Don't allow deleting a price that has been paid for
-        related_name='payments'
-    )
-    # Linking to an event is optional at the time of payment creation,
-    # it can be associated later (e.g., by the webhook).
-    event = models.ForeignKey(
-        'events.Event', 
-        on_delete=models.SET_NULL, 
-        related_name='payments',
-        null=True,
-        blank=True
+    flower_plan = models.OneToOneField(
+        'events.FlowerPlan',
+        on_delete=models.CASCADE,
+        related_name='payment',
+        help_text="The flower plan this payment is for."
     )
     stripe_payment_intent_id = models.CharField(
         max_length=255, 
