@@ -45,18 +45,6 @@ export interface UserProfile {
     email: string;
     first_name: string;
     last_name: string;
-    country_code: string;
-    phone: string | null;
-    backup_email: string | null;
-    secondary_backup_email: string | null;
-    backup_phone: string | null;
-    facebook_handle: string | null;
-    instagram_handle: string | null;
-    snapchat_handle: string | null;
-    x_handle: string | null;
-    is_staff: boolean;
-    is_superuser: boolean;
-    is_email_verified: boolean;
 }
 
 export interface EmergencyContact {

@@ -10,16 +10,7 @@ The `users` app is the cornerstone of user management within the ForeverFlower a
 This is the custom user model for the project (`AbstractUser`), extended to include a rich set of fields for robust communication and data privacy.
 
 **Key Fields:**
-*   **Primary Contact:** Inherits `email`, `first_name`, `last_name` from Django's auth system. Adds `country_code` and `phone`.
-*   **Backup Contact:** `backup_email`, `secondary_backup_email`, `backup_phone`.
-*   **Social Media:** Handles for Facebook, Instagram, Snapchat, and X.
-*   **Account Status:**
-    *   `is_email_verified`: A boolean flag set to `True` once a user clicks the verification link sent to their email.
-    *   `verification_email_last_sent_at`: A timestamp to enable rate-limiting of the "Resend Verification" feature.
-*   **Anonymization Fields:** A comprehensive set of `hash_*` fields (e.g., `hash_first_name`, `hash_email`) that store hashed PII upon account deletion to maintain system integrity while protecting user privacy.
-
-### `EmergencyContact`
-A simple model that links directly to a `User` account. Each user can have multiple emergency contacts.
+*   **Primary Contact:** Inherits `email`, `first_name`, `last_name` from Django's auth system.
 
 ## Key Flows & Business Logic
 

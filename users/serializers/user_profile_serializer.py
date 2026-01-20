@@ -16,18 +16,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'email',
             'first_name',
             'last_name',
-            'country_code',
-            'phone',
-            'backup_email',
-            'secondary_backup_email',
-            'backup_phone',
-            'facebook_handle',
-            'instagram_handle',
-            'snapchat_handle',
-            'x_handle',
-            'is_staff',
-            'is_superuser',
-            'is_email_verified',
         ]
         read_only_fields = [
             'username', 

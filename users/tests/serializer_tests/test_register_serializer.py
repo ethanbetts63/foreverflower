@@ -21,8 +21,7 @@ def test_register_serializer_success(mocker):
         "password": "strongpassword123",
         "first_name": "Test",
         "last_name": "User",
-        "country_code": "1",
-        "phone": "1234567890",
+
     }
 
     serializer = RegisterSerializer(data=user_data)

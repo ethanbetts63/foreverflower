@@ -167,12 +167,6 @@ const ConfirmationPage = () => {
                   <p><strong>First Name:</strong> {profile?.first_name || 'Not provided'}</p>
                   <p><strong>Last Name:</strong> {profile?.last_name || 'Not provided'}</p>
                   <p><strong>Email:</strong> {profile?.email || 'Not provided'}</p>
-                  <p><strong>Phone:</strong> {profile?.country_code && profile?.phone ? `+${profile.country_code} ${profile.phone}` : 'Not provided'}</p>
-                  <p><strong>Backup Email:</strong> {profile?.backup_email || 'Not provided'}</p>
-                  <p><strong>Facebook:</strong> {profile?.facebook_handle || 'Not provided'}</p>
-                  <p><strong>Instagram:</strong> {profile?.instagram_handle || 'Not provided'}</p>
-                  <p><strong>Snapchat:</strong> {profile?.snapchat_handle || 'Not provided'}</p>
-                  <p><strong>X (Twitter):</strong> {profile?.x_handle || 'Not provided'}</p>
                 </CardContent>
               </Card>
 
