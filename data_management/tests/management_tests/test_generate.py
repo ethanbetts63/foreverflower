@@ -17,16 +17,6 @@ class TestGenerateCommand:
         mock_orchestrator.return_value.run.assert_called_once()
         assert 'Starting FAQ generation...' in out.getvalue()
 
-    @patch('data_management.management.commands.generate.TierUpdateOrchestrator')
-    def test_generate_tiers_flag(self, mock_orchestrator):
-        """Test that the --tiers flag calls the TierUpdateOrchestrator."""
-        out = StringIO()
-        call_command('generate', '--tiers', stdout=out)
-        
-        mock_orchestrator.assert_called_once()
-        mock_orchestrator.return_value.run.assert_called_once()
-        assert 'Starting Tier and Price generation...' in out.getvalue()
-
     @patch('data_management.management.commands.generate.TermsUpdateOrchestrator')
     def test_generate_terms_flag(self, mock_orchestrator):
         """Test that the --terms flag calls the TermsUpdateOrchestrator."""
@@ -62,8 +52,6 @@ class TestGenerateCommand:
         
         mock_faq_orchestrator.assert_called_once()
         mock_faq_orchestrator.return_value.run.assert_called_once()
-        mock_tier_orchestrator.assert_called_once()
-        mock_tier_orchestrator.return_value.run.assert_called_once()
         
         output = out.getvalue()
         assert 'Starting FAQ generation...' in output

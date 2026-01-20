@@ -5,12 +5,8 @@ import sys
 def load_db_from_latest_archive(command):
     base_archive_dir = os.path.join('data_management', 'data', 'archive', 'db_backups')
     load_order = [
-        'payments.tier.json',
-        'payments.price.json',
-        'data_management.faq.json',
         'data_management.termsandconditions.json',
         'users.user.json',
-        'users.emergencycontact.json',
         'events.event.json',
         'notifications.notification.json',
         'payments.payment.json',
