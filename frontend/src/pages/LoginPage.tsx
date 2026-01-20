@@ -3,7 +3,7 @@ import Seo from '../components/Seo';
 
 const LoginPage = () => {
   return (
-    <div className="bg-muted flex h-full flex-col items-center justify-center p-6 md:p-10">
+    <div className="bg-[var(--color4)] flex h-full flex-col items-center justify-center p-6 md:p-10">
       <Seo
         title="Login | ForeverFlower"
         description="Access your ForeverFlower account to manage your critical long-term events and view your notification settings."

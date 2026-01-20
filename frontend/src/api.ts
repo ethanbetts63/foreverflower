@@ -136,6 +136,31 @@ export async function activateFreeEvent(eventId: number): Promise<Event> {
     return handleResponse(response);
 }
 
+// --- FlowerPlan Endpoints ---
+
+export interface FlowerPlan {
+    id: number;
+    user: number;
+    is_active: boolean;
+    recipient_details: any; // Consider creating a specific type for this
+    notes: string | null;
+    created_at: string;
+    updated_at: string;
+    preferred_colors: number[];
+    preferred_flower_types: number[];
+    rejected_colors: number[];
+    rejected_flower_types: number[];
+}
+
+export async function createFlowerPlan(planData: { bouquet_budget: number, deliveries_per_year: number, years: number }): Promise<FlowerPlan> {
+    const response = await authedFetch('/api/events/flower-plans/', {
+        method: 'POST',
+        body: JSON.stringify(planData),
+    });
+    return handleResponse(response);
+}
+
+
 
 // --- User Profile & Settings Endpoints ---
 

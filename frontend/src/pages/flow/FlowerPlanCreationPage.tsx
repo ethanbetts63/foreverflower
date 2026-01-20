@@ -1,14 +1,4 @@
-// foreverflower/frontend/src/pages/flow/FlowerPlanCreationPage.tsx
-import React, { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import Seo from '@/components/Seo';
-import { toast } from 'sonner';
+import { createFlowerPlan } from '@/api';
 
 type Breakdown = {
   fee_per_delivery: number;
@@ -29,7 +19,8 @@ const FlowerPlanCreationPage: React.FC = () => {
     // API/Calculation result state
     const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
     const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isCalculating, setIsCalculating] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -40,12 +31,13 @@ const FlowerPlanCreationPage: React.FC = () => {
     }, [isAuthenticated, navigate]);
 
     const handleCalculateUpfront = async () => {
-        setIsLoading(true);
+        setIsCalculating(true);
         setError(null);
         setUpfrontPrice(null);
         setBreakdown(null);
 
         try {
+            // NOTE: Using fetch here because this is an unauthenticated call by design
             const response = await fetch('/api/events/calculate-price/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -61,19 +53,40 @@ const FlowerPlanCreationPage: React.FC = () => {
             setBreakdown(data.breakdown);
         } catch (err: any) {
             setError(err.message);
+            toast.error(err.message);
         } finally {
-            setIsLoading(false);
+            setIsCalculating(false);
         }
     };
     
-    const handleCreatePlan = () => {
-        // TODO: Implement plan creation logic
-        toast.info("Plan creation not implemented yet.");
+    const handleCreatePlan = async () => {
+        if (!upfrontPrice) {
+            toast.error("Please calculate the price before creating the plan.");
+            return;
+        }
+        setIsCreating(true);
+        setError(null);
+        try {
+            const newPlan = await createFlowerPlan({
+                bouquet_budget: bouquetBudget,
+                deliveries_per_year: deliveriesPerYear,
+                years: years,
+            });
+            toast.success("Flower plan created successfully!");
+            navigate(`/flower-plan/${newPlan.id}/preferences`);
+        } catch (err: any) {
+            setError(err.message);
+            toast.error("Failed to create plan:", err.message);
+        } finally {
+            setIsCreating(false);
+        }
     }
 
     if (!isAuthenticated) {
         return null; // Render nothing while redirecting
     }
+
+    const isLoading = isCalculating || isCreating;
 
     return (
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
@@ -102,7 +115,7 @@ const FlowerPlanCreationPage: React.FC = () => {
                             </div>
                         </div>
                         <div className="mt-6 text-center">
-                            <Button onClick={handleCalculateUpfront} disabled={isLoading} className="w-full">{isLoading ? <Spinner className="mr-2 h-4 w-4" /> : 'Calculate Upfront Cost'}</Button>
+                            <Button onClick={handleCalculateUpfront} disabled={isLoading} className="w-full">{isCalculating ? <Spinner className="mr-2 h-4 w-4" /> : 'Calculate Upfront Cost'}</Button>
                         </div>
                         <div className="mt-4 text-center h-12 flex flex-col items-center justify-center">
                             {upfrontPrice !== null && (
@@ -111,16 +124,16 @@ const FlowerPlanCreationPage: React.FC = () => {
                                 {breakdown?.upfront_savings_percentage && <p className="text-xs text-gray-600">That's a ~{breakdown.upfront_savings_percentage}% savings compared to paying per delivery!</p>}
                             </>
                             )}
-                            {error && <div className="text-red-500 text-sm">{error}</div>}
+                            {error && !isCreating && <div className="text-red-500 text-sm">{error}</div>}
                         </div>
                     </CardContent>
                     <CardFooter className="flex justify-end">
                         <Button 
                             size="lg"
-                            disabled={!upfrontPrice}
+                            disabled={!upfrontPrice || isLoading}
                             onClick={handleCreatePlan}
                         >
-                            Next: Confirm & Pay
+                            {isCreating ? <Spinner className="mr-2 h-4 w-4" /> : 'Next: Select Preferences'}
                         </Button>
                     </CardFooter>
                 </Card>
