@@ -1,3 +1,13 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
+import Seo from '@/components/Seo';
+import { toast } from 'sonner';
 import { createFlowerPlan } from '@/api';
 
 type Breakdown = {

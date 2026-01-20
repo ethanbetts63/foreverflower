@@ -21,7 +21,7 @@ const AdminLayout: React.FC = () => {
     );
   }
 
-  if (!user?.is_staff) {
+  if (!user?.is_staff && !user?.is_superuser) {
     return <Navigate to="/" replace />;
   }
 

@@ -4,9 +4,11 @@ import logo from '../assets/logo.webp';
 import logo128 from '../assets/logo-128w.webp';
 import logo192 from '../assets/logo-192w.webp';
 import logo256 from '../assets/logo-256w.webp';
+import { useAuth } from '@/context/AuthContext';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const { user } = useAuth();
 
   return (
     <footer className="bg-primary text-primary-foreground">
@@ -31,6 +33,9 @@ const Footer: React.FC = () => {
           <nav className="flex gap-6">
             <Link to="/contact" className="text-sm hover:underline">Contact Us</Link>
             <Link to="/terms-and-conditions" className="text-sm hover:underline">Terms & Conditions</Link>
+            {(user?.is_staff || user?.is_superuser) && (
+              <Link to="/admin-dashboard" className="text-sm hover:underline">Admin Dashboard</Link>
+            )}
           </nav>
 
         </div>
