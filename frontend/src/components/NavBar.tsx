@@ -1,12 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { useAuth } from '@/context/AuthContext';
 import logo from '../assets/logo.webp';
 import logo128 from '../assets/logo-128w.webp';
 import logo192 from '../assets/logo-192w.webp';
 import logo256 from '../assets/logo-256w.webp';
 
 const NavBar: React.FC = () => {
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-[var(--color2)] bg-[var(--color3)]">
       <div className="relative flex h-20 w-full items-center justify-between px-4">
@@ -33,9 +42,15 @@ const NavBar: React.FC = () => {
 
         {/* Right Section: Auth Buttons */}
         <div className="flex items-center gap-2">
-            <Link to="/login">
-                <Button className="bg-white text-black font-bold hover:bg-gray-100">Login</Button>
-            </Link>
+            {isAuthenticated ? (
+                <Button onClick={handleLogout} className="bg-white text-black font-bold hover:bg-gray-100">
+                    Logout
+                </Button>
+            ) : (
+                <Link to="/login">
+                    <Button className="bg-white text-black font-bold hover:bg-gray-100">Login</Button>
+                </Link>
+            )}
             <Link to="/event-gate">
                 <Button className="bg-white text-black font-bold hover:bg-gray-100">Create Event</Button>
             </Link>
