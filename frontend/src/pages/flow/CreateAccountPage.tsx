@@ -40,10 +40,10 @@ const CreateAccountPage: React.FC = () => {
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-2xl py-12">
                 <Seo title="Create Account | ForeverFlower" />
-                <Card className="bg-white text-black">
+                <Card className="bg-white text-black border-none shadow-md">
                     <CardHeader>
                         <CardTitle className="text-3xl">Step 1: Create Your Account</CardTitle>
-                        <CardDescription className="text-gray-600">
+                        <CardDescription className="text-black">
                             Welcome! Let's get your account set up so you can create your first flower plan.
                         </CardDescription>
                     </CardHeader>

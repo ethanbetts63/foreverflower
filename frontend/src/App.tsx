@@ -15,14 +15,12 @@ const UserDashboardLayout = lazy(() => import('./pages/UserDashboardLayout'));
 const AccountManagementPage = lazy(() => import('./pages/AccountManagementPage'));
 const EventGate = lazy(() => import('@/components/EventGate'));
 const ProfileCreationPage = lazy(() => import('./pages/flow/ProfileCreationPage'));
-const EmergencyContactPage = lazy(() => import('./pages/flow/EmergencyContactPage'));
 const EventCreationPage = lazy(() => import('./pages/flow/EventCreationPage'));
-const TierChoicePage = lazy(() => import('./pages/flow/TierChoicePage'));
-const ActivationSuccessPage = lazy(() => import('./pages/flow/ActivationSuccessPage'));
+const ActivationSuccessPage = lazy(() => import('./pages/ActivationSuccessPage'));
 const PaymentPage = lazy(() => import('./pages/flow/PaymentPage'));
 const PaymentStatusPage = lazy(() => import('./pages/flow/PaymentStatusPage'));
-const VerificationSuccessPage = lazy(() => import('./pages/flow/VerificationSuccessPage'));
-const BlocklistSuccessPage = lazy(() => import('./pages/flow/BlocklistSuccessPage'));
+const VerificationSuccessPage = lazy(() => import('./pages/VerificationSuccessPage'));
+const BlocklistSuccessPage = lazy(() => import('./pages/BlocklistSuccessPage'));
 const TermsAndConditionsPage = lazy(() => import('./pages/TermsAndConditionsPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordConfirmPage = lazy(() => import('./pages/ResetPasswordConfirmPage'));
@@ -84,9 +82,7 @@ function App() {
                 {/* Event Creation Flow */}
                 <Route path="/event-gate" element={<EventGate />} />
                 <Route path="/create-flow/profile" element={<ProfileCreationPage />} />
-                <Route path="/create-flow/contacts" element={<EmergencyContactPage />} />
                 <Route path="/create-flow/event" element={<EventCreationPage />} />
-                <Route path="/events/:id/activate" element={<TierChoicePage />} />
                 <Route path="/create-flow/payment" element={<PaymentPage />} />
                 <Route path="/create-flow/success" element={<ActivationSuccessPage />} />
                 <Route path="/payment-status" element={<PaymentStatusPage />} />

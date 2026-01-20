@@ -46,7 +46,7 @@ const ProfileCreationPage: React.FC = () => {
     return (
         <div className="container mx-auto max-w-2xl py-12">
             <Seo title="Create Profile | ForeverFlower" />
-            <Card className="bg-foreground text-background">
+            <Card className="bg-white text-black border-none shadow-md">
                 <CardHeader>
                     <CardTitle className="text-3xl">Step 1: Create Your Account</CardTitle>
                     <CardDescription className="text-black">
