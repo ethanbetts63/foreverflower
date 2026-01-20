@@ -44,29 +44,31 @@ const ProfileCreationPage: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto max-w-2xl py-12">
-            <Seo title="Create Profile | ForeverFlower" />
-            <Card className="bg-white text-black border-none shadow-md">
-                <CardHeader>
-                    <CardTitle className="text-3xl">Step 1: Create Your Account</CardTitle>
-                    <CardDescription className="text-black">
-                        Welcome! Let's get your account set up so you can create your first reminder.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ProfileCreationForm initialData={{}} onSubmit={handleFormSubmit} />
-                </CardContent>
-                <CardFooter className="flex justify-end">
-                    <Button 
-                        size="lg"
-                        disabled={isSubmitting}
-                        onClick={() => document.getElementById('profile-creation-submit')?.click()}
-                    >
-                        {isSubmitting && <Spinner className="mr-2 h-4 w-4" />}
-                        Next: Add Contacts
-                    </Button>
-                </CardFooter>
-            </Card>
+        <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
+            <div className="container mx-auto max-w-2xl py-12">
+                <Seo title="Create Profile | ForeverFlower" />
+                <Card className="bg-white text-black border-none shadow-md">
+                    <CardHeader>
+                        <CardTitle className="text-3xl">Step 1: Create Your Account</CardTitle>
+                        <CardDescription className="text-black">
+                            Welcome! Let's get your account set up so you can create your first reminder.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ProfileCreationForm initialData={{}} onSubmit={handleFormSubmit} />
+                    </CardContent>
+                    <CardFooter className="flex justify-end">
+                        <Button 
+                            size="lg"
+                            disabled={isSubmitting}
+                            onClick={() => document.getElementById('profile-creation-submit')?.click()}
+                        >
+                            {isSubmitting && <Spinner className="mr-2 h-4 w-4" />}
+                            Next: Add Contacts
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
         </div>
     );
 };
