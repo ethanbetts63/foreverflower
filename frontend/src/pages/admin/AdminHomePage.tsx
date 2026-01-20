@@ -1,8 +1,5 @@
 import React from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { HistoricalSummaryChart } from '@/components/admin/HistoricalSummaryChart';
-import { AutomatedNotificationStats } from '@/components/admin/AutomatedNotificationStats';
-import { AdminTaskQueue } from '@/components/admin/AdminTaskQueue';
 
 const AdminHomePage: React.FC = () => {
   const { user } = useAuth();
@@ -15,9 +12,6 @@ const AdminHomePage: React.FC = () => {
       </p>
       
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <HistoricalSummaryChart />
-        <AutomatedNotificationStats />
-        <AdminTaskQueue />
       </div>
     </>
   );

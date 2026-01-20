@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { Spinner } from '@/components/ui/spinner';
 import { Button } from '@/components/ui/button';
 import Seo from '@/components/Seo';
-import { Home, BarChart2, BellRing } from 'lucide-react';
+import { Home  } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -40,18 +40,6 @@ const AdminLayout: React.FC = () => {
               </NavLink>
             </Button>
             <h3 className="text-sm font-semibold tracking-tight mt-4 mb-2 px-2 text-muted-foreground">Analytics</h3>
-            <Button asChild variant="ghost">
-              <NavLink to="/admin-dashboard/notifications/automated" className={getNavLinkClass}>
-                <BarChart2 className="h-4 w-4" />
-                Automated
-              </NavLink>
-            </Button>
-            <Button asChild variant="ghost">
-              <NavLink to="/admin-dashboard/notifications/manual" className={getNavLinkClass}>
-                <BellRing className="h-4 w-4" />
-                Manual
-              </NavLink>
-            </Button>
           </nav>
         </aside>
 
