@@ -10,10 +10,6 @@ EVENT DETAILS
 ---
 Event: {{ event.name }}
 Date: {{ event.event_date | date:"F j, Y" }}
-{% if event.notes %}
-Your Notes:
-{{ event.notes }}
-{% endif %}
 ---
 
 To acknowledge that you have received this reminder, please click the link below. If you do not acknowledge it, our notifications will continue to escalate according to your chosen plan.
