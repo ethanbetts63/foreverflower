@@ -11,6 +11,7 @@ import { getColors, getFlowerTypes, updateFlowerPlan } from '@/api';
 import type { Color, FlowerType } from '@/api';
 import { ColorSwatch, SelectableTag } from '@/components/preferences';
 import { Separator } from '@/components/ui/separator';
+import { ArrowLeft } from 'lucide-react';
 
 const PreferenceSelectionPage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
@@ -95,6 +96,10 @@ const PreferenceSelectionPage: React.FC = () => {
         navigate(`/book-flow/flower-plan/${planId}/add-message`);
     }
 
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     if (!isAuthenticated) return null; // Redirecting
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
     if (error) return <div className="text-center py-12 text-red-500">{error}</div>;
@@ -105,10 +110,17 @@ const PreferenceSelectionPage: React.FC = () => {
                 <Seo title="Select Preferences | ForeverFlower" />
                 <Card className="bg-white text-black border-none shadow-md">
                     <CardHeader>
-                        <CardTitle className="text-3xl">Add Your Preferences (Optional)</CardTitle>
-                        <CardDescription className="text-black">
-                            Let us know what you love and what you don't. This helps our florists create bouquets you'll adore.
-                        </CardDescription>
+                         <div className="flex justify-between items-start">
+                            <div>
+                                <CardTitle className="text-3xl">Step 3: Add Your Preferences (Optional)</CardTitle>
+                                <CardDescription className="text-black">
+                                    Let us know what you love and what you don't. This helps our florists create bouquets you'll adore.
+                                </CardDescription>
+                            </div>
+                             <Button variant="destructive" onClick={handleSkip} className="bg-transparent text-red-500 hover:bg-red-50 ml-4">
+                                Skip for Now
+                            </Button>
+                        </div>
                     </CardHeader>
                     <CardContent className="space-y-8">
                         {/* Colors Section */}
@@ -183,7 +195,9 @@ const PreferenceSelectionPage: React.FC = () => {
 
                     </CardContent>
                     <CardFooter className="flex justify-between">
-                        <Button variant="ghost" onClick={handleSkip}>Skip for Now</Button>
+                        <Button variant="ghost" onClick={handleBack}>
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                        </Button>
                         <Button size="lg" onClick={handleSave} disabled={isSaving}>
                             {isSaving ? <Spinner className="mr-2 h-4 w-4" /> : 'Save & Continue'}
                         </Button>
