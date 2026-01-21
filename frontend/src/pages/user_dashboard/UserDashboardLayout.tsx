@@ -6,7 +6,7 @@ function UserDashboardLayout() {
     <div className="flex min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
       <aside className="w-64 flex-shrink-0 bg-gray-800 text-white p-6">
         <nav className="flex flex-col space-y-6">
-          <h2 className="text-lg font-semibold">Dashboard</h2>
+          <Link to="/dashboard" className="text-lg font-semibold hover:text-gray-300">Dashboard</Link>
           <Link to="/event-gate">
             <Button className="w-full bg-white text-black font-bold hover:bg-gray-100">Order Flowers</Button>
           </Link>

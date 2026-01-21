@@ -4,7 +4,7 @@ from .views.event_view import EventViewSet
 from .views.pricing_view import calculate_upfront_price
 from .views.color_view import ColorViewSet
 from .views.flower_type_view import FlowerTypeViewSet
-from .views.flower_plan_view import FlowerPlanViewSet
+from .views.flower_plan_view import FlowerPlanViewSet, get_latest_inactive_flower_plan
 
 router = DefaultRouter()
 router.register(r'colors', ColorViewSet, basename='color')
@@ -14,5 +14,6 @@ router.register(r'flower-plans', FlowerPlanViewSet, basename='flower-plan')
 
 urlpatterns = [
     path('calculate-price/', calculate_upfront_price, name='calculate-price'),
+    path('flower-plans/get-latest-inactive/', get_latest_inactive_flower_plan, name='get-latest-inactive-flower-plan'),
     path('', include(router.urls)),
 ]

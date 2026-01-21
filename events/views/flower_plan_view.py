@@ -5,6 +5,27 @@ from ..models import FlowerPlan, Event
 from ..serializers.flower_plan_serializer import FlowerPlanSerializer
 from ..utils.pricing_calculators import forever_flower_upfront_price
 from datetime import date, timedelta
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_latest_inactive_flower_plan(request):
+    """
+    Retrieves the most recent flower plan for the authenticated user
+    that is not yet active.
+    """
+    user = request.user
+    inactive_plan = FlowerPlan.objects.filter(user=user, is_active=False).order_by('-created_at').first()
+
+    if inactive_plan:
+        serializer = FlowerPlanSerializer(inactive_plan)
+        return Response(serializer.data)
+    else:
+        # Per user request, return null with a 200 OK status
+        return Response(None)
+
 
 class FlowerPlanViewSet(viewsets.ModelViewSet):
     """

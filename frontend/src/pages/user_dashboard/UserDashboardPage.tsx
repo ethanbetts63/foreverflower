@@ -2,7 +2,7 @@ import React from 'react';
 
 const UserDashboardPage: React.FC = () => {
   return (
-    <div className="w-full">
+    <div className="w-full text-black">
       <h1 className="text-3xl font-bold mb-6">Welcome to Your Dashboard</h1>
       <p className="mb-8 text-lg">
         This is your central hub for managing everything related to your Forever Flower account. 
