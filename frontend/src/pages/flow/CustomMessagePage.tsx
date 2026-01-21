@@ -9,7 +9,6 @@ import Seo from '@/components/Seo';
 import { toast } from 'sonner';
 import { getFlowerPlan } from '@/api';
 import type { FlowerPlan } from '@/api';
-import type { Event } from '@/types';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from '@/components/ui/label';

@@ -9,7 +9,6 @@ import { ConfigProvider } from './context/ConfigContext';
 import { Spinner } from './components/ui/spinner';
 
 // --- Lazy-loaded Pages ---
-const ConfirmationPage = lazy(() => import('./pages/flow/ConfirmationPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const UserDashboardLayout = lazy(() => import('./pages/user_dashboard/UserDashboardLayout'));
 const UserDashboardPage = lazy(() => import('./pages/user_dashboard/UserDashboardPage'));
@@ -62,7 +61,6 @@ function App() {
                 {/* Public routes */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/contact" element={<ContactPage />} />
-                <Route path="/confirmation/:eventId" element={<ConfirmationPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/reset-password-confirm/:uid/:token" element={<ResetPasswordConfirmPage />} />

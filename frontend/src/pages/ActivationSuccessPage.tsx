@@ -1,25 +1,54 @@
-// frontend/src/pages/flow/ActivationSuccessPage.tsx
-import React from 'react';
-import { useLocation, useNavigate, Navigate } from 'react-router-dom';
+// src/pages/ActivationSuccessPage.tsx
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2 } from 'lucide-react';
-import type { Event } from '@/types';
+import { CheckCircle2, Loader2 } from 'lucide-react';
+import { getFlowerPlan } from '@/api';
+import type { FlowerPlan } from '@/api';
 import Seo from '@/components/Seo';
+import { toast } from 'sonner';
 
 const ActivationSuccessPage: React.FC = () => {
-    const location = useLocation();
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const event: Event | undefined = location.state?.event;
+    const [plan, setPlan] = useState<FlowerPlan | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    if (!event) {
-        // If the user lands here without an event in the state, send them to the dashboard.
-        return <Navigate to="/dashboard/events" replace />;
+    useEffect(() => {
+        const planId = searchParams.get('plan_id');
+
+        if (!planId) {
+            toast.error('No plan specified.');
+            navigate('/dashboard');
+            return;
+        }
+
+        getFlowerPlan(planId)
+            .then(data => {
+                setPlan(data);
+            })
+            .catch(err => {
+                console.error("Failed to fetch plan:", err);
+                toast.error('Failed to load plan details.');
+                navigate('/dashboard');
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [searchParams, navigate]);
+
+    if (loading) {
+        return (
+            <div className="container mx-auto flex items-center justify-center min-h-[60vh]">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
     }
 
     return (
         <div className="container mx-auto flex items-center justify-center min-h-[60vh]">
-            <Seo title="Event Activated | ForeverFlower" />
+            <Seo title="Plan Activated | ForeverFlower" />
             <Card className="w-full max-w-lg text-center shadow-lg">
                 <CardHeader>
                     <div className="flex justify-center">
@@ -27,18 +56,15 @@ const ActivationSuccessPage: React.FC = () => {
                     </div>
                     <CardTitle className="text-3xl">Activation Successful!</CardTitle>
                     <CardDescription className="text-lg text-muted-foreground pt-2">
-                        Your reminder for <span className="font-semibold text-primary">{event.name}</span> is now active.
+                        Your Flower Plan is now active.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <p className="mb-6">
-                        We will begin sending notifications according to your schedule. You can view and manage your event from your dashboard.
+                        We will begin preparing your flower deliveries. You can view and manage your plan from your dashboard.
                     </p>
-                    <Button 
-                        size="lg" 
-                        onClick={() => navigate('/dashboard/events')}
-                    >
-                        Go to My Dashboard
+                    <Button asChild size="lg">
+                        <Link to="/dashboard/plans">Go to My Plans</Link>
                     </Button>
                 </CardContent>
             </Card>
