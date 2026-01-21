@@ -22,11 +22,11 @@ const EventGate: React.FC = () => {
         }
 
         if (isAuthenticated) {
-            // Logged-in users jump straight to the final step
-            navigate('/create-flow/event', { replace: true });
+            // Logged-in users jump straight to the plan creation step
+            navigate('/book-flow', { replace: true });
         } else {
-            // Anonymous users start at the beginning of the wizard
-            navigate('/create-flow/profile', { replace: true });
+            // Anonymous users are sent to the account creation page
+            navigate('/create-account', { replace: true });
         }
     }, [isAuthenticated, isLoading, navigate]);
 

@@ -14,7 +14,6 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 const UserDashboardLayout = lazy(() => import('./pages/UserDashboardLayout'));
 const AccountManagementPage = lazy(() => import('./pages/AccountManagementPage'));
 const EventGate = lazy(() => import('@/components/EventGate'));
-const ProfileCreationPage = lazy(() => import('./pages/flow/ProfileCreationPage'));
 const FlowerPlanCreationPage = lazy(() => import('./pages/flow/FlowerPlanCreationPage'));
 const PreferenceSelectionPage = lazy(() => import('./pages/flow/PreferenceSelectionPage'));
 const BookingConfirmationPage = lazy(() => import('./pages/flow/BookingConfirmationPage'));
@@ -81,7 +80,6 @@ function App() {
 
                 {/* Event Creation Flow */}
                 <Route path="/event-gate" element={<EventGate />} />
-                <Route path="/create-flow/profile" element={<ProfileCreationPage />} />
                 <Route path="/book-flow" element={<FlowerPlanCreationPage />} />
                 <Route path="/flower-plan/:planId/preferences" element={<PreferenceSelectionPage />} />
                 <Route path="/flower-plan/:planId/confirmation" element={<BookingConfirmationPage />} />

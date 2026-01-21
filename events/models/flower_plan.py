@@ -16,6 +16,21 @@ class FlowerPlan(models.Model):
         default=False,
         help_text="Whether the plan is active. Activated upon successful payment."
     )
+    
+    # --- Plan Details ---
+    budget = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.00,
+        help_text="The budget per bouquet."
+    )
+    deliveries_per_year = models.PositiveIntegerField(
+        default=1,
+        help_text="How many deliveries are scheduled per year."
+    )
+    number_of_years = models.PositiveIntegerField(
+        default=1,
+        help_text="The total number of years for the plan."
+    )
+
     recipient_details = models.JSONField(
         null=True,
         blank=True,
