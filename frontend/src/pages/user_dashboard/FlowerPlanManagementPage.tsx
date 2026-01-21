@@ -10,6 +10,8 @@ import { showErrorToast } from '@/utils/utils';
 interface FlowerPlan {
   id: number;
   is_active: boolean;
+  recipient_first_name: string | null;
+  recipient_last_name: string | null;
   budget: string; // Comes as a string from DecimalField
   deliveries_per_year: number;
   years: number;
@@ -62,6 +64,7 @@ const FlowerPlanManagementPage: React.FC = () => {
         <TableHeader>
           <TableRow className="border-none hover:bg-transparent">
             <TableHead className="text-black text-base">Status</TableHead>
+            <TableHead className="text-black text-base">Recipient</TableHead>
             <TableHead className="text-right text-black text-base">Budget</TableHead>
             <TableHead className="text-right text-black text-base">Deliveries/Year</TableHead>
             <TableHead className="text-right text-black text-base">Years</TableHead>
@@ -82,6 +85,9 @@ const FlowerPlanManagementPage: React.FC = () => {
                 }`}>
                   {plan.is_active ? 'Active' : 'Inactive'}
                 </span>
+              </TableCell>
+              <TableCell className="text-black text-base">
+                {`${plan.recipient_first_name || ''} ${plan.recipient_last_name || ''}`.trim() || 'N/A'}
               </TableCell>
               <TableCell className="text-right text-black text-base">${parseFloat(plan.budget).toFixed(2)}</TableCell>
               <TableCell className="text-right text-black text-base">{plan.deliveries_per_year}</TableCell>
