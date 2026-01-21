@@ -67,12 +67,12 @@ const CustomMessagePage: React.FC = () => {
 
     const handleSave = () => {
         // Saving logic will go here
-        navigate(`/flower-plan/${planId}/confirmation`);
+        navigate(`/book-flow/flower-plan/${planId}/confirmation`);
     };
 
     const handleSkip = () => {
         toast.info("You can add messages later from your dashboard.");
-        navigate(`/flower-plan/${planId}/confirmation`);
+        navigate(`/book-flow/flower-plan/${planId}/confirmation`);
     };
 
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;

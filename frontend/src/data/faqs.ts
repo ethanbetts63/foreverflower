@@ -130,19 +130,19 @@ export const faqs: { [key: string]: FaqItem[] } = {
   "best-flower-delivery-adelaide": [
     {
       "question": "What is the best overall flower delivery service in Adelaide?",
-      "answer": "Blooms on Brougham is considered the best overall option in Adelaide due to their consistently high-quality arrangements and strong customer care, ideal for premium bouquets and important occasions."
+      "answer": "East End Flower Market is highly regarded as the best overall, known for unique, handcrafted bouquets using fresh, locally sourced flowers and consistent quality."
     },
     {
-      "question": "I need to send flowers in Adelaide today, but it's already late afternoon. What's my best bet?",
-      "answer": "Floraly is your best choice for last-minute orders in Adelaide. They offer one of the latest same-day delivery cutoff times, allowing orders placed by 3 pm on weekdays to be delivered that day."
+      "question": "Which service offers the fastest same-day flower delivery in Adelaide?",
+      "answer": "Tynte Flowers offers same-day delivery for orders placed by around 2 pm on weekdays and 1 pm on weekends, making it ideal for later, last-minute orders."
     },
     {
-      "question": "Which service offers the most affordable flower delivery in Adelaide?",
-      "answer": "Easy Flowers is the most budget-friendly service, with bouquets starting around $40. It's a practical option for casual gifting or when budget is the primary concern."
+      "question": "What is the most affordable flower delivery service in Adelaide?",
+      "answer": "GO FLOWERS provides fresh, handcrafted bouquets by local florists with same-day delivery at a budget-friendly price, striking a good balance between cost and quality."
     },
     {
-      "question": "What's the typical cutoff time for same-day flower delivery in Adelaide?",
-      "answer": "Most flower delivery services in Adelaide require orders to be placed between 1 pm and 3 pm on weekdays for same-day delivery. It's always best to check with the specific florist for their exact times."
+      "question": "Are there other highly-rated local florists in Adelaide worth considering?",
+      "answer": "Yes, other excellent options include Chill Flowers, Alyssiums Florist, The Flower Nook, Floral Atelier Australia, BloomBar Flowers, Adelaide Flower House, Embellish Flowers and Plants, and Flowers of Adelaide."
     }
   ],
   "best-flower-delivery-darwin": [
@@ -161,6 +161,24 @@ export const faqs: { [key: string]: FaqItem[] } = {
     {
       "question": "Do Darwin flower delivery services offer same-day delivery to regional areas?",
       "answer": "Generally, same-day service is typically limited to Metro Darwin. Regional NT and outer suburbs usually require next-day delivery, so it's always best to check with the specific retailer."
+    }
+  ],
+  "best-flower-delivery-melbourne": [
+    {
+      "question": "What is the best overall flower delivery service in Melbourne?",
+      "answer": "Fig & Bloom is widely regarded as the best all-round flower delivery option in Melbourne, known for its lush, contemporary bouquets and consistently excellent service, ideal for premium arrangements."
+    },
+    {
+      "question": "Which service offers the fastest same-day flower delivery in Melbourne?",
+      "answer": "Floraly offers one of the latest same-day order cut-offs in Melbourne, accepting weekday orders up to about 3 pm. This makes it ideal for last-minute needs when time is tight."
+    },
+    {
+      "question": "What is the most affordable flower delivery service in Melbourne?",
+      "answer": "Easy Flowers is the most affordable widely available flower delivery service in Melbourne, with bouquets starting around $40. It's a practical choice for budget-friendly and quick deliveries."
+    },
+    {
+      "question": "Do Melbourne flower delivery services offer same-day delivery to outer suburbs?",
+      "answer": "Typically, same-day delivery services in Melbourne are limited to metro areas. Outer suburbs may require next-day delivery, so it's always advisable to confirm with the specific provider."
     }
   ]
 };

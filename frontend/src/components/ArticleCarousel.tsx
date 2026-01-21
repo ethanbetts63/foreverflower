@@ -85,6 +85,13 @@ const articles = [
     srcSet: `${floristPackingImage} 320w, ${floristPackingImage} 640w, ${floristPackingImage} 768w, ${floristPackingImage} 1024w, ${floristPackingImage} 1280w`,
     link: '/articles/best-flower-delivery-darwin',
     alt: 'A guide to the best flower delivery services in Darwin'
+  },
+  {
+    title: 'The Best Flower Delivery Services in Melbourne (2026 Guide)',
+    imageSrc: floristPackingImage,
+    srcSet: `${floristPackingImage} 320w, ${floristPackingImage} 640w, ${floristPackingImage} 768w, ${floristPackingImage} 1024w, ${floristPackingImage} 1280w`,
+    link: '/articles/best-flower-delivery-melbourne',
+    alt: 'A guide to the best flower delivery services in Melbourne'
   }
 ];
 
