@@ -33,6 +33,7 @@ export const CtaCard: React.FC = () => {
   const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
   const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDebouncing, setIsDebouncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // --- Instant Calculations for Subscription view ---
@@ -51,9 +52,10 @@ export const CtaCard: React.FC = () => {
   // --- API Handler ---
   // Memoize the core API call function to ensure debouncing works correctly
   const calculateUpfront = useCallback(async (currentBudget: number, currentDeliveries: number, currentYears: number) => {
+    setIsDebouncing(false); // Debounce has finished, API call is about to start
     setIsLoading(true);
     setError(null);
-    setUpfrontPrice(null);
+    setUpfrontPrice(null); // Clear previous results immediately
     setBreakdown(null);
 
     try {
@@ -61,7 +63,7 @@ export const CtaCard: React.FC = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          budget: currentBudget, // Use bouquet_budget here as well, matches backend
+          budget: currentBudget,
           deliveries_per_year: currentDeliveries,
           years: currentYears,
         }),
@@ -99,15 +101,27 @@ export const CtaCard: React.FC = () => {
       <div className="space-y-6">
         <div className="grid gap-2">
           <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
-          <Slider id="budget-slider" aria-label="Bouquet Budget" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => setBouquetBudget(v[0])} />
+          <Slider id="budget-slider" aria-label="Bouquet Budget" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => {
+            setIsDebouncing(true);
+            setBouquetBudget(v[0]);
+            debouncedCalculateUpfront(v[0], deliveriesPerYear, years);
+          }} />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
-          <Slider id="deliveries-slider" aria-label="Deliveries Per Year" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => setDeliveriesPerYear(v[0])} />
+          <Slider id="deliveries-slider" aria-label="Deliveries Per Year" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => {
+            setIsDebouncing(true);
+            setDeliveriesPerYear(v[0]);
+            debouncedCalculateUpfront(bouquetBudget, v[0], years);
+          }} />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
-          <Slider id="years-slider" aria-label="Years" min={1} max={25} step={1} value={[years]} onValueChange={(v) => setYears(v[0])} />
+          <Slider id="years-slider" aria-label="Years" min={1} max={25} step={1} value={[years]} onValueChange={(v) => {
+            setIsDebouncing(true);
+            setYears(v[0]);
+            debouncedCalculateUpfront(bouquetBudget, deliveriesPerYear, v[0]);
+          }} />
         </div>
       </div>
       <div className="mt-6 text-center">
@@ -115,7 +129,7 @@ export const CtaCard: React.FC = () => {
       </div>
       <div className="mt-4 text-center h-20 flex flex-col items-center justify-center">
         {error && <div className="text-red-500 text-sm">{error}</div>}
-        {isLoading ? (
+        {(isLoading || isDebouncing) ? (
             <Spinner className="h-8 w-8" />
         ) : (
             upfrontPrice !== null && (
