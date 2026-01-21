@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Loader2, Palette, Sprout, Ban, ArrowRight, Tag, Milestone, Repeat, DollarSign, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Loader2, Palette, Sprout, Ban, ArrowRight, Tag, Milestone, Repeat, DollarSign, ArrowLeft, Pencil } from 'lucide-react';
 import { getFlowerPlan, getColors, getFlowerTypes } from '@/api';
 import type { FlowerPlan, Color, FlowerType } from '@/api';
 import Seo from '@/components/Seo';
@@ -143,7 +143,14 @@ const BookingConfirmationPage = () => {
           <div className="space-y-6">
             {/* Plan Details Section */}
             <Card className="bg-white shadow-md border-none text-black">
-              <CardHeader><CardTitle>Plan Structure</CardTitle></CardHeader>
+              <CardHeader className="flex justify-between items-center">
+                <CardTitle>Plan Structure</CardTitle>
+                <Button asChild variant="ghost" size="sm">
+                    <Link to={`/book-flow/create-flower-plan?planId=${planId}`}>
+                        <Pencil className="mr-2 h-4 w-4" /> Edit
+                    </Link>
+                </Button>
+              </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                   <div className="flex flex-col items-center">
                       <Milestone className="h-8 w-8 mb-2 text-green-500" />
@@ -165,7 +172,14 @@ const BookingConfirmationPage = () => {
 
             {/* Preferences Section */}
             <Card className="bg-white shadow-md border-none text-black">
-              <CardHeader><CardTitle>Your Preferences</CardTitle></CardHeader>
+              <CardHeader className="flex justify-between items-center">
+                <CardTitle>Your Preferences</CardTitle>
+                <Button asChild variant="ghost" size="sm">
+                    <Link to={`/book-flow/flower-plan/${planId}/preferences`}>
+                        <Pencil className="mr-2 h-4 w-4" /> Edit
+                    </Link>
+                </Button>
+              </CardHeader>
               <CardContent className="space-y-6">
                 <ColorPreferenceList title="Preferred Colors" colorIds={plan.preferred_colors} colorMap={colorMap} icon={Palette} />
                 <FlowerTypePreferenceList title="Preferred Flower Types" typeIds={plan.preferred_flower_types} typeMap={flowerTypeMap} icon={Sprout} variant="default" />

@@ -61,10 +61,10 @@ const FlowerPlanManagementPage: React.FC = () => {
       <Table className="border-separate border-spacing-y-3">
         <TableHeader>
           <TableRow className="border-none hover:bg-transparent">
-            <TableHead className="text-black">Status</TableHead>
-            <TableHead className="text-right text-black">Budget</TableHead>
-            <TableHead className="text-right text-black">Deliveries/Year</TableHead>
-            <TableHead className="text-right text-black">Years</TableHead>
+            <TableHead className="text-black text-base">Status</TableHead>
+            <TableHead className="text-right text-black text-base">Budget</TableHead>
+            <TableHead className="text-right text-black text-base">Deliveries/Year</TableHead>
+            <TableHead className="text-right text-black text-base">Years</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
@@ -72,17 +72,21 @@ const FlowerPlanManagementPage: React.FC = () => {
           {plans.map((plan) => (
             <TableRow
               key={plan.id}
-              className="bg-[hsl(347,100%,97%)] border-none transition-transform duration-200 ease-in-out hover:scale-[1.02]"
+              className="bg-[hsl(347,100%,97%)] border-none hover:bg-[hsl(347,100%,97%)]"
             >
-              <TableCell className="rounded-l-lg">
-                <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-black">
+              <TableCell className="rounded-l-lg text-base">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  plan.is_active
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-[var(--destructive)] text-white'
+                }`}>
                   {plan.is_active ? 'Active' : 'Inactive'}
                 </span>
               </TableCell>
-              <TableCell className="text-right text-black">${parseFloat(plan.budget).toFixed(2)}</TableCell>
-              <TableCell className="text-right text-black">{plan.deliveries_per_year}</TableCell>
-              <TableCell className="text-right text-black">{plan.years}</TableCell>
-              <TableCell className="rounded-r-lg text-right">
+              <TableCell className="text-right text-black text-base">${parseFloat(plan.budget).toFixed(2)}</TableCell>
+              <TableCell className="text-right text-black text-base">{plan.deliveries_per_year}</TableCell>
+              <TableCell className="text-right text-black text-base">{plan.years}</TableCell>
+              <TableCell className="rounded-r-lg text-right text-base">
                 <Button variant="outline" size="sm" disabled>
                   Edit
                 </Button>
@@ -99,7 +103,7 @@ const FlowerPlanManagementPage: React.FC = () => {
       <div className="container mx-auto px-4 max-w-4xl">
         <Card className="bg-white shadow-md border-none text-black">
           <CardHeader>
-            <CardTitle className="text-2xl">Flower Plan Management</CardTitle>
+            <CardTitle className="text-3xl">Flower Plan Management</CardTitle>
           </CardHeader>
           <CardContent>
             {renderContent()}
