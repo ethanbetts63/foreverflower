@@ -153,7 +153,6 @@ export interface FlowerPlan {
     id: number;
     user: number;
     is_active: boolean;
-    recipient_details: any; // Consider creating a specific type for this
     notes: string | null;
     created_at: string;
     updated_at: string;
@@ -162,6 +161,16 @@ export interface FlowerPlan {
     years: number;
     total_amount: number;
     currency: string;
+    
+    recipient_first_name: string | null;
+    recipient_last_name: string | null;
+    recipient_street_address: string | null;
+    recipient_suburb: string | null;
+    recipient_city: string | null;
+    recipient_state: string | null;
+    recipient_postcode: string | null;
+    recipient_country: string | null;
+
     preferred_colors: string[];
     preferred_flower_types: string[];
     rejected_colors: string[];
@@ -196,7 +205,21 @@ export async function deleteFlowerPlan(planId: string): Promise<void> {
     await handleResponse(response);
 }
 
-export async function createFlowerPlan(planData: { budget: number, deliveries_per_year: number, years: number }): Promise<FlowerPlan> {
+export interface CreateFlowerPlanPayload {
+    budget: number;
+    deliveries_per_year: number;
+    years: number;
+    recipient_first_name?: string;
+    recipient_last_name?: string;
+    recipient_street_address?: string;
+    recipient_suburb?: string;
+    recipient_city?: string;
+    recipient_state?: string;
+    recipient_postcode?: string;
+    recipient_country?: string;
+}
+
+export async function createFlowerPlan(planData: CreateFlowerPlanPayload): Promise<FlowerPlan> {
     const response = await authedFetch('/api/events/flower-plans/', {
         method: 'POST',
         body: JSON.stringify(planData),
@@ -210,7 +233,7 @@ export interface FlowerPlanUpdatePayload {
     rejected_colors?: number[];
     preferred_flower_types?: number[];
     rejected_flower_types?: number[];
-    recipient_details?: any;
+    recipient_details?: any; // This should be updated or removed
     notes?: string;
 }
 

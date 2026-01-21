@@ -72,7 +72,7 @@ const FlowerPlanManagementPage: React.FC = () => {
           {plans.map((plan) => (
             <TableRow
               key={plan.id}
-              className="bg-[hsl(347,100%,97%)] border-none hover:shadow-md transition-shadow"
+              className="bg-[hsl(347,100%,97%)] border-none transition-transform duration-200 ease-in-out hover:scale-[1.02]"
             >
               <TableCell className="rounded-l-lg">
                 <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-black">

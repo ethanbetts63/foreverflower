@@ -5,10 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
 import { createFlowerPlan, getFlowerPlan, deleteFlowerPlan } from '@/api';
+import type { CreateFlowerPlanPayload } from '@/api';
 import { debounce } from '@/utils/debounce';
 
 type Breakdown = {
@@ -25,25 +28,36 @@ const FlowerPlanCreationPage: React.FC = () => {
     const planId = searchParams.get('planId');
     const isUpdateMode = !!planId;
 
-    // State for the form
+    // --- State Management ---
+    // Recipient Details
+    const [recipientFirstName, setRecipientFirstName] = useState('');
+    const [recipientLastName, setRecipientLastName] = useState('');
+    const [recipientStreetAddress, setRecipientStreetAddress] = useState('');
+    const [recipientSuburb, setRecipientSuburb] = useState('');
+    const [recipientCity, setRecipientCity] = useState('');
+    const [recipientState, setRecipientState] = useState('');
+    const [recipientPostcode, setRecipientPostcode] = useState('');
+    const [recipientCountry, setRecipientCountry] = useState('');
+
+    // Plan Structure
     const [bouquetBudget, setBouquetBudget] = useState(75);
     const [deliveriesPerYear, setDeliveriesPerYear] = useState(1);
     const [years, setYears] = useState(5);
 
-    // API/Calculation result state
+    // API & UI State
     const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
     const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
     const [isApiCalculating, setIsApiCalculating] = useState(false);
     const [isDebouncePending, setIsDebouncePending] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false); // Combined create/update state
-    const [isInitialLoading, setIsInitialLoading] = useState(isUpdateMode); // Only true if we are fetching an existing plan
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isInitialLoading, setIsInitialLoading] = useState(isUpdateMode);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!isAuthenticated) {
             toast.error("You must be logged in to create a flower plan.");
             navigate('/login');
-            return; // Early exit
+            return;
         }
 
         if (isUpdateMode && planId) {
@@ -51,12 +65,23 @@ const FlowerPlanCreationPage: React.FC = () => {
                 setIsInitialLoading(true);
                 try {
                     const existingPlan = await getFlowerPlan(planId);
+                    // Populate recipient form
+                    setRecipientFirstName(existingPlan.recipient_first_name || '');
+                    setRecipientLastName(existingPlan.recipient_last_name || '');
+                    setRecipientStreetAddress(existingPlan.recipient_street_address || '');
+                    setRecipientSuburb(existingPlan.recipient_suburb || '');
+                    setRecipientCity(existingPlan.recipient_city || '');
+                    setRecipientState(existingPlan.recipient_state || '');
+                    setRecipientPostcode(existingPlan.recipient_postcode || '');
+                    setRecipientCountry(existingPlan.recipient_country || '');
+                    
+                    // Populate plan sliders
                     setBouquetBudget(existingPlan.budget);
                     setDeliveriesPerYear(existingPlan.deliveries_per_year);
                     setYears(existingPlan.years);
                 } catch (err: any) {
                     toast.error("Failed to load your saved plan.", { description: "Starting a new plan instead." });
-                    navigate('/book-flow/create-flower-plan', { replace: true }); // Redirect to clean create page
+                    navigate('/book-flow/create-flower-plan', { replace: true });
                 } finally {
                     setIsInitialLoading(false);
                 }
@@ -76,11 +101,7 @@ const FlowerPlanCreationPage: React.FC = () => {
             const response = await fetch('/api/events/calculate-price/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    budget: currentBudget,
-                    deliveries_per_year: currentDeliveries,
-                    years: currentYears,
-                }),
+                body: JSON.stringify({ budget: currentBudget, deliveries_per_year: currentDeliveries, years: currentYears }),
             });
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'Something went wrong');
@@ -100,9 +121,7 @@ const FlowerPlanCreationPage: React.FC = () => {
         if (isAuthenticated && !isSubmitting && !isInitialLoading) {
             debouncedCalculateUpfront(bouquetBudget, deliveriesPerYear, years);
         }
-        return () => {
-            debouncedCalculateUpfront.cancel && debouncedCalculateUpfront.cancel();
-        };
+        return () => { debouncedCalculateUpfront.cancel?.(); };
     }, [bouquetBudget, deliveriesPerYear, years, isAuthenticated, isSubmitting, isInitialLoading, debouncedCalculateUpfront]);
     
     const handleSubmit = async () => {
@@ -114,17 +133,25 @@ const FlowerPlanCreationPage: React.FC = () => {
         setError(null);
 
         try {
-            // In update mode, we delete the old plan first to ensure a clean state
-            // and re-trigger all the backend's `perform_create` logic.
             if (isUpdateMode && planId) {
                 await deleteFlowerPlan(planId);
             }
 
-            const newPlan = await createFlowerPlan({
+            const payload: CreateFlowerPlanPayload = {
                 budget: bouquetBudget,
                 deliveries_per_year: deliveriesPerYear,
                 years: years,
-            });
+                recipient_first_name: recipientFirstName,
+                recipient_last_name: recipientLastName,
+                recipient_street_address: recipientStreetAddress,
+                recipient_suburb: recipientSuburb,
+                recipient_city: recipientCity,
+                recipient_state: recipientState,
+                recipient_postcode: recipientPostcode,
+                recipient_country: recipientCountry,
+            };
+
+            const newPlan = await createFlowerPlan(payload);
 
             toast.success(isUpdateMode ? "Plan updated successfully!" : "Flower plan created successfully!");
             navigate(`/book-flow/flower-plan/${newPlan.id}/preferences`);
@@ -156,31 +183,74 @@ const FlowerPlanCreationPage: React.FC = () => {
                             {isUpdateMode ? "Adjust the details of your saved plan below." : "Design your perfect long-term flower plan. Pay upfront and save!"}
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <div className="space-y-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
-                                <Slider id="budget-slider" aria-label="Bouquet Budget" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => {
-                                    setIsDebouncePending(true);
-                                    setBouquetBudget(v[0]);
-                                }} />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
-                                <Slider id="deliveries-slider" aria-label="Deliveries Per Year" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => {
-                                    setIsDebouncePending(true);
-                                    setDeliveriesPerYear(v[0]);
-                                }} />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
-                                <Slider id="years-slider" aria-label="Years" min={1} max={25} step={1} value={[years]} onValueChange={(v) => {
-                                    setIsDebouncePending(true);
-                                    setYears(v[0]);
-                                }} />
+                    <CardContent className="space-y-8">
+                        {/* Recipient Details Section */}
+                        <div>
+                            <h3 className="text-xl font-semibold mb-4">Recipient Details</h3>
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="recipient-first-name">First Name</Label>
+                                        <Input id="recipient-first-name" value={recipientFirstName} onChange={(e) => setRecipientFirstName(e.target.value)} placeholder="Jane" />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="recipient-last-name">Last Name</Label>
+                                        <Input id="recipient-last-name" value={recipientLastName} onChange={(e) => setRecipientLastName(e.target.value)} placeholder="Doe" />
+                                    </div>
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="recipient-street">Street Address</Label>
+                                    <Input id="recipient-street" value={recipientStreetAddress} onChange={(e) => setRecipientStreetAddress(e.target.value)} placeholder="123 Blossom Lane" />
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                     <div className="grid gap-2">
+                                        <Label htmlFor="recipient-suburb">Suburb</Label>
+                                        <Input id="recipient-suburb" value={recipientSuburb} onChange={(e) => setRecipientSuburb(e.target.value)} placeholder="e.g., Suburb, Apt, Suite" />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="recipient-city">City</Label>
+                                        <Input id="recipient-city" value={recipientCity} onChange={(e) => setRecipientCity(e.target.value)} placeholder="Springfield" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="recipient-state">State / Province</Label>
+                                        <Input id="recipient-state" value={recipientState} onChange={(e) => setRecipientState(e.target.value)} placeholder="CA" />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="recipient-postcode">Postcode</Label>
+                                        <Input id="recipient-postcode" value={recipientPostcode} onChange={(e) => setRecipientPostcode(e.target.value)} placeholder="90210" />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="recipient-country">Country</Label>
+                                        <Input id="recipient-country" value={recipientCountry} onChange={(e) => setRecipientCountry(e.target.value)} placeholder="USA" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="mt-4 text-center h-12 flex flex-col items-center justify-center">
+
+                        <Separator />
+
+                        {/* Plan Structure Section */}
+                        <div>
+                            <h3 className="text-xl font-semibold mb-4">Plan Structure</h3>
+                                                            <div className="space-y-6">
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor="budget-slider" className="text-sm">Bouquet Budget: ${bouquetBudget}</Label>
+                                                                <Slider id="budget-slider" aria-label="Bouquet Budget" min={75} max={500} step={5} value={[bouquetBudget]} onValueChange={(v) => { setIsDebouncePending(true); setBouquetBudget(v[0]); }} />
+                                                            </div>
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {deliveriesPerYear}</Label>
+                                                                <Slider id="deliveries-slider" aria-label="Deliveries Per Year" min={1} max={12} step={1} value={[deliveriesPerYear]} onValueChange={(v) => { setIsDebouncePending(true); setDeliveriesPerYear(v[0]); }} />
+                                                            </div>
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor="years-slider" className="text-sm">Years: {years}</Label>
+                                                                <Slider id="years-slider" aria-label="Years" min={1} max={25} step={1} value={[years]} onValueChange={(v) => { setIsDebouncePending(true); setYears(v[0]); }} />
+                                                            </div>
+                                                        </div>                        </div>
+                        
+                        {/* Calculation Result */}
+                        <div className="mt-8 text-center h-12 flex flex-col items-center justify-center">
                             {(isApiCalculating || isDebouncePending) ? (
                                 <Spinner className="h-8 w-8" />
                             ) : (

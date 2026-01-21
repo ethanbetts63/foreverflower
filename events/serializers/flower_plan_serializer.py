@@ -32,8 +32,11 @@ class FlowerPlanSerializer(serializers.ModelSerializer):
         model = FlowerPlan
         fields = [
             'id', 'user', 'is_active', 'budget', 'deliveries_per_year',
-            'years', 'recipient_details', 'notes', 'created_at', 'updated_at',
+            'years', 'notes', 'created_at', 'updated_at',
             'total_amount', 'currency',
+            'recipient_first_name', 'recipient_last_name',
+            'recipient_street_address', 'recipient_suburb', 'recipient_city',
+            'recipient_state', 'recipient_postcode', 'recipient_country',
             'preferred_colors', 'preferred_flower_types', 'rejected_colors', 'rejected_flower_types',
             'events',  
         ]
