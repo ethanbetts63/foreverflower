@@ -9,6 +9,7 @@ import type { FlowerPlan, Color, FlowerType } from '@/api';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
+import EditButton from '@/components/ui/EditButton';
 
 // Helper component for displaying a single color swatch
 const ColorSwatchDisplay: React.FC<{ hex: string; name: string }> = ({ hex, name }) => (
@@ -145,11 +146,7 @@ const BookingConfirmationPage = () => {
             <Card className="bg-white shadow-md border-none text-black">
               <CardHeader className="flex justify-between items-center">
                 <CardTitle>Plan Structure</CardTitle>
-                <Button asChild variant="ghost" size="sm">
-                    <Link to={`/book-flow/create-flower-plan?planId=${planId}`}>
-                        <Pencil className="mr-2 h-4 w-4" /> Edit
-                    </Link>
-                </Button>
+                <EditButton to={`/book-flow/create-flower-plan?planId=${planId}`} />
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
                   <div className="flex flex-col items-center">
@@ -174,11 +171,7 @@ const BookingConfirmationPage = () => {
             <Card className="bg-white shadow-md border-none text-black">
               <CardHeader className="flex justify-between items-center">
                 <CardTitle>Your Preferences</CardTitle>
-                <Button asChild variant="ghost" size="sm">
-                    <Link to={`/book-flow/flower-plan/${planId}/preferences`}>
-                        <Pencil className="mr-2 h-4 w-4" /> Edit
-                    </Link>
-                </Button>
+                <EditButton to={`/book-flow/flower-plan/${planId}/preferences`} />
               </CardHeader>
               <CardContent className="space-y-6">
                 <ColorPreferenceList title="Preferred Colors" colorIds={plan.preferred_colors} colorMap={colorMap} icon={Palette} />
