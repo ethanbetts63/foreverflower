@@ -192,8 +192,8 @@ const BookingConfirmationPage = () => {
             {/* Action Button */}
             <div className="text-center">
                 <Button asChild size="lg">
-                    <Link to={`/book-flow/flower-plan/${planId}/payment`}>
-                        Proceed to Payment <ArrowRight className="ml-2 h-5 w-5" />
+                    <Link to={`/activation-success?plan_id=${planId}`}>
+                        Complete Activation <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                 </Button>
             </div>
