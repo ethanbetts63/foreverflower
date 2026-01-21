@@ -1,5 +1,5 @@
 def forever_flower_upfront_price(
-    bouquet_budget,        # B: $ per delivery
+    budget,        # B: $ per delivery
     deliveries_per_year,   # F
     years,                 # N
     commission_pct=0.05,   # 5%
@@ -14,12 +14,12 @@ def forever_flower_upfront_price(
 
     # Fee per delivery
     fee_per_delivery = max(
-        bouquet_budget * commission_pct,
+        budget * commission_pct,
         min_fee_per_delivery
     )
 
     # Annual costs
-    flower_cost_year = bouquet_budget * deliveries_per_year
+    flower_cost_year = budget * deliveries_per_year
     fee_year = fee_per_delivery * deliveries_per_year
     total_cost_year = flower_cost_year + fee_year
 
@@ -32,7 +32,7 @@ def forever_flower_upfront_price(
     total_service_fee = fee_year * annuity_factor
 
     # For comparison, calculate the total nominal cost if paid via subscription
-    price_per_delivery = bouquet_budget + fee_per_delivery
+    price_per_delivery = budget + fee_per_delivery
     total_subscription_cost = price_per_delivery * deliveries_per_year * N
     
     # Calculate the savings percentage

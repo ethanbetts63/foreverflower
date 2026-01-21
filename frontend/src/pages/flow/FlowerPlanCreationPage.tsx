@@ -47,7 +47,6 @@ const FlowerPlanCreationPage: React.FC = () => {
         setBreakdown(null);
 
         try {
-            // NOTE: Using fetch here because this is an unauthenticated call by design
             const response = await fetch('/api/events/calculate-price/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

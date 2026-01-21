@@ -45,7 +45,7 @@ def calculate_upfront_price(request):
 
 
     upfront_price, breakdown = forever_flower_upfront_price(
-        bouquet_budget=budget,
+        budget=budget,
         deliveries_per_year=deliveries_per_year,
         years=years,
     )

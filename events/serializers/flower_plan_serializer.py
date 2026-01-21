@@ -10,11 +10,9 @@ class FlowerPlanSerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True, read_only=True)
 
     budget = serializers.DecimalField(
-        max_digits=10, decimal_places=2, source='bouquet_budget'
+        max_digits=10, decimal_places=2, source='budget'
     )
-    years = serializers.IntegerField(
-        source='years'
-    )
+    years = serializers.IntegerField()
     deliveries_per_year = serializers.IntegerField()
 
     preferred_colors = serializers.PrimaryKeyRelatedField(

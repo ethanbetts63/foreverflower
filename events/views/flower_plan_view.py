@@ -30,7 +30,7 @@ class FlowerPlanViewSet(viewsets.ModelViewSet):
 
         # --- Calculate and save the total price ---
         upfront_price, _ = forever_flower_upfront_price(
-            bouquet_budget=float(flower_plan.budget),
+            budget=float(flower_plan.budget),
             deliveries_per_year=flower_plan.deliveries_per_year,
             years=flower_plan.years,
         )
