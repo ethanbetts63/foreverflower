@@ -12,6 +12,7 @@ import type { FlowerPlan } from '@/api';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from '@/components/ui/label';
+import { ArrowLeft } from 'lucide-react';
 
 const CustomMessagePage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
@@ -75,6 +76,10 @@ const CustomMessagePage: React.FC = () => {
         navigate(`/book-flow/flower-plan/${planId}/confirmation`);
     };
 
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
     if (error) return <div className="text-center py-12 text-red-500">{error}</div>;
 
@@ -84,10 +89,17 @@ const CustomMessagePage: React.FC = () => {
                 <Seo title="Add Custom Messages | ForeverFlower" />
                 <Card className="bg-white text-black border-none shadow-md">
                     <CardHeader>
-                        <CardTitle className="text-3xl">Add Custom Messages (Optional)</CardTitle>
-                        <CardDescription className="text-black">
-                            Add a personal touch to your deliveries. You can write one message for all, or customize each one.
-                        </CardDescription>
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <CardTitle className="text-3xl">Add Custom Messages (Optional)</CardTitle>
+                                <CardDescription className="text-black">
+                                    Add a personal touch to your deliveries. You can write one message for all, or customize each one.
+                                </CardDescription>
+                            </div>
+                             <Button variant="destructive" onClick={handleSkip} className="bg-transparent text-red-500 hover:bg-red-50 ml-4">
+                                Skip for Now
+                            </Button>
+                        </div>
                     </CardHeader>
                     <CardContent className="space-y-8">
                         <div>
@@ -135,7 +147,9 @@ const CustomMessagePage: React.FC = () => {
                         </div>
                     </CardContent>
                     <CardFooter className="flex justify-between">
-                        <Button variant="ghost" onClick={handleSkip}>Skip for Now</Button>
+                        <Button variant="ghost" onClick={handleBack}>
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                        </Button>
                         <Button size="lg" onClick={handleSave}>
                             Save & Continue
                         </Button>
