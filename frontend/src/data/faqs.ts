@@ -126,7 +126,7 @@ export const faqs: { [key: string]: FaqItem[] } = {
       "question": "What's the difference between using a local Perth florist versus a national service?",
       "answer": "Generally, local Perth florists may offer more unique, higher-quality designs. National services, on the other hand, often provide wider delivery coverage and later same-day cutoff times, giving you more flexibility."
     }
-  },
+  ],
   "best-flower-delivery-adelaide": [
     {
       "question": "What is the best overall flower delivery service in Adelaide?",
