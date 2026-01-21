@@ -1,74 +1,90 @@
+// src/pages/flow/PaymentPage.tsx
 import { useState, useEffect } from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import type { StripeElementsOptions, Appearance } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { toast } from 'sonner';
-
-import CheckoutForm from '../../forms/CheckoutForm';
-import Summary from '../../components/Summary';
-import { getUserProfile } from '@/api';
-import type { Event, UserProfile } from '@/types';
+import { getFlowerPlan, createPaymentIntent } from '@/api';
+import type { FlowerPlan } from '@/api';
 import { Spinner } from '@/components/ui/spinner';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Seo from '@/components/Seo';
+import CheckoutForm from '../../forms/CheckoutForm';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
+const PlanSummary: React.FC<{ plan: FlowerPlan }> = ({ plan }) => (
+  <Card>
+    <CardHeader>
+      <CardTitle>Your Flower Plan</CardTitle>
+      <CardDescription>Review your one-time payment details below.</CardDescription>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      <div className="flex justify-between">
+        <span className="text-muted-foreground">Plan Duration</span>
+        <span>{plan.years} {plan.years > 1 ? 'Years' : 'Year'}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-muted-foreground">Deliveries per Year</span>
+        <span>{plan.deliveries_per_year}</span>
+      </div>
+      <div className="flex justify-between">
+        <span className="text-muted-foreground">Budget per Bouquet</span>
+        <span>${plan.budget.toFixed(2)}</span>
+      </div>
+      <div className="border-t my-2"></div>
+      <div className="flex justify-between text-xl font-bold">
+        <span>Total Amount</span>
+        <span>${plan.total_amount.toFixed(2)} {plan.currency.toUpperCase()}</span>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 export default function PaymentPage() {
-  const location = useLocation();
-  const [clientSecret] = useState<string | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [, setIsLoading] = useState(true);
-  
-  const event: Event | undefined = location.state?.event;
-  const targetTier: undefined = location.state?.targetTier;
+  const { planId } = useParams<{ planId: string }>();
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [flowerPlan, setFlowerPlan] = useState<FlowerPlan | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch user profile and contacts
-    Promise.all([getUserProfile()])
-      .then(([userProfile]) => {
-        setProfile(userProfile);
+    if (!planId) {
+      setError('No Plan ID provided.');
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    Promise.all([
+      getFlowerPlan(planId),
+      createPaymentIntent(parseInt(planId, 10)),
+    ])
+      .then(([planData, intentData]) => {
+        setFlowerPlan(planData);
+        setClientSecret(intentData.clientSecret);
       })
-      .catch(error => {
-        toast.error("Failed to load user data", {
-          description: error.message || "Could not fetch profile and contact details."
+      .catch(err => {
+        console.error(err);
+        setError(err.message || 'Failed to load plan details or initialize payment.');
+        toast.error('An error occurred', {
+          description: err.message || 'Please try refreshing the page.',
         });
       })
       .finally(() => {
         setIsLoading(false);
       });
+  }, [planId]);
 
-    // Fetch payment intent
-    if (event?.id && targetTier?.id) {
-      // TODO: This page needs to be updated to the new FlowerPlan flow. get rid of tiers and move to the custom pricing. 
-      // The createPaymentIntent function now expects a flower_plan_id, not event.id and targetTier.id.
-      // createPaymentIntent(event.id, targetTier.id)
-      //   .then(data => {
-      //     setClientSecret(data.clientSecret);
-      //   })
-      //   .catch(error => {
-      //     toast.error("Failed to initialize payment", {
-      //       description: error.message || "Could not connect to the payment service."
-      //     });
-      //   });
-    }
-  }, [event, targetTier]);
-
-  if (!event || !targetTier) {
-    // If we land here without an event or a target tier, the flow is broken.
-    // Send user back to the start of the creation flow.
-    toast.error("Invalid state", { description: "Missing event or tier information for payment."});
-    return <Navigate to="/create-flow/event" replace />;
+  if (error) {
+    // Navigate away if there's a critical error
+    toast.error("Invalid payment state", { description: error });
+    return <Navigate to="/dashboard" replace />;
   }
-  
+
   const appearance: Appearance = {
     theme: 'stripe',
-    rules: {
-      '.Label': {
-        color: 'var(--background)',
-      },
-    }
   };
 
   const options: StripeElementsOptions = {
@@ -76,53 +92,62 @@ export default function PaymentPage() {
     appearance,
   };
 
-  const priceAmount = targetTier.prices.find(p => p.type === 'one_time')?.amount;
-  const price = priceAmount ? Number(priceAmount) : undefined;
-
   return (
     <div className="container mx-auto px-4 py-8">
       <Seo title="Secure Payment | ForeverFlower" />
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold">Complete Your Payment</h1>
-        <p className="text-muted-foreground">
-          Secure your reminder for <strong>{event.name}</strong>.
-        </p>
+        <p className="text-muted-foreground">Secure your ForeverFlower plan.</p>
       </div>
 
       <div className="flex flex-col md:flex-row md:gap-12">
         {/* Left Column (Payment Form) */}
         <div className="order-2 md:order-1 w-full">
-          <Card className="bg-foreground text-background">
-            <CardHeader>
-              <div className="text-center text-sm text-muted-foreground pb-2">
-                <p>Powered by <span className="font-bold">Stripe</span></p>
-              </div>
-              <CardTitle className="text-3xl">Payment Details</CardTitle>
-              <CardDescription className="text-black">Enter your card information below.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {clientSecret ? (
-                <Elements options={options} stripe={stripePromise}>
-                  <CheckoutForm eventId={event.id.toString()} />
-                </Elements>
-              ) : (
-                <div className="flex justify-center items-center h-48">
-                  <Spinner className="h-12 w-12" />
-                  <p className="ml-4 text-lg">Initializing payment gateway...</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+            {isLoading || !clientSecret || !flowerPlan ? (
+                 <Card className="bg-foreground text-background">
+                    <CardHeader>
+                        <CardTitle className="text-3xl">Payment Details</CardTitle>
+                        <CardDescription className="text-black">Enter your card information below.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex justify-center items-center h-48">
+                            <Spinner className="h-12 w-12" />
+                            <p className="ml-4 text-lg text-black">Initializing payment gateway...</p>
+                        </div>
+                    </CardContent>
+                </Card>
+            ) : (
+                <Card className="bg-foreground text-background">
+                    <CardHeader>
+                        <div className="text-center text-sm text-black pb-2">
+                            <p>Powered by <span className="font-bold">Stripe</span></p>
+                        </div>
+                        <CardTitle className="text-3xl">Payment Details</CardTitle>
+                        <CardDescription className="text-black">Enter your card information below.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Elements options={options} stripe={stripePromise}>
+                            <CheckoutForm planId={flowerPlan.id.toString()} />
+                        </Elements>
+                    </CardContent>
+                </Card>
+            )}
         </div>
 
         {/* Right Column (Summary) */}
         <div className="order-1 md:order-2 w-full mb-8 md:mb-0">
-          <Summary 
-            event={event} 
-            user={profile || undefined} 
-            price={price}
-            isPriceLoading={!price && !clientSecret}
-          />
+          {isLoading || !flowerPlan ? (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Loading Plan...</CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center items-center h-48">
+                    <Spinner className="h-12 w-12" />
+                </CardContent>
+            </Card>
+          ) : (
+            <PlanSummary plan={flowerPlan} />
+          )}
         </div>
       </div>
     </div>

@@ -85,7 +85,7 @@ function App() {
                 <Route path="/book-flow/create-flower-plan" element={<FlowerPlanCreationPage />} />
                 <Route path="/book-flow/flower-plan/:planId/preferences" element={<PreferenceSelectionPage />} />
                 <Route path="/book-flow/flower-plan/:planId/confirmation" element={<BookingConfirmationPage />} />
-                <Route path="/create-flow/payment" element={<PaymentPage />} />
+                <Route path="/book-flow/flower-plan/:planId/payment" element={<PaymentPage />} />
                 <Route path="/create-flow/success" element={<ActivationSuccessPage />} />
                 <Route path="/payment-status" element={<PaymentStatusPage />} />
 
