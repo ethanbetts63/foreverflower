@@ -150,7 +150,7 @@ const PreferenceSelectionPage: React.FC = () => {
                         {/* Flower Types Section */}
                         <div>
                             <h3 className="text-xl font-semibold mb-2">Flower Types</h3>
-                            <p className="text-sm text-gray-600 mb-4">Select their favorite flowers and flowers you know they don't like. We will try our best to find a florist that delivers in your area for your budget that matches your preferences.</p>
+                            <p className="text-sm text-gray-600 mb-4">Select their favorite flowers and flowers you know they don't like. We will order based off these so long as we can find a florist in your area, for your budget, that can accomodate your preferences.</p>
                             <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div>
                                     <h4 className="font-medium mb-3 text-center">My absolute favorites</h4>
