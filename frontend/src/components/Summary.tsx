@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { Event, UserProfile, EmergencyContact } from '@/types';
+import type { Event, UserProfile } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatDate } from '@/utils/utils';
@@ -7,7 +7,6 @@ import { formatDate } from '@/utils/utils';
 interface SummaryProps {
   event?: Event;
   user?: UserProfile;
-  emergencyContacts?: EmergencyContact[];
   className?: string;
   price?: number; // Accept a direct price
   isPriceLoading?: boolean;
