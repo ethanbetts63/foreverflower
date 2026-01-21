@@ -37,6 +37,7 @@ const BestFlowerDeliveryPerth = lazy(() => import('./pages/articles/BestFlowerDe
 const BestFlowerDeliverySydney = lazy(() => import('./pages/articles/BestFlowerDeliverySydney'));
 
 const CreateAccountPage = lazy(() => import('./pages/flow/CreateAccountPage'));
+const CustomMessagePage = lazy(() => import('./pages/flow/CustomMessagePage'));
 
 // --- Lazy-loaded Admin Pages ---
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
@@ -82,6 +83,7 @@ function App() {
                 <Route path="/book-flow/create-account" element={<CreateAccountPage />} />
                 <Route path="/book-flow/create-flower-plan" element={<FlowerPlanCreationPage />} />
                 <Route path="/book-flow/flower-plan/:planId/preferences" element={<PreferenceSelectionPage />} />
+                <Route path="/book-flow/flower-plan/:planId/add-message" element={<CustomMessagePage />} />
                 <Route path="/book-flow/flower-plan/:planId/confirmation" element={<BookingConfirmationPage />} />
                 <Route path="/book-flow/flower-plan/:planId/payment" element={<PaymentPage />} />
                 <Route path="/create-flow/success" element={<ActivationSuccessPage />} />

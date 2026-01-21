@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { debounce } from '@/utils/debounce'; // Import debounce utility
 
 // Define a type for the breakdown for better type safety
 type Breakdown = {
@@ -47,7 +48,8 @@ export const CtaCard: React.FC = () => {
   };
 
   // --- API Handler ---
-  const handleCalculateUpfront = async () => {
+  // Memoize the core API call function to ensure debouncing works correctly
+  const calculateUpfront = useCallback(async (currentBudget: number, currentDeliveries: number, currentYears: number) => {
     setIsLoading(true);
     setError(null);
     setUpfrontPrice(null);
@@ -58,9 +60,9 @@ export const CtaCard: React.FC = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          budget: bouquetBudget,
-          deliveries_per_year: deliveriesPerYear,
-          years: years,
+          budget: currentBudget, // Use bouquet_budget here as well, matches backend
+          deliveries_per_year: currentDeliveries,
+          years: currentYears,
         }),
       });
       const data = await response.json();
@@ -72,7 +74,24 @@ export const CtaCard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []); // Dependencies are empty as it gets values from parameters
+
+  // Create a debounced version of the calculateUpfront function
+  const debouncedCalculateUpfront = useMemo(() => {
+    return debounce(calculateUpfront, 500); // 500ms debounce time
+  }, [calculateUpfront]);
+
+  // Effect to trigger initial calculation and re-calculate on slider changes
+  useEffect(() => {
+    if (view === 'upfront') {
+        debouncedCalculateUpfront(bouquetBudget, deliveriesPerYear, years);
+    }
+    // Cleanup function for debounce
+    return () => {
+        debouncedCalculateUpfront.cancel && debouncedCalculateUpfront.cancel();
+    };
+  }, [bouquetBudget, deliveriesPerYear, years, view, debouncedCalculateUpfront]);
+
 
   const renderUpfrontCalculator = () => (
     <>
@@ -91,7 +110,10 @@ export const CtaCard: React.FC = () => {
         </div>
       </div>
       <div className="mt-6 text-center">
-        <Button onClick={handleCalculateUpfront} disabled={isLoading} className="w-full">{isLoading ? 'Calculating...' : 'Calculate Upfront Cost'}</Button>
+        {/* The button is now primarily for explicit recalculation if needed, or if debounce is not triggered by slider */}
+        <Button onClick={() => debouncedCalculateUpfront(bouquetBudget, deliveriesPerYear, years)} disabled={isLoading} className="w-full">
+            {isLoading ? 'Calculating...' : 'Calculate Upfront Cost'}
+        </Button>
       </div>
       <div className="mt-4 text-center h-20 flex flex-col items-center justify-center">
         {error && <div className="text-red-500 text-sm">{error}</div>}
