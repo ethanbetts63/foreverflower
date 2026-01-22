@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStripe } from '@stripe/react-stripe-js';
-import type { PaymentIntent, PaymentIntentResult } from '@stripe/stripe-js';
+import type { PaymentIntentResult } from '@stripe/stripe-js';
 
-// Define a more specific type that includes the metadata we expect from our backend.
-interface PaymentIntentWithMetadata extends PaymentIntent {
-  metadata: {
-    event_id?: string;
-    user_id?: string;
-  };
-}
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -47,7 +40,7 @@ const PaymentStatusPage: React.FC = () => {
       }
 
       setIsProcessing(false);
-      const paymentIntent = result.paymentIntent as PaymentIntentWithMetadata;
+      const paymentIntent = result.paymentIntent;
 
       switch (paymentIntent?.status) {
         case 'succeeded':
@@ -56,14 +49,14 @@ const PaymentStatusPage: React.FC = () => {
             description: "Your event has been activated."
           });
           
-          const eventId = new URLSearchParams(window.location.search).get('event_id');
-          if (eventId) {
-            setMessage('Success! Your payment was received. Redirecting to your confirmation...');
+          const planId = new URLSearchParams(window.location.search).get('plan_id');
+          if (planId) {
+            setMessage('Success! Your payment was received. Redirecting...');
             setTimeout(() => {
-              navigate(`/confirmation/${eventId}`);
+              navigate(`/create-flow/success?plan_id=${planId}`);
             }, 2000);
           } else {
-            setMessage('Success! Your payment was received, but we could not find the event details. Please check your dashboard.');
+            setMessage('Success! Your payment was received, but we could not find the plan details. Please check your dashboard.');
           }
           break;
         case 'processing':
