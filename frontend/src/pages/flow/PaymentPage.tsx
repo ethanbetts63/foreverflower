@@ -1,6 +1,6 @@
 // src/pages/flow/PaymentPage.tsx
 import { useState, useEffect } from 'react';
-import { useParams, Navigate, useNavigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import type { StripeElementsOptions, Appearance } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
@@ -44,7 +44,6 @@ const PlanSummary: React.FC<{ plan: FlowerPlan }> = ({ plan }) => (
 );
 
 export default function PaymentPage() {
-  const navigate = useNavigate();
   const { planId } = useParams<{ planId: string }>();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [flowerPlan, setFlowerPlan] = useState<FlowerPlan | null>(null);
