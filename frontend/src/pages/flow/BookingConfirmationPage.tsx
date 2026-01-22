@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Loader2, Palette, Sprout, Ban, ArrowRight, Tag, Milestone, Repeat, DollarSign } from 'lucide-react';
+import { CheckCircle, Loader2, Palette, Sprout, Ban, ArrowRight, Tag, Milestone, Repeat, DollarSign, MessageSquareText } from 'lucide-react';
 import { getFlowerPlan, getColors, getFlowerTypes } from '@/api';
 import type { FlowerPlan, Color, FlowerType } from '@/api';
 import Seo from '@/components/Seo';
@@ -181,6 +181,33 @@ const BookingConfirmationPage = () => {
                 <ColorPreferenceList title="Rejected Colors" colorIds={plan.rejected_colors} colorMap={colorMap} icon={Ban} />
                 <FlowerTypePreferenceList title="Rejected Flower Types" typeIds={plan.rejected_flower_types} typeMap={flowerTypeMap} icon={Ban} variant="destructive" />
               </CardContent>
+            </Card>
+
+            {/* Custom Messages Section */}
+            <Card className="bg-white shadow-md border-none text-black">
+                <CardHeader className="flex flex-row justify-between items-center">
+                    <CardTitle className="flex items-center">
+                        <MessageSquareText className="mr-2 h-5 w-5" />
+                        Custom Messages
+                    </CardTitle>
+                    <EditButton to={`/book-flow/flower-plan/${planId}/add-message`} />
+                </CardHeader>
+                <CardContent>
+                    {plan.events && plan.events.some(e => e.message) ? (
+                        <ul className="space-y-4">
+                            {plan.events.filter(e => e.message).map((event, index) => (
+                                <li key={event.id} className="p-4 bg-gray-50 rounded-lg">
+                                    <p className="font-semibold text-sm text-gray-800">
+                                        Delivery on {new Date(event.delivery_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                    </p>
+                                    <p className="mt-1 text-gray-600 italic">"{event.message}"</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No custom messages were added.</p>
+                    )}
+                </CardContent>
             </Card>
 
             {/* Pricing Summary */}

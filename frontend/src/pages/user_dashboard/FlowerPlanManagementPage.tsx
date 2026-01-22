@@ -93,7 +93,7 @@ const FlowerPlanManagementPage: React.FC = () => {
               <TableCell className="text-right text-black text-base">{plan.deliveries_per_year}</TableCell>
               <TableCell className="text-right text-black text-base">{plan.years}</TableCell>
               <TableCell className="rounded-r-lg text-right text-base">
-                <EditButton />
+                <EditButton to={`/book-flow/create-flower-plan?planId=${plan.id}`} />
               </TableCell>
             </TableRow>
           ))}
