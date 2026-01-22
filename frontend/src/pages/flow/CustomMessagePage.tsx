@@ -12,7 +12,7 @@ import type { FlowerPlan } from '@/api';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from '@/components/ui/label';
-import { ArrowLeft } from 'lucide-react';
+import BackButton from '@/components/BackButton';
 
 const CustomMessagePage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
@@ -74,10 +74,6 @@ const CustomMessagePage: React.FC = () => {
     const handleSkip = () => {
         toast.info("You can add messages later from your dashboard.");
         navigate(`/book-flow/flower-plan/${planId}/confirmation`);
-    };
-
-    const handleBack = () => {
-        navigate(-1);
     };
 
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
@@ -147,9 +143,7 @@ const CustomMessagePage: React.FC = () => {
                         </div>
                     </CardContent>
                     <CardFooter className="flex justify-between">
-                        <Button variant="ghost" onClick={handleBack}>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Back
-                        </Button>
+                        <BackButton />
                         <Button size="lg" onClick={handleSave}>
                             Save & Continue
                         </Button>

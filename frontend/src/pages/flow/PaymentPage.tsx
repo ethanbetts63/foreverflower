@@ -1,6 +1,6 @@
 // src/pages/flow/PaymentPage.tsx
 import { useState, useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import type { StripeElementsOptions, Appearance } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { getFlowerPlan, createPaymentIntent } from '@/api';
 import type { FlowerPlan } from '@/api';
 import { Spinner } from '@/components/ui/spinner';
+import BackButton from '@/components/BackButton';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Seo from '@/components/Seo';
 import CheckoutForm from '../../forms/CheckoutForm';
@@ -43,6 +44,7 @@ const PlanSummary: React.FC<{ plan: FlowerPlan }> = ({ plan }) => (
 );
 
 export default function PaymentPage() {
+  const navigate = useNavigate();
   const { planId } = useParams<{ planId: string }>();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [flowerPlan, setFlowerPlan] = useState<FlowerPlan | null>(null);
@@ -140,7 +142,7 @@ export default function PaymentPage() {
           {/* Right Column (Summary) */}
           <div className="order-1 md:order-2 w-full mb-8 md:mb-0">
             {isLoading || !flowerPlan ? (
-              <Card>
+              <Card className="bg-white shadow-md border-none text-black">
                   <CardHeader>
                       <CardTitle>Loading Plan...</CardTitle>
                   </CardHeader>
@@ -152,6 +154,9 @@ export default function PaymentPage() {
               <PlanSummary plan={flowerPlan} />
             )}
           </div>
+        </div>
+        <div className="mt-8">
+            <BackButton />
         </div>
       </div>
     </div>
