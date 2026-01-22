@@ -33,19 +33,14 @@ class CreatePaymentIntentView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # The price is now directly related to the FlowerPlan
-        try:
-            price = flower_plan.price
-            if not price or price.total_amount <= 0:
-                # This case should ideally not happen if a price is always created with a plan
-                raise AttributeError
-        except AttributeError:
-             return Response(
-                {"error": f"No active price could be found for the selected flower plan."},
+        # The total amount is now directly on the FlowerPlan model.
+        if not flower_plan.total_amount or flower_plan.total_amount <= 0:
+            return Response(
+                {"error": "Invalid total amount for the selected flower plan."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        amount_in_cents = int(price.total_amount * 100)
+
+        amount_in_cents = int(flower_plan.total_amount * 100)
 
         try:
             # Check if a payment record already exists and is pending
@@ -58,7 +53,7 @@ class CreatePaymentIntentView(APIView):
                 # Create a new PaymentIntent with Stripe
                 payment_intent = stripe.PaymentIntent.create(
                     amount=amount_in_cents,
-                    currency=price.currency,
+                    currency=flower_plan.currency,
                     automatic_payment_methods={'enabled': True},
                     metadata={
                         'flower_plan_id': flower_plan.id,
@@ -71,7 +66,7 @@ class CreatePaymentIntentView(APIView):
                     user=request.user,
                     flower_plan=flower_plan,
                     stripe_payment_intent_id=payment_intent.id,
-                    amount=price.total_amount,
+                    amount=flower_plan.total_amount,
                     status='pending'
                 )
 
