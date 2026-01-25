@@ -9,8 +9,9 @@ from .views.flower_plan_view import FlowerPlanViewSet, get_latest_inactive_flowe
 router = DefaultRouter()
 router.register(r'colors', ColorViewSet, basename='color')
 router.register(r'flower-types', FlowerTypeViewSet, basename='flower-type')
-router.register(r'events', EventViewSet, basename='event')
 router.register(r'flower-plans', FlowerPlanViewSet, basename='flower-plan')
+# This must be last, as its empty prefix will catch anything not matched above.
+router.register(r'', EventViewSet, basename='event')
 
 urlpatterns = [
     path('calculate-price/', calculate_upfront_price, name='calculate-price'),
