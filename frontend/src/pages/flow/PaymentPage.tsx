@@ -1,5 +1,5 @@
 // src/pages/flow/PaymentPage.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import type { StripeElementsOptions, Appearance } from '@stripe/stripe-js';
@@ -49,6 +49,7 @@ export default function PaymentPage() {
   const [flowerPlan, setFlowerPlan] = useState<FlowerPlan | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasCreatedPaymentIntentRef = useRef(false); // Add this ref
 
   useEffect(() => {
     if (!planId) {
@@ -57,17 +58,18 @@ export default function PaymentPage() {
       return;
     }
 
-    if (clientSecret) { // If clientSecret is already set, we don't need to re-fetch/re-create
+    // Prevent re-running if clientSecret is already set OR if we've already tried to create the intent
+    if (clientSecret || hasCreatedPaymentIntentRef.current) { 
       setIsLoading(false);
       return;
     }
 
     setIsLoading(true);
+    hasCreatedPaymentIntentRef.current = true; // Mark that we are attempting to create the intent
 
     getFlowerPlan(planId)
       .then(planData => {
         setFlowerPlan(planData);
-        // Only create payment intent if clientSecret is null/not yet set
         return createPaymentIntent(planData.id);
       })
       .then(intentData => {
@@ -79,6 +81,7 @@ export default function PaymentPage() {
         toast.error('An error occurred', {
           description: err.message || 'Please try refreshing the page.',
         });
+        hasCreatedPaymentIntentRef.current = false; // Reset if error, so a retry can happen
       })
       .finally(() => {
         setIsLoading(false);
