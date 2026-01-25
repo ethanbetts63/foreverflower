@@ -1,0 +1,75 @@
+# User Account Deletion / Anonymization Implementation Plan
+
+This plan outlines the steps to implement the user account deletion workflow as described in `delete_user_flow.txt`, incorporating the user's specific instructions regarding hash fields in `FlowerPlan` and the existing `hash_value` utility.
+
+## Relevant Files:
+
+*   `foreverflower/events/models/flower_plan.py`: FlowerPlan model definition. (Needs new hash fields)
+*   `foreverflower/events/models/event.py`: Event model definition.
+*   `foreverflower/users/models/user.py`: Custom User model definition.
+*   `foreverflower/users/utils/hash_value.py`: Existing utility for hashing values.
+*   `foreverflower/users/utils/anonymize_user.py`: Main utility to be implemented for user anonymization.
+*   `foreverflower/users/views/delete_user_view.py`: View that orchestrates the deletion process.
+*   `foreverflower/delete_user_flow.txt`: User deletion workflow specification.
+
+## Step-by-Step Guide:
+
+### 1. Update `FlowerPlan` Model with Hash Fields
+
+**File:** `foreverflower/events/models/flower_plan.py`
+
+**Action:** Add `hash_*` fields for `recipient_first_name`, `recipient_last_name`, and `recipient_street_address` to store their hashed values upon anonymization. These fields should be `CharField(max_length=64, blank=True, null=True, editable=False)` to match the User model's hash fields.
+
+### 2. Implement `anonymize_user` Utility
+
+**File:** `foreverflower/users/utils/anonymize_user.py`
+
+**Action:** Uncomment the entire file and implement the `anonymize_user(user: User)` function based on the `delete_user_flow.txt` and the updated model structures.
+
+    a.  **Imports:** Ensure all necessary imports are present:
+        *   `django.conf.settings`
+        *   `django.utils.timezone`
+        *   `users.models.User` (if not already there)
+        *   `users.utils.hash_value.hash_value` (the existing utility)
+        *   `events.models.flower_plan.FlowerPlan`
+        *   `events.models.event.Event`
+
+    b.  **Retrieve Hashing Salt:**
+        *   Get `salt = getattr(settings, 'HASHING_SALT', None)`. Ensure this setting exists in `settings.py`. If not, this step will need to be added. (For now, assume it will exist or be handled by the user).
+        *   Add a check: `if not salt: return` (or raise an error).
+
+    c.  **Handle FlowerPlans (Step 2 of flow):**
+        *   **Delete Inactive Plans:** Query and delete `FlowerPlan` objects where `user=user` and `is_active=False`.
+        *   **Anonymize Active Plans:**
+            *   Query `active_plans = FlowerPlan.objects.filter(user=user, is_active=True)`.
+            *   Iterate through each `plan` in `active_plans`:
+                *   **Delete Non-Completed Events:** For the current `plan`, delete all related `Event` objects where `status` is not `'delivered'`.
+                *   **Hash Recipient PII:** For the fields `recipient_first_name`, `recipient_last_name`, `recipient_street_address`:
+                    *   If the original field has a value, hash it using `hash_value(original_value, salt)` and store it in the corresponding `hash_*` field on the `plan`.
+                *   **Wipe Recipient PII:** Set the original `recipient_*` fields to `None` (for `null=True`) or an empty string (for `blank=True`).
+                *   Save the `plan`.
+
+    d.  **Hash and Wipe User PII (Steps 3 & 4 of flow):**
+        *   Define `user_pii_fields_to_hash` dictionary:
+            `{ 'first_name': 'hash_first_name', 'last_name': 'hash_last_name' }`
+        *   Iterate through `user_pii_fields_to_hash`:
+            *   Hash the `user.field_name` using `hash_value` and store in `user.hash_field_name`.
+            *   Set `user.field_name` to an empty string.
+        *   **Handle Email:**
+            *   If `user.email` exists, hash it into `user.hash_email`.
+            *   Set `user.email` to `f"deleted_{user.pk}@deleted.com"`.
+        *   **Handle Username:**
+            *   Set `user.username` to `f"deleted_user_{user.pk}"`.
+
+    e.  **Deactivate Account (Step 5 of flow):**
+        *   Set `user.is_active = False`.
+        *   Set `user.anonymized_at = timezone.now()`.
+        *   `user.save()`
+
+### 3. Update `DeleteUserView`
+
+**File:** `foreverflower/users/views/delete_user_view.py`
+
+**Action:**
+    *   Uncomment `from users.utils.anonymize_user import anonymize_user`.
+    *   Uncomment `anonymize_user(user)` within the `delete` method's `try` block.
