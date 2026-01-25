@@ -1,6 +1,6 @@
 // foreverflower/frontend/src/pages/flow/CustomMessagePage.tsx
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,15 @@ import BackButton from '@/components/BackButton';
 const CustomMessagePage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const { isAuthenticated } = useAuth();
+
+    // Determine navigation context
+    const isManagementFlow = new URLSearchParams(location.search).get('source') === 'management';
+    const redirectPath = isManagementFlow 
+        ? `/dashboard/plans/${planId}/overview` 
+        : `/book-flow/flower-plan/${planId}/confirmation`;
+    const saveButtonText = isManagementFlow ? 'Save' : 'Next';
     
     // Core State
     const [flowerPlan, setFlowerPlan] = useState<FlowerPlan | null>(null);
@@ -108,7 +116,7 @@ const CustomMessagePage: React.FC = () => {
             await Promise.all(promises);
 
             toast.success("Your messages have been saved!");
-            navigate(`/book-flow/flower-plan/${planId}/confirmation`);
+            navigate(redirectPath);
         } catch (err: any) {
             toast.error("Failed to save messages.", { description: err.message });
             console.error(err);
@@ -119,7 +127,7 @@ const CustomMessagePage: React.FC = () => {
 
     const handleSkip = () => {
         toast.info("You can add messages later from your dashboard.");
-        navigate(`/book-flow/flower-plan/${planId}/confirmation`);
+        navigate(redirectPath);
     };
 
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
@@ -189,10 +197,10 @@ const CustomMessagePage: React.FC = () => {
                         </div>
                     </CardContent>
                     <CardFooter className="flex justify-between">
-                        <BackButton />
+                        <BackButton to={isManagementFlow ? redirectPath : undefined} />
                         <Button size="lg" onClick={handleSave} disabled={isSaving}>
                             {isSaving ? <Spinner className="mr-2 h-4 w-4 animate-spin" /> : null}
-                            {isSaving ? 'Saving...' : 'Save & Continue'}
+                            {isSaving ? 'Saving...' : saveButtonText}
                         </Button>
                     </CardFooter>
                 </Card>

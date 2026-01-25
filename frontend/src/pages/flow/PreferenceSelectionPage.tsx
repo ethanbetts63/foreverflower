@@ -1,22 +1,30 @@
 // foreverflower/frontend/src/pages/flow/PreferenceSelectionPage.tsx
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
-import { getColors, getFlowerTypes, updateFlowerPlan } from '@/api';
+import { getColors, getFlowerTypes, getFlowerPlan, updateFlowerPlan } from '@/api';
 import type { Color, FlowerType } from '@/api';
 import { ColorSwatch, SelectableTag } from '@/components/preferences';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft } from 'lucide-react';
+import BackButton from '@/components/BackButton';
 
 const PreferenceSelectionPage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const { isAuthenticated } = useAuth();
+
+    // Determine navigation context
+    const isManagementFlow = new URLSearchParams(location.search).get('source') === 'management';
+    const redirectPath = isManagementFlow 
+        ? `/dashboard/plans/${planId}/overview`
+        : `/book-flow/flower-plan/${planId}/add-message`;
+    const saveButtonText = isManagementFlow ? 'Save' : 'Next';
 
     // Data fetching state
     const [colors, setColors] = useState<Color[]>([]);
@@ -46,12 +54,24 @@ const PreferenceSelectionPage: React.FC = () => {
         const fetchData = async () => {
             setIsLoading(true);
             try {
-                const [colorsData, flowerTypesData] = await Promise.all([
+                // Fetch all required data in parallel
+                const [colorsData, flowerTypesData, planData] = await Promise.all([
                     getColors(),
-                    getFlowerTypes()
+                    getFlowerTypes(),
+                    getFlowerPlan(planId), 
                 ]);
+                
                 setColors(colorsData);
                 setFlowerTypes(flowerTypesData);
+
+                // Pre-populate selections from the fetched plan data
+                if (planData) {
+                    setPreferredColors(planData.preferred_colors.map(Number));
+                    setRejectedColors(planData.rejected_colors.map(Number));
+                    setPreferredFlowerTypes(planData.preferred_flower_types.map(Number));
+                    setRejectedFlowerTypes(planData.rejected_flower_types.map(Number));
+                }
+
             } catch (err) {
                 setError("Failed to load preference options. Please try again later.");
                 toast.error("Failed to load preference options.");
@@ -83,7 +103,7 @@ const PreferenceSelectionPage: React.FC = () => {
                 rejected_flower_types: rejectedFlowerTypes,
             });
             toast.success("Preferences saved!");
-            navigate(`/book-flow/flower-plan/${planId}/add-message`); 
+            navigate(redirectPath); 
         } catch (err) {
             toast.error("Failed to save preferences. Please try again.");
         } finally {
@@ -93,7 +113,7 @@ const PreferenceSelectionPage: React.FC = () => {
     
     const handleSkip = () => {
         toast.info("You can add preferences later from your dashboard.");
-        navigate(`/book-flow/flower-plan/${planId}/add-message`);
+        navigate(redirectPath);
     }
 
     const handleBack = () => {

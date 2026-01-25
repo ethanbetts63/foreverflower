@@ -3,9 +3,9 @@ from rest_framework.permissions import IsAuthenticated
 from events.models import Event
 from events.serializers.event_serializer import EventSerializer
 
-class EventViewSet(viewsets.ReadOnlyModelViewSet):
+class EventViewSet(viewsets.ModelViewSet):
     """
-    A read-only ViewSet for listing and retrieving delivery events 
+    A ViewSet for listing, retrieving and performing CRUD operations on delivery events
     owned by the currently authenticated user.
     """
     permission_classes = [IsAuthenticated]
