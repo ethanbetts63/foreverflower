@@ -53,17 +53,17 @@ const DeleteAccountSection: React.FC = () => {
                             {isDeleting ? 'Deleting...' : 'Delete Account'}
                         </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="bg-white text-black">
                         <AlertDialogHeader>
                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
+                            <AlertDialogDescription className="bg-white text-black">
                                 This action cannot be undone. This will permanently delete your
                                 account and remove all your data from our servers.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive hover:bg-destructive/90">
+                            <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive hover:bg-destructive/90 text-white">
                                 Yes, delete my account
                             </AlertDialogAction>
                         </AlertDialogFooter>
