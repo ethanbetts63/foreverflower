@@ -8,16 +8,11 @@ import { Spinner } from '@/components/ui/spinner';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
 import { getFlowerPlan, updateFlowerPlan, type PartialFlowerPlan } from '@/api';
+import { authedFetch } from '@/apiClient';
+import { authedFetch } from '@/apiClient';
 import PlanStructureForm, { type PlanStructureData } from '@/forms/PlanStructureForm';
 import BackButton from '@/components/BackButton';
 import { debounce } from '@/utils/debounce';
-
-type Breakdown = {
-  fee_per_delivery: number;
-  years: number;
-  deliveries_per_year: number;
-  upfront_savings_percentage: number;
-};
 
 const EditStructurePage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
@@ -33,8 +28,7 @@ const EditStructurePage: React.FC = () => {
     const [isSaving, setIsSaving] = useState(false);
 
     // Price calculation state
-    const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
-    const [breakdown, setBreakdown] = useState<Breakdown | null>(null);
+    const [amountOwing, setAmountOwing] = useState<number | null>(null);
     const [isApiCalculating, setIsApiCalculating] = useState(false);
     const [isDebouncePending, setIsDebouncePending] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -71,39 +65,37 @@ const EditStructurePage: React.FC = () => {
         fetchPlanData();
     }, [planId, isAuthenticated, navigate]);
 
-    const calculateUpfront = useCallback(async (budget: number, deliveries: number, years: number) => {
+    const calculateModification = useCallback((budget: number, deliveries: number, years: number) => {
+        if (!planId) return;
         setIsDebouncePending(false);
         setIsApiCalculating(true);
         setError(null);
-        setUpfrontPrice(null);
-        setBreakdown(null);
+        setAmountOwing(null);
 
-        try {
-            const response = await fetch('/api/events/calculate-price/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ budget, deliveries_per_year: deliveries, years }),
-            });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Something went wrong');
-            setUpfrontPrice(data.upfront_price);
-            setBreakdown(data.breakdown);
-        } catch (err: any) {
+        authedFetch(`/api/events/flower-plans/${planId}/calculate-modification/`, {
+            method: 'POST',
+            body: JSON.stringify({ budget, deliveries_per_year: deliveries, years }),
+        })
+        .then(data => {
+            setAmountOwing(data.amount_owing);
+        })
+        .catch(err => {
             setError(err.message);
-            toast.error(err.message);
-        } finally {
+            toast.error("Calculation Error", { description: err.message });
+        })
+        .finally(() => {
             setIsApiCalculating(false);
-        }
-    }, []);
+        });
+    }, [planId]);
 
-    const debouncedCalculateUpfront = useMemo(() => debounce(calculateUpfront, 500), [calculateUpfront]);
+    const debouncedCalculateModification = useMemo(() => debounce(calculateModification, 500), [calculateModification]);
 
     useEffect(() => {
         if (!isLoading && !isSaving) {
-            debouncedCalculateUpfront(formData.budget, formData.deliveries_per_year, formData.years);
+            debouncedCalculateModification(formData.budget, formData.deliveries_per_year, formData.years);
         }
-        return () => { debouncedCalculateUpfront.cancel?.(); };
-    }, [formData, isLoading, isSaving, debouncedCalculateUpfront]);
+        return () => { debouncedCalculateModification.cancel?.(); };
+    }, [formData, isLoading, isSaving, debouncedCalculateModification]);
 
 
     const handleFormChange = (field: keyof PlanStructureData, value: number) => {
@@ -148,10 +140,10 @@ const EditStructurePage: React.FC = () => {
                             {(isApiCalculating || isDebouncePending) ? (
                                 <Spinner className="h-8 w-8" />
                             ) : (
-                                upfrontPrice !== null && (
+                                amountOwing !== null && (
                                 <>
-                                    <div className="text-2xl font-bold">${upfrontPrice.toLocaleString()}</div>
-                                    {breakdown?.upfront_savings_percentage && <p className="text-xs text-gray-600">A new charge will be calculated and applied to your account</p>}
+                                    <div className="text-2xl font-bold">${parseFloat(amountOwing).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                                    <p className="text-xs text-gray-600">Amount to pay for this change</p>
                                 </>
                                 )
                             )}
@@ -160,8 +152,8 @@ const EditStructurePage: React.FC = () => {
                     </CardContent>
                     <CardFooter className="flex justify-between">
                         <BackButton to={`/dashboard/plans/${planId}/overview`} />
-                        <Button size="lg" onClick={handleSave} disabled={isSaving || isApiCalculating || isDebouncePending || !upfrontPrice}>
-                            {isSaving ? <Spinner className="mr-2 h-4 w-4" /> : 'Save Changes'}
+                        <Button size="lg" onClick={handleSave} disabled={isSaving || isApiCalculating || isDebouncePending || amountOwing === null}>
+                            {isSaving ? <Spinner className="mr-2 h-4 w-4" /> : 'Review Changes'}
                         </Button>
                     </CardFooter>
                 </Card>

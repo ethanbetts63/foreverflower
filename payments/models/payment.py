@@ -16,10 +16,10 @@ class Payment(models.Model):
         on_delete=models.CASCADE, 
         related_name='payments'
     )
-    flower_plan = models.OneToOneField(
+    flower_plan = models.ForeignKey(
         'events.FlowerPlan',
         on_delete=models.CASCADE,
-        related_name='payment',
+        related_name='payments',
         help_text="The flower plan this payment is for."
     )
     stripe_payment_intent_id = models.CharField(

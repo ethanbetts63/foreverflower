@@ -4,10 +4,45 @@ from rest_framework.permissions import IsAuthenticated
 from ..models import FlowerPlan, Event
 from ..serializers.flower_plan_serializer import FlowerPlanSerializer
 from ..utils.pricing_calculators import forever_flower_upfront_price
+from ..utils.modification_calculator import calculate_modification_details
 from datetime import date, timedelta
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def calculate_plan_modification(request, plan_id):
+    """
+    Calculates the cost difference for modifying an existing flower plan.
+    """
+    try:
+        plan = FlowerPlan.objects.get(pk=plan_id, user=request.user)
+    except FlowerPlan.DoesNotExist:
+        return Response({'error': 'Plan not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        new_structure = {
+            'budget': float(request.data.get('budget')),
+            'deliveries_per_year': int(request.data.get('deliveries_per_year')),
+            'years': int(request.data.get('years')),
+        }
+    except (TypeError, ValueError, AttributeError):
+        return Response(
+            {'error': 'Invalid input. Please provide valid numbers for all fields.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Basic validation
+    if not all(new_structure.values()):
+        return Response(
+            {'error': 'Missing one or more required fields.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    result = calculate_modification_details(plan, new_structure)
+    return Response(result, status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
