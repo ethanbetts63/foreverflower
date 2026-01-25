@@ -8,13 +8,12 @@ import { showErrorToast } from '@/utils/utils';
 import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
 
-// Based on events/models/flower_plan.py and api.ts
 interface FlowerPlan {
   id: number;
   is_active: boolean;
   recipient_first_name: string | null;
   recipient_last_name: string | null;
-  budget: string; // Comes as a string from DecimalField
+  budget: string; 
   deliveries_per_year: number;
   years: number;
 }

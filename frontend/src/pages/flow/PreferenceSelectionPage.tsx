@@ -142,7 +142,7 @@ const PreferenceSelectionPage: React.FC = () => {
                         {/* Colors Section */}
                         <div>
                             <h3 className="text-xl font-semibold mb-2">Colors</h3>
-                            <p className="text-sm text-gray-600 mb-4">Choose colors you'd like to see more of, and any you'd like to avoid.</p>
+                            <p className="text-sm text-gray-600 mb-4">Optionally, choose colors you'd like to see more of in the bouquet, and any you'd like to avoid.</p>
                             <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div>
                                     <h4 className="font-medium mb-3 text-center">I'd love these colors</h4>
