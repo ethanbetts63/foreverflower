@@ -13,6 +13,7 @@ import PlanStructureCard from '@/components/PlanStructureCard';
 import PreferencesCard from '@/components/PreferencesCard';
 import MessagesCard from '@/components/MessagesCard';
 import RecipientCard from '@/components/RecipientCard';
+import PaymentHistoryCard from '@/components/PaymentHistoryCard';
 
 const PlanOverviewPage = () => {
   const { planId } = useParams<{ planId: string }>();
@@ -113,6 +114,8 @@ const PlanOverviewPage = () => {
               plan={plan}
               editUrl={`/book-flow/flower-plan/${planId}/add-message?source=management`}
             />
+
+            <PaymentHistoryCard plan={plan} />
             
             {/* Action Buttons */}
             <div className="flex justify-between items-center mt-8">
