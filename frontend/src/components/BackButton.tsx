@@ -1,22 +1,43 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, type ButtonProps } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { cn } from '@/utils/utils';
 
-const BackButton: React.FC<ButtonProps> = ({ className, ...props }) => {
+interface BackButtonProps extends ButtonProps {
+  to?: string;
+}
+
+const BackButton: React.FC<BackButtonProps> = ({ to, className, ...props }) => {
   const navigate = useNavigate();
+
+  const buttonContent = (
+    <>
+      <ArrowLeft className="mr-2 h-4 w-4" />
+      Back
+    </>
+  );
+
+  const buttonClassName = cn("font-bold", className);
+
+  if (to) {
+    return (
+      <Button asChild variant="destructive" className={buttonClassName} {...props}>
+        <Link to={to}>{buttonContent}</Link>
+      </Button>
+    );
+  }
 
   return (
     <Button
       variant="destructive"
       onClick={() => navigate(-1)}
-      className={cn("font-bold", className)}
+      className={buttonClassName}
       {...props}
     >
-      <ArrowLeft className="mr-2 h-4 w-4" />
-      Back
+      {buttonContent}
     </Button>
   );
 };
 
 export default BackButton;
+

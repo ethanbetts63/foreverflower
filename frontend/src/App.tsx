@@ -14,6 +14,7 @@ const UserDashboardLayout = lazy(() => import('./pages/user_dashboard/UserDashbo
 const UserDashboardPage = lazy(() => import('./pages/user_dashboard/UserDashboardPage'));
 const AccountManagementPage = lazy(() => import('./pages/user_dashboard/AccountManagementPage'));
 const FlowerPlanManagementPage = lazy(() => import('./pages/user_dashboard/FlowerPlanManagementPage'));
+const PlanOverviewPage = lazy(() => import('./pages/user_dashboard/PlanOverviewPage'));
 const EventGate = lazy(() => import('@/components/EventGate'));
 const FlowerPlanCreationPage = lazy(() => import('./pages/flow/FlowerPlanCreationPage'));
 const PreferenceSelectionPage = lazy(() => import('./pages/flow/PreferenceSelectionPage'));
@@ -101,6 +102,7 @@ function App() {
                   <Route index element={<UserDashboardPage />} />
                   <Route path="account" element={<AccountManagementPage />} />
                   <Route path="plans" element={<FlowerPlanManagementPage />} />
+                  <Route path="plans/:planId/overview" element={<PlanOverviewPage />} />
                 </Route>
 
               </Routes>
