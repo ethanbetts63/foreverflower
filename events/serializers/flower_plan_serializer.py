@@ -2,12 +2,14 @@
 from rest_framework import serializers
 from ..models import FlowerPlan, Color, FlowerType
 from .event_serializer import EventSerializer
+from payments.serializers.payment_serializer import PaymentSerializer # New Import
 
 class FlowerPlanSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     
     # This field is for reading the nested events, it's ignored on write operations.
     events = EventSerializer(many=True, read_only=True)
+    payments = PaymentSerializer(many=True, read_only=True) # New field for nested payments
 
     budget = serializers.DecimalField(
         max_digits=10, decimal_places=2
@@ -38,7 +40,7 @@ class FlowerPlanSerializer(serializers.ModelSerializer):
             'recipient_street_address', 'recipient_suburb', 'recipient_city',
             'recipient_state', 'recipient_postcode', 'recipient_country',
             'preferred_colors', 'preferred_flower_types', 'rejected_colors', 'rejected_flower_types',
-            'events',  
+            'events', 'payments', # Added 'payments'
         ]
         read_only_fields = [
             'id', 'is_active', 'created_at', 'updated_at', 'total_amount', 'currency'
