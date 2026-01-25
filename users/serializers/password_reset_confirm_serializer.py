@@ -20,5 +20,4 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError({"password_confirm": "The two password fields didn't match."})
-        # Note: You could add more complex password validation here if needed.
         return attrs

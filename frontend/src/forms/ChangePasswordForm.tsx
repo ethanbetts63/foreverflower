@@ -42,6 +42,7 @@ export const ChangePasswordForm: React.FC = () => {
           new_password: data.new_password,
           new_password_confirm: data.new_password_confirm
       });
+      toast.success("Password changed successfully!");
       reset();
     } catch (err: any) {
       const errorMessage = err.response?.data?.old_password?.[0] 
