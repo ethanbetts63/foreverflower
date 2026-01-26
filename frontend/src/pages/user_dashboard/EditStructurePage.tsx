@@ -2,15 +2,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
 import { getFlowerPlan, updateFlowerPlan, type PartialFlowerPlan } from '@/api';
 import { authedFetch } from '@/apiClient';
-import PlanStructureForm, { type PlanStructureData } from '@/forms/PlanStructureForm';
-import BackButton from '@/components/BackButton';
+import type { PlanStructureData } from '@/forms/PlanStructureForm';
+import StructureEditor from '@/components/plan/StructureEditor';
 import { debounce } from '@/utils/debounce';
 
 const EditStructurePage: React.FC = () => {
@@ -112,7 +109,6 @@ const EditStructurePage: React.FC = () => {
     const handleSave = async () => {
         if (!planId) return;
 
-        // If there's an amount to be paid, navigate to the payment page with modification details.
         if (amountOwing && amountOwing > 0) {
             const params = new URLSearchParams({
                 source: 'management',
@@ -125,7 +121,6 @@ const EditStructurePage: React.FC = () => {
             return;
         }
 
-        // If no amount is owing (or it's a credit), just update the plan and redirect.
         setIsSaving(true);
         try {
             const payload: PartialFlowerPlan = { ...formData };
@@ -139,50 +134,33 @@ const EditStructurePage: React.FC = () => {
         }
     };
 
-    if (isLoading) {
-        return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
+    const handleCancel = () => {
+        if (planId) {
+            navigate(`/dashboard/plans/${planId}/overview`);
+        } else {
+            navigate('/dashboard');
+        }
     }
 
     return (
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-2xl py-12">
                 <Seo title="Edit Plan Structure | ForeverFlower" />
-                <Card className="bg-white text-black border-none shadow-md">
-                    <CardHeader>
-                        <CardTitle className="text-3xl">Edit Plan Structure</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-8">
-                        <PlanStructureForm
-                            formData={formData}
-                            onFormChange={handleFormChange}
-                            setIsDebouncePending={setIsDebouncePending}
-                            title=""
-                        />
-                         {/* Calculation Result */}
-                        <div className="mt-8 text-center h-12 flex flex-col items-center justify-center">
-                            {(isApiCalculating || isDebouncePending) ? (
-                                <Spinner className="h-8 w-8" />
-                            ) : (
-                                amountOwing !== null && (
-                                <>
-                                    <div className="text-2xl font-bold">${amountOwing.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                                    <p className="text-xs text-gray-600">Amount to pay for this change</p>
-                                </>
-                                )
-                            )}
-                            {error && <div className="text-red-500 text-sm">{error}</div>}
-                        </div>
-                    </CardContent>
-                    <CardFooter className="flex justify-between">
-                        <BackButton to={`/dashboard/plans/${planId}/overview`} />
-                        <Button size="lg" onClick={handleSave} disabled={isSaving || isApiCalculating || isDebouncePending || amountOwing === null}>
-                            {isSaving 
-                                ? <Spinner className="mr-2 h-4 w-4" /> 
-                                : (amountOwing && amountOwing > 0 ? 'Proceed to Payment' : 'Save Changes')
-                            }
-                        </Button>
-                    </CardFooter>
-                </Card>
+                <StructureEditor
+                    formData={formData}
+                    onFormChange={handleFormChange}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                    isSaving={isSaving}
+                    isLoading={isLoading}
+                    title="Edit Plan Structure"
+                    amountOwing={amountOwing}
+                    isApiCalculating={isApiCalculating}
+                    isDebouncePending={isDebouncePending}
+                    calculationError={error}
+                    setIsDebouncePending={setIsDebouncePending}
+                    backButtonTo={planId ? `/dashboard/plans/${planId}/overview` : '/dashboard'}
+                />
             </div>
         </div>
     );

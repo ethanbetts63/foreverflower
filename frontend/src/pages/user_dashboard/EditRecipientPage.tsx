@@ -2,14 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import Seo from '@/components/Seo';
 import { toast } from 'sonner';
 import { getFlowerPlan, updateFlowerPlan, type PartialFlowerPlan } from '@/api';
-import RecipientForm, { type RecipientData } from '@/forms/RecipientForm';
-import BackButton from '@/components/BackButton';
+import type { RecipientData } from '@/forms/RecipientForm';
+import RecipientEditor from '@/components/plan/RecipientEditor';
+import Seo from '@/components/Seo';
 
 const EditRecipientPage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
@@ -76,6 +73,7 @@ const EditRecipientPage: React.FC = () => {
         try {
             const payload: PartialFlowerPlan = { ...formData };
             await updateFlowerPlan(planId, payload);
+            toast.success("Recipient details updated successfully!");
             navigate(`/dashboard/plans/${planId}/overview`);
         } catch (err) {
             toast.error("Failed to update recipient details.");
@@ -83,36 +81,35 @@ const EditRecipientPage: React.FC = () => {
             setIsSaving(false);
         }
     };
-
-    if (isLoading) {
-        return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
+    
+    const handleCancel = () => {
+        if (planId) {
+            navigate(`/dashboard/plans/${planId}/overview`);
+        } else {
+            navigate('/dashboard');
+        }
     }
 
     return (
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-2xl py-12">
                 <Seo title="Edit Recipient | ForeverFlower" />
-                <Card className="bg-white text-black border-none shadow-md">
-                    <CardHeader>
-                        <CardTitle className="text-3xl">Edit Recipient Details</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <RecipientForm
-                            formData={formData}
-                            onFormChange={handleFormChange}
-                            title="" // Title is already in CardHeader
-                        />
-                    </CardContent>
-                    <CardFooter className="flex justify-between">
-                        <BackButton to={`/dashboard/plans/${planId}/overview`} />
-                        <Button size="lg" onClick={handleSave} disabled={isSaving}>
-                            {isSaving ? <Spinner className="mr-2 h-4 w-4" /> : 'Save Changes'}
-                        </Button>
-                    </CardFooter>
-                </Card>
+                <RecipientEditor
+                    formData={formData}
+                    onFormChange={handleFormChange}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                    isSaving={isSaving}
+                    isLoading={isLoading}
+                    title="Edit Recipient Details"
+                    saveButtonText="Save Changes"
+                    showCancelButton={true}
+                    backButtonTo={planId ? `/dashboard/plans/${planId}/overview` : '/dashboard'}
+                />
             </div>
         </div>
     );
 };
 
 export default EditRecipientPage;
+
