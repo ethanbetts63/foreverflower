@@ -18,7 +18,7 @@ interface FlowerPlan {
   years: number;
 }
 
-const FlowerPlanManagementPage: React.FC = () => {
+const FlowerPlanListPage: React.FC = () => {
   const [plans, setPlans] = useState<FlowerPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -123,4 +123,4 @@ const FlowerPlanManagementPage: React.FC = () => {
   );
 };
 
-export default FlowerPlanManagementPage;
+export default FlowerPlanListPage;

@@ -13,17 +13,21 @@ const LoginPage = lazy(() => import('./pages/LoginPage'));
 const UserDashboardLayout = lazy(() => import('./pages/user_dashboard/UserDashboardLayout'));
 const UserDashboardPage = lazy(() => import('./pages/user_dashboard/UserDashboardPage'));
 const AccountManagementPage = lazy(() => import('./pages/user_dashboard/AccountManagementPage'));
-const FlowerPlanManagementPage = lazy(() => import('./pages/user_dashboard/FlowerPlanManagementPage'));
+const FlowerPlanListPage = lazy(() => import('./pages/user_dashboard/FlowerPlanListPage'));
 const PlanOverviewPage = lazy(() => import('./pages/user_dashboard/PlanOverviewPage'));
 const EditRecipientPage = lazy(() => import('./pages/user_dashboard/EditRecipientPage'));
 const EditStructurePage = lazy(() => import('./pages/user_dashboard/EditStructurePage'));
+
 const EventGate = lazy(() => import('@/components/EventGate'));
+const CreateAccountPage = lazy(() => import('./pages/flow/Step1CreateAccountPage'));
 const RecipientPage = lazy(() => import('./pages/flow/Step2RecipientPage'));
-const StructurePage = lazy(() => import('./pages/flow/Step5StructurePage'));
 const PreferenceSelectionPage = lazy(() => import('./pages/flow/Step3PreferenceSelectionPage'));
+const CustomMessagePage = lazy(() => import('./pages/flow/Step4CustomMessagePage'));
+const StructurePage = lazy(() => import('./pages/flow/Step5StructurePage'));
 const BookingConfirmationPage = lazy(() => import('./pages/flow/Step6BookingConfirmationPage'));
 const PaymentPage = lazy(() => import('./pages/flow/Step7PaymentPage'));
 const PaymentStatusPage = lazy(() => import('./pages/flow/Step8PaymentStatusPage'));
+
 const BlocklistSuccessPage = lazy(() => import('./pages/BlocklistSuccessPage'));
 const TermsAndConditionsPage = lazy(() => import('./pages/TermsAndConditionsPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
@@ -37,9 +41,6 @@ const BestFlowerSubscriptionServicesEU = lazy(() => import('./pages/articles/Bes
 const BestFlowerSubscriptionServicesNZ = lazy(() => import('./pages/articles/BestFlowerSubscriptionServicesNZ'));
 const BestFlowerDeliveryPerth = lazy(() => import('./pages/articles/BestFlowerDeliveryPerth'));
 const BestFlowerDeliverySydney = lazy(() => import('./pages/articles/BestFlowerDeliverySydney'));
-
-const CreateAccountPage = lazy(() => import('./pages/flow/Step1CreateAccountPage'));
-const CustomMessagePage = lazy(() => import('./pages/flow/Step4CustomMessagePage'));
 
 // --- Lazy-loaded Admin Pages ---
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
@@ -100,7 +101,7 @@ function App() {
                 <Route path="/dashboard" element={<UserDashboardLayout />}>
                   <Route index element={<UserDashboardPage />} />
                   <Route path="account" element={<AccountManagementPage />} />
-                  <Route path="plans" element={<FlowerPlanManagementPage />} />
+                  <Route path="plans" element={<FlowerPlanListPage />} />
                   <Route path="plans/:planId/overview" element={<PlanOverviewPage />} />
                   <Route path="plans/:planId/edit-recipient" element={<EditRecipientPage />} />
                   <Route path="plans/:planId/edit-structure" element={<EditStructurePage />} />

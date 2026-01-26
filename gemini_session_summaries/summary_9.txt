@@ -6,8 +6,8 @@ This session focused on resolving a build error and implementing a new feature o
 
 ### 1. `EditButton` Build Error Fix
 
-*   **Problem:** The `EditButton` component had been refactored to require a `to` prop, which was not being provided in the `FlowerPlanManagementPage.tsx` file, causing a build failure.
-*   **File Affected:** `foreverflower/frontend/src/pages/user_dashboard/FlowerPlanManagementPage.tsx`
+*   **Problem:** The `EditButton` component had been refactored to require a `to` prop, which was not being provided in the `FlowerPlanListPage.tsx` file, causing a build failure.
+*   **File Affected:** `foreverflower/frontend/src/pages/user_dashboard/FlowerPlanListPage.tsx`
 *   **Actions Taken:**
     *   Identified that the `EditButton` was intended to link to the plan editing page.
     *   Based on the routing structure defined in `App.tsx` and the logic in `EventGate.tsx`, the correct path was determined to be `/book-flow/flower-plan`.
