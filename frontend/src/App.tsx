@@ -18,12 +18,12 @@ const PlanOverviewPage = lazy(() => import('./pages/user_dashboard/PlanOverviewP
 const EditRecipientPage = lazy(() => import('./pages/user_dashboard/EditRecipientPage'));
 const EditStructurePage = lazy(() => import('./pages/user_dashboard/EditStructurePage'));
 const EventGate = lazy(() => import('@/components/EventGate'));
-const RecipientPage = lazy(() => import('./pages/flow/RecipientPage'));
-const StructurePage = lazy(() => import('./pages/flow/StructurePage'));
-const PreferenceSelectionPage = lazy(() => import('./pages/flow/PreferenceSelectionPage'));
-const BookingConfirmationPage = lazy(() => import('./pages/flow/BookingConfirmationPage'));
-const PaymentPage = lazy(() => import('./pages/flow/PaymentPage'));
-const PaymentStatusPage = lazy(() => import('./pages/flow/PaymentStatusPage'));
+const RecipientPage = lazy(() => import('./pages/flow/Step2RecipientPage'));
+const StructurePage = lazy(() => import('./pages/flow/Step5StructurePage'));
+const PreferenceSelectionPage = lazy(() => import('./pages/flow/Step3PreferenceSelectionPage'));
+const BookingConfirmationPage = lazy(() => import('./pages/flow/Step6BookingConfirmationPage'));
+const PaymentPage = lazy(() => import('./pages/flow/Step7PaymentPage'));
+const PaymentStatusPage = lazy(() => import('./pages/flow/Step8PaymentStatusPage'));
 const BlocklistSuccessPage = lazy(() => import('./pages/BlocklistSuccessPage'));
 const TermsAndConditionsPage = lazy(() => import('./pages/TermsAndConditionsPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
@@ -38,8 +38,8 @@ const BestFlowerSubscriptionServicesNZ = lazy(() => import('./pages/articles/Bes
 const BestFlowerDeliveryPerth = lazy(() => import('./pages/articles/BestFlowerDeliveryPerth'));
 const BestFlowerDeliverySydney = lazy(() => import('./pages/articles/BestFlowerDeliverySydney'));
 
-const CreateAccountPage = lazy(() => import('./pages/flow/CreateAccountPage'));
-const CustomMessagePage = lazy(() => import('./pages/flow/CustomMessagePage'));
+const CreateAccountPage = lazy(() => import('./pages/flow/Step1CreateAccountPage'));
+const CustomMessagePage = lazy(() => import('./pages/flow/Step4CustomMessagePage'));
 
 // --- Lazy-loaded Admin Pages ---
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
