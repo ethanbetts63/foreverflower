@@ -43,21 +43,21 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({ originalPlan, newPlan }) => {
         <div className="flex justify-between">
           <span>Plan Duration</span>
           <div className='flex items-center'>
-            {newPlan && <span className="text-gray-500 line-through mr-2">{originalPlan.years} {originalPlan.years > 1 ? 'Years' : 'Year'}</span>}
+            {newPlan && newPlan.years !== originalPlan.years && <span className="text-gray-500 line-through mr-2">{originalPlan.years} {originalPlan.years > 1 ? 'Years' : 'Year'}</span>}
             <span>{displayPlan.years} {displayPlan.years > 1 ? 'Years' : 'Year'}</span>
           </div>
         </div>
         <div className="flex justify-between">
           <span>Deliveries per Year</span>
            <div className='flex items-center'>
-            {newPlan && <span className="text-gray-500 line-through mr-2">{originalPlan.deliveries_per_year}</span>}
+            {newPlan && newPlan.deliveries_per_year !== originalPlan.deliveries_per_year && <span className="text-gray-500 line-through mr-2">{originalPlan.deliveries_per_year}</span>}
             <span>{displayPlan.deliveries_per_year}</span>
           </div>
         </div>
         <div className="flex justify-between">
           <span>Budget per Bouquet</span>
            <div className='flex items-center'>
-            {newPlan && <span className="text-gray-500 line-through mr-2">${Number(originalPlan.budget).toFixed(2)}</span>}
+            {newPlan && newPlan.budget !== Number(originalPlan.budget) && <span className="text-gray-500 line-through mr-2">${Number(originalPlan.budget).toFixed(2)}</span>}
             <span>${Number(displayPlan.budget).toFixed(2)}</span>
           </div>
         </div>

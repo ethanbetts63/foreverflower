@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from users.utils.send_verification_email import send_verification_email
 
 User = get_user_model()
 
@@ -32,9 +31,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         # Pop the password so it's not passed in the **validated_data spread
         password = validated_data.pop('password')
         email = validated_data.get('email').lower()
-        
-        # All users created through this serializer are considered claimed
-        # because they have set a password.
+
         user = User.objects.create_user(
             username=email,
             password=password,
