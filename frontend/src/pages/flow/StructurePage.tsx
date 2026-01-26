@@ -57,10 +57,15 @@ const CreatePlanStep2_StructurePage: React.FC = () => {
         setUpfrontPrice(null);
 
         try {
-            const data = await authedFetch('/api/events/calculate-price/', {
+            const response = await authedFetch('/api/events/calculate-price/', {
                 method: 'POST',
                 body: JSON.stringify({ budget, deliveries_per_year: deliveries, years }),
             });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Something went wrong');
+            }
+            const data = await response.json();
             setUpfrontPrice(data.upfront_price);
         } catch (err: any) {
             setError(err.message || 'Price calculation failed.');

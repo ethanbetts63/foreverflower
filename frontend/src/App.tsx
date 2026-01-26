@@ -18,7 +18,8 @@ const PlanOverviewPage = lazy(() => import('./pages/user_dashboard/PlanOverviewP
 const EditRecipientPage = lazy(() => import('./pages/user_dashboard/EditRecipientPage'));
 const EditStructurePage = lazy(() => import('./pages/user_dashboard/EditStructurePage'));
 const EventGate = lazy(() => import('@/components/EventGate'));
-const FlowerPlanCreationPage = lazy(() => import('./pages/flow/FlowerPlanCreationPage'));
+const RecipientPage = lazy(() => import('./pages/flow/RecipientPage'));
+const StructurePage = lazy(() => import('./pages/flow/StructurePage'));
 const PreferenceSelectionPage = lazy(() => import('./pages/flow/PreferenceSelectionPage'));
 const BookingConfirmationPage = lazy(() => import('./pages/flow/BookingConfirmationPage'));
 
@@ -82,7 +83,8 @@ function App() {
                 {/* Event Creation Flow */}
                 <Route path="/event-gate" element={<EventGate />} />
                 <Route path="/book-flow/create-account" element={<CreateAccountPage />} />
-                <Route path="/book-flow/create-flower-plan" element={<FlowerPlanCreationPage />} />
+                <Route path="/book-flow/create-flower-plan/recipient" element={<RecipientPage />} />
+                <Route path="/book-flow/create-flower-plan/stucture" element={<StructurePage />} />
                 <Route path="/book-flow/flower-plan/:planId/preferences" element={<PreferenceSelectionPage />} />
                 <Route path="/book-flow/flower-plan/:planId/add-message" element={<CustomMessagePage />} />
                 <Route path="/book-flow/flower-plan/:planId/confirmation" element={<BookingConfirmationPage />} />
