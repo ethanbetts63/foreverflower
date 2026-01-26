@@ -1,33 +1,27 @@
-// foreverflower/frontend/src/pages/flow/CreatePlanStep2_StructurePage.tsx
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
-import { createFlowerPlan, type CreateFlowerPlanPayload } from '@/api';
-import type { RecipientData } from '@/forms/RecipientForm';
+import { getFlowerPlan, updateFlowerPlan } from '@/api';
 import type { PlanStructureData } from '@/forms/PlanStructureForm';
 import StructureEditor from '@/components/plan/StructureEditor';
 import { debounce } from '@/utils/debounce';
 import { authedFetch } from '@/apiClient';
 
-const CreatePlanStep2_StructurePage: React.FC = () => {
+const StructurePage: React.FC = () => {
     const navigate = useNavigate();
+    const { planId } = useParams<{ planId: string }>();
     const { isAuthenticated } = useAuth();
 
-    const [structureData, setStructureData] = useState<PlanStructureData>(() => {
-        const savedData = localStorage.getItem('newPlanStructureData');
-        if (savedData) {
-            return JSON.parse(savedData);
-        }
-        return {
-            budget: 75,
-            deliveries_per_year: 1,
-            years: 5,
-        };
+    const [formData, setFormData] = useState<PlanStructureData>({
+        budget: 75,
+        deliveries_per_year: 1,
+        years: 5,
     });
-
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
     
     // Price calculation state
     const [upfrontPrice, setUpfrontPrice] = useState<number | null>(null);
@@ -41,13 +35,28 @@ const CreatePlanStep2_StructurePage: React.FC = () => {
             navigate('/login');
             return;
         }
-        // Ensure recipient data exists, otherwise send back to step 1
-        const recipientData = localStorage.getItem('newPlanRecipientData');
-        if (!recipientData) {
-            toast.error("Please complete Step 1 first.");
-            navigate('/book-flow/flower-plan/step-1');
+        if (!planId) {
+            toast.error("No plan ID was provided.");
+            navigate('/dashboard');
+            return;
         }
-    }, [isAuthenticated, navigate]);
+        
+        setIsLoading(true);
+        getFlowerPlan(planId)
+            .then(plan => {
+                setFormData({
+                    budget: plan.budget || 75,
+                    deliveries_per_year: plan.deliveries_per_year || 1,
+                    years: plan.years || 5,
+                });
+            })
+            .catch(error => {
+                toast.error("Failed to load plan details", { description: error.message });
+                navigate('/dashboard');
+            })
+            .finally(() => setIsLoading(false));
+
+    }, [planId, isAuthenticated, navigate]);
 
     // Price calculation logic
     const calculateUpfront = useCallback(async (budget: number, deliveries: number, years: number) => {
@@ -78,55 +87,37 @@ const CreatePlanStep2_StructurePage: React.FC = () => {
     const debouncedCalculateUpfront = useMemo(() => debounce(calculateUpfront, 500), [calculateUpfront]);
 
     useEffect(() => {
-        debouncedCalculateUpfront(structureData.budget, structureData.deliveries_per_year, structureData.years);
-        localStorage.setItem('newPlanStructureData', JSON.stringify(structureData));
+        if (!isLoading) {
+            debouncedCalculateUpfront(formData.budget, formData.deliveries_per_year, formData.years);
+        }
         return () => { debouncedCalculateUpfront.cancel?.(); };
-    }, [structureData, debouncedCalculateUpfront]);
+    }, [formData, isLoading, debouncedCalculateUpfront]);
 
     const handleFormChange = (field: keyof PlanStructureData, value: number) => {
-        setStructureData(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => ({ ...prev, [field]: value }));
     };
 
     const handleNext = async () => {
+        if (!planId) return;
         if (upfrontPrice === null) {
             toast.error("Please wait for the price to be calculated.");
             return;
         }
-        
-        const recipientDataString = localStorage.getItem('newPlanRecipientData');
-        if (!recipientDataString) {
-            toast.error("Recipient data is missing. Please return to Step 1.");
-            navigate('/book-flow/flower-plan/step-1');
-            return;
-        }
 
-        setIsSubmitting(true);
+        setIsSaving(true);
         try {
-            const recipientData: RecipientData = JSON.parse(recipientDataString);
-            const payload: CreateFlowerPlanPayload = {
-                ...recipientData,
-                ...structureData,
-            };
-
-            const newPlan = await createFlowerPlan(payload);
-            
-            // Clear stored data on success
-            localStorage.removeItem('newPlanRecipientData');
-            localStorage.removeItem('newPlanStructureData');
-            
-            toast.success("Plan created! Now for the fun part.");
-            navigate(`/book-flow/flower-plan/${newPlan.id}/preferences`);
+            await updateFlowerPlan(planId, formData);
+            toast.success("Plan structure saved!");
+            navigate(`/book-flow/flower-plan/${planId}/preferences`);
         } catch (err: any) {
             setError(err.message);
-            toast.error("Failed to create plan.", { description: err.message });
+            toast.error("Failed to save plan structure.", { description: err.message });
         } finally {
-            setIsSubmitting(false);
+            setIsSaving(false);
         }
     };
     
     const handleCancel = () => {
-        localStorage.removeItem('newPlanRecipientData');
-        localStorage.removeItem('newPlanStructureData');
         navigate('/dashboard');
     }
 
@@ -135,15 +126,15 @@ const CreatePlanStep2_StructurePage: React.FC = () => {
             <div className="container mx-auto max-w-2xl py-12">
                 <Seo title="Create Plan: Structure | ForeverFlower" />
                 <div className="text-center mb-4 text-black">
-                    <h1 className="text-sm font-bold tracking-widest uppercase text-gray-500">Step 2 of 3</h1>
+                    <h1 className="text-sm font-bold tracking-widest uppercase text-gray-500">Step 2 of 4: Structure</h1>
                 </div>
                 <StructureEditor
-                    formData={structureData}
+                    formData={formData}
                     onFormChange={handleFormChange}
                     onSave={handleNext}
                     onCancel={handleCancel}
-                    isSaving={isSubmitting}
-                    isLoading={false}
+                    isSaving={isSaving}
+                    isLoading={isLoading}
                     title="Define the Plan's Structure"
                     saveButtonText="Next: Select Preferences"
                     amountOwing={upfrontPrice}
@@ -151,11 +142,11 @@ const CreatePlanStep2_StructurePage: React.FC = () => {
                     isDebouncePending={isDebouncePending}
                     calculationError={error}
                     setIsDebouncePending={setIsDebouncePending}
-                    backButtonTo="/book-flow/flower-plan/step-1"
+                    backButtonTo={planId ? `/book-flow/flower-plan/${planId}/recipient` : '/dashboard'}
                 />
             </div>
         </div>
     );
 };
 
-export default CreatePlanStep2_StructurePage;
+export default StructurePage;

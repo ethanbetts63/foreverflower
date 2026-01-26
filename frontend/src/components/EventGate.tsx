@@ -1,24 +1,38 @@
 // frontend/src/components/EventGate.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import Seo from '../components/Seo';
+import { getOrCreateInactiveFlowerPlan } from '@/api';
+import { toast } from 'sonner';
 
 const EventGate: React.FC = () => {
     const { isAuthenticated, isLoading } = useAuth();
     const navigate = useNavigate();
+    const hasInitiated = useRef(false);
 
     useEffect(() => {
-        // Don't do anything until the auth status is definitively known
-        if (isLoading) {
+        if (isLoading || hasInitiated.current) {
             return;
         }
 
         if (isAuthenticated) {
-            // Authenticated users are sent to the first step of the plan creation flow
-            navigate('/book-flow/flower-plan/step-1', { replace: true });
+            hasInitiated.current = true;
+            const findOrCreatePlan = async () => {
+                try {
+                    toast.info("Finding or creating a draft plan...");
+                    const plan = await getOrCreateInactiveFlowerPlan();
+                    navigate(`/book-flow/flower-plan/${plan.id}/recipient`, { replace: true });
+                } catch (error: any) {
+                    toast.error("Could not prepare your plan", {
+                        description: error.message || "Please try again later.",
+                    });
+                    navigate('/dashboard', { replace: true });
+                }
+            };
+            findOrCreatePlan();
         } else {
-            // Anonymous users are sent to the account creation page
+             // Anonymous users are sent to the account creation page
             navigate('/book-flow/create-account', { replace: true });
         }
     }, [isAuthenticated, isLoading, navigate]);

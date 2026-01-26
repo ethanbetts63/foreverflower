@@ -1,61 +1,88 @@
-// foreverflower/frontend/src/pages/flow/CreatePlanStep1_RecipientPage.tsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
+import { getFlowerPlan, updateFlowerPlan } from '@/api';
 import type { RecipientData } from '@/forms/RecipientForm';
 import RecipientEditor from '@/components/plan/RecipientEditor';
 import Seo from '@/components/Seo';
 
-const CreatePlanStep1_RecipientPage: React.FC = () => {
+const RecipientPage: React.FC = () => {
     const navigate = useNavigate();
+    const { planId } = useParams<{ planId: string }>();
     const { isAuthenticated } = useAuth();
-
-    const [formData, setFormData] = useState<RecipientData>(() => {
-        // Initialize state from local storage or with default values
-        const savedData = localStorage.getItem('newPlanRecipientData');
-        if (savedData) {
-            return JSON.parse(savedData);
-        }
-        return {
-            recipient_first_name: '',
-            recipient_last_name: '',
-            recipient_street_address: '',
-            recipient_suburb: '',
-            recipient_city: '',
-            recipient_state: '',
-            recipient_postcode: '',
-            recipient_country: 'New Zealand', // Default country
-        };
-    });
     
+    const [formData, setFormData] = useState<RecipientData>({
+        recipient_first_name: '',
+        recipient_last_name: '',
+        recipient_street_address: '',
+        recipient_suburb: '',
+        recipient_city: '',
+        recipient_state: '',
+        recipient_postcode: '',
+        recipient_country: 'New Zealand',
+    });
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+
     useEffect(() => {
         if (!isAuthenticated) {
             toast.error("You must be logged in to create a plan.");
             navigate('/login');
+            return;
         }
-    }, [isAuthenticated, navigate]);
+        if (!planId) {
+            toast.error("No plan ID was provided.");
+            navigate('/dashboard');
+            return;
+        }
+
+        setIsLoading(true);
+        getFlowerPlan(planId)
+            .then(plan => {
+                setFormData({
+                    recipient_first_name: plan.recipient_first_name || '',
+                    recipient_last_name: plan.recipient_last_name || '',
+                    recipient_street_address: plan.recipient_street_address || '',
+                    recipient_suburb: plan.recipient_suburb || '',
+                    recipient_city: plan.recipient_city || '',
+                    recipient_state: plan.recipient_state || '',
+                    recipient_postcode: plan.recipient_postcode || '',
+                    recipient_country: plan.recipient_country || 'New Zealand',
+                });
+            })
+            .catch(error => {
+                toast.error("Failed to load plan details", { description: error.message });
+                navigate('/dashboard');
+            })
+            .finally(() => setIsLoading(false));
+
+    }, [planId, isAuthenticated, navigate]);
 
     const handleFormChange = (field: keyof RecipientData, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleNext = () => {
-        // Basic validation
+    const handleNext = async () => {
+        if (!planId) return;
+
         if (!formData.recipient_first_name || !formData.recipient_street_address || !formData.recipient_city) {
             toast.error("Please fill in at least the recipient's first name, address, and city.");
             return;
         }
         
-        // Save to local storage and proceed to the next step
-        localStorage.setItem('newPlanRecipientData', JSON.stringify(formData));
-        navigate('/book-flow/flower-plan/step-2');
+        setIsSaving(true);
+        try {
+            await updateFlowerPlan(planId, formData);
+            navigate(`/book-flow/flower-plan/${planId}/structure`);
+        } catch (error: any) {
+            toast.error("Failed to save recipient details", { description: error.message });
+        } finally {
+            setIsSaving(false);
+        }
     };
     
     const handleCancel = () => {
-        // Clear local storage and go back to dashboard
-        localStorage.removeItem('newPlanRecipientData');
-        localStorage.removeItem('newPlanStructureData');
         navigate('/dashboard');
     }
 
@@ -64,15 +91,15 @@ const CreatePlanStep1_RecipientPage: React.FC = () => {
             <div className="container mx-auto max-w-2xl py-12">
                 <Seo title="Create Plan: Recipient | ForeverFlower" />
                 <div className="text-center mb-4 text-black">
-                    <h1 className="text-sm font-bold tracking-widest uppercase text-gray-500">Step 1 of 3</h1>
+                    <h1 className="text-sm font-bold tracking-widest uppercase text-gray-500">Step 1 of 4: Recipient</h1>
                 </div>
                 <RecipientEditor
                     formData={formData}
                     onFormChange={handleFormChange}
                     onSave={handleNext}
                     onCancel={handleCancel}
-                    isSaving={false} // This page doesn't have a long-running save operation
-                    isLoading={false} // No data is loaded on this page
+                    isSaving={isSaving}
+                    isLoading={isLoading}
                     title="Who is this plan for?"
                     saveButtonText="Next: Plan Structure"
                     showCancelButton={true}
@@ -83,4 +110,4 @@ const CreatePlanStep1_RecipientPage: React.FC = () => {
     );
 };
 
-export default CreatePlanStep1_RecipientPage;
+export default RecipientPage;

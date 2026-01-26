@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from events.models import FlowerPlan
-from events.serializers import FlowerPlanSerializer
+from events.serializers.flower_plan_serializer import FlowerPlanSerializer
 
 class GetOrCreateInactivePlanView(APIView):
     """
