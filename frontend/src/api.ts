@@ -145,6 +145,7 @@ export interface FlowerPlan {
     id: number;
     user: number;
     is_active: boolean;
+    start_date?: string;
     notes: string | null;
     created_at: string;
     updated_at: string;

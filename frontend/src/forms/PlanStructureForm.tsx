@@ -1,17 +1,18 @@
-// foreverflower/frontend/src/components/PlanStructureForm.tsx
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
 
 export interface PlanStructureData {
   budget: number;
   deliveries_per_year: number;
   years: number;
+  start_date: string;
 }
 
 interface PlanStructureFormProps {
   formData: PlanStructureData;
-  onFormChange: (field: keyof PlanStructureData, value: number) => void;
+  onFormChange: (field: keyof PlanStructureData, value: number | string) => void;
   setIsDebouncePending?: (isPending: boolean) => void;
   title?: string;
 }
@@ -23,7 +24,7 @@ const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
   title = "Plan Structure"
 }) => {
 
-  const handleSliderChange = (field: keyof PlanStructureData) => (value: number[]) => {
+  const handleSliderChange = (field: 'budget' | 'deliveries_per_year' | 'years') => (value: number[]) => {
     if (setIsDebouncePending) {
       setIsDebouncePending(true);
     }
@@ -69,6 +70,16 @@ const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
             value={[formData.years]}
             onValueChange={handleSliderChange('years')}
           />
+        </div>
+        <div className="grid gap-2">
+            <Label htmlFor="start-date-input" className="text-sm">First Delivery Date</Label>
+            <Input
+                id="start-date-input"
+                type="date"
+                value={formData.start_date || ''}
+                onChange={(e) => onFormChange('start_date', e.target.value)}
+                className="w-full"
+            />
         </div>
       </div>
     </div>

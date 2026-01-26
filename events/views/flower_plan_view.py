@@ -94,7 +94,7 @@ class FlowerPlanViewSet(viewsets.ModelViewSet):
 
         # --- Create the events based on the plan details ---
         events_to_create = []
-        start_date = date.today()
+        start_date = flower_plan.start_date if flower_plan.start_date else date.today()
         # Calculate the interval between deliveries
         interval_days = 365 / flower_plan.deliveries_per_year
 

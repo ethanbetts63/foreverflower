@@ -18,6 +18,7 @@ const StructurePage: React.FC = () => {
         budget: 75,
         deliveries_per_year: 1,
         years: 5,
+        start_date: new Date().toISOString().split('T')[0],
     });
     
     const [isLoading, setIsLoading] = useState(true);
@@ -48,6 +49,7 @@ const StructurePage: React.FC = () => {
                     budget: plan.budget || 75,
                     deliveries_per_year: plan.deliveries_per_year || 1,
                     years: plan.years || 5,
+                    start_date: plan.start_date || new Date().toISOString().split('T')[0],
                 });
             })
             .catch(error => {
@@ -93,7 +95,7 @@ const StructurePage: React.FC = () => {
         return () => { debouncedCalculateUpfront.cancel?.(); };
     }, [formData, isLoading, debouncedCalculateUpfront]);
 
-    const handleFormChange = (field: keyof PlanStructureData, value: number) => {
+    const handleFormChange = (field: keyof PlanStructureData, value: number | string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 

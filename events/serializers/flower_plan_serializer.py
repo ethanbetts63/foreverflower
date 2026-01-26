@@ -10,6 +10,7 @@ class FlowerPlanSerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True, read_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
 
+    start_date = serializers.DateField(required=False, allow_null=True)
     budget = serializers.DecimalField(
         max_digits=10, decimal_places=2
     )
@@ -36,7 +37,7 @@ class FlowerPlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = FlowerPlan
         fields = [
-            'id', 'user', 'is_active', 'budget', 'deliveries_per_year',
+            'id', 'user', 'is_active', 'start_date', 'budget', 'deliveries_per_year',
             'years', 'notes', 'created_at', 'updated_at',
             'total_amount', 'currency',
             'recipient_first_name', 'recipient_last_name',
