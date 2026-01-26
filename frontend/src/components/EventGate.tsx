@@ -20,7 +20,6 @@ const EventGate: React.FC = () => {
             hasInitiated.current = true;
             const findOrCreatePlan = async () => {
                 try {
-                    toast.info("Finding or creating a draft plan...");
                     const plan = await getOrCreateInactiveFlowerPlan();
                     navigate(`/book-flow/flower-plan/${plan.id}/recipient`, { replace: true });
                 } catch (error: any) {
@@ -32,7 +31,6 @@ const EventGate: React.FC = () => {
             };
             findOrCreatePlan();
         } else {
-             // Anonymous users are sent to the account creation page
             navigate('/book-flow/create-account', { replace: true });
         }
     }, [isAuthenticated, isLoading, navigate]);

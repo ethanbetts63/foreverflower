@@ -20,7 +20,7 @@ const CreateAccountPage: React.FC = () => {
         try {
             const authResponse = await registerUser(data);
             handleLoginSuccess(authResponse);
-            navigate('/book-flow/flower-plan/step-1'); // Navigate to the next step
+            navigate('/event-gate'); // Navigate to the event gate to start the plan creation flow
         } catch (error: any) {
             const errorData = error.data || {};
             const description = Object.entries(errorData)
@@ -41,7 +41,7 @@ const CreateAccountPage: React.FC = () => {
                 <Seo title="Create Account | ForeverFlower" />
                 <Card className="bg-white text-black border-none shadow-md">
                     <CardHeader>
-                        <CardTitle className="text-3xl">Step 1: Create Your Account</CardTitle>
+                        <CardTitle className="text-3xl">Create Your Account</CardTitle>
                         <CardDescription className="text-black">
                             Welcome! Let's get your account set up so you can create your first flower plan. 
                         </CardDescription>

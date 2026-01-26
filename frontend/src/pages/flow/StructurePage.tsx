@@ -125,9 +125,6 @@ const StructurePage: React.FC = () => {
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-2xl py-12">
                 <Seo title="Create Plan: Structure | ForeverFlower" />
-                <div className="text-center mb-4 text-black">
-                    <h1 className="text-sm font-bold tracking-widest uppercase text-gray-500">Step 2 of 4: Structure</h1>
-                </div>
                 <StructureEditor
                     formData={formData}
                     onFormChange={handleFormChange}

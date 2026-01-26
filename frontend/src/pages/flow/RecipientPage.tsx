@@ -90,9 +90,6 @@ const RecipientPage: React.FC = () => {
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-2xl py-12">
                 <Seo title="Create Plan: Recipient | ForeverFlower" />
-                <div className="text-center mb-4 text-black">
-                    <h1 className="text-sm font-bold tracking-widest uppercase text-gray-500">Step 1 of 4: Recipient</h1>
-                </div>
                 <RecipientEditor
                     formData={formData}
                     onFormChange={handleFormChange}
@@ -100,7 +97,7 @@ const RecipientPage: React.FC = () => {
                     onCancel={handleCancel}
                     isSaving={isSaving}
                     isLoading={isLoading}
-                    title="Who is this plan for?"
+                    title="Who is receiving the flowers?"
                     saveButtonText="Next: Plan Structure"
                     showCancelButton={true}
                     cancelButtonText="Cancel"
