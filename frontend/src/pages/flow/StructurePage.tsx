@@ -107,7 +107,6 @@ const StructurePage: React.FC = () => {
         setIsSaving(true);
         try {
             await updateFlowerPlan(planId, formData);
-            toast.success("Plan structure saved!");
             navigate(`/book-flow/flower-plan/${planId}/preferences`);
         } catch (err: any) {
             setError(err.message);
