@@ -22,10 +22,9 @@ const CustomMessagePage: React.FC = () => {
 
     // Determine navigation context
     const isManagementFlow = new URLSearchParams(location.search).get('source') === 'management';
-    const redirectPath = isManagementFlow 
-        ? `/dashboard/plans/${planId}/overview` 
-        : `/book-flow/flower-plan/${planId}/confirmation`;
-    const saveButtonText = isManagementFlow ? 'Save' : 'Next';
+        const redirectPath = isManagementFlow
+            ? `/dashboard/plans/${planId}/overview`
+            : `/book-flow/flower-plan/${planId}/structure`;    const saveButtonText = isManagementFlow ? 'Save' : 'Next';
     
     // Core State
     const [flowerPlan, setFlowerPlan] = useState<FlowerPlan | null>(null);

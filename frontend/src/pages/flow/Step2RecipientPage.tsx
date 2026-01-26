@@ -74,7 +74,7 @@ const RecipientPage: React.FC = () => {
         setIsSaving(true);
         try {
             await updateFlowerPlan(planId, formData);
-            navigate(`/book-flow/flower-plan/${planId}/structure`);
+            navigate(`/book-flow/flower-plan/${planId}/preferences`);
         } catch (error: any) {
             toast.error("Failed to save recipient details", { description: error.message });
         } finally {

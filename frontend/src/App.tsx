@@ -19,14 +19,14 @@ const EditRecipientPage = lazy(() => import('./pages/user_dashboard/EditRecipien
 const EditStructurePage = lazy(() => import('./pages/user_dashboard/EditStructurePage'));
 
 const EventGate = lazy(() => import('@/components/EventGate'));
-const CreateAccountPage = lazy(() => import('./pages/flow/Step1CreateAccountPage'));
-const RecipientPage = lazy(() => import('./pages/flow/Step2RecipientPage'));
-const PreferenceSelectionPage = lazy(() => import('./pages/flow/Step3PreferenceSelectionPage'));
-const CustomMessagePage = lazy(() => import('./pages/flow/Step4CustomMessagePage'));
-const StructurePage = lazy(() => import('./pages/flow/Step5StructurePage'));
-const BookingConfirmationPage = lazy(() => import('./pages/flow/Step6BookingConfirmationPage'));
-const PaymentPage = lazy(() => import('./pages/flow/Step7PaymentPage'));
-const PaymentStatusPage = lazy(() => import('./pages/flow/Step8PaymentStatusPage'));
+const Step1CreateAccountPage = lazy(() => import('./pages/flow/Step1CreateAccountPage'));
+const Step2RecipientPage = lazy(() => import('./pages/flow/Step2RecipientPage'));
+const Step3PreferenceSelectionPage = lazy(() => import('./pages/flow/Step3PreferenceSelectionPage'));
+const Step4CustomMessagePage = lazy(() => import('./pages/flow/Step4CustomMessagePage'));
+const Step5StructurePage = lazy(() => import('./pages/flow/Step5StructurePage'));
+const Step6BookingConfirmationPage = lazy(() => import('./pages/flow/Step6BookingConfirmationPage'));
+const Step7PaymentPage = lazy(() => import('./pages/flow/Step7PaymentPage'));
+const Step8PaymentStatusPage = lazy(() => import('./pages/flow/Step8PaymentStatusPage'));
 
 const BlocklistSuccessPage = lazy(() => import('./pages/BlocklistSuccessPage'));
 const TermsAndConditionsPage = lazy(() => import('./pages/TermsAndConditionsPage'));
@@ -79,18 +79,16 @@ function App() {
                 <Route path="/articles/best-flower-delivery-perth" element={<BestFlowerDeliveryPerth />} />
                 <Route path="/articles/best-flower-delivery-sydney" element={<BestFlowerDeliverySydney />} />
 
-
                 {/* Event Creation Flow */}
                 <Route path="/event-gate" element={<EventGate />} />
-                <Route path="/book-flow/create-account" element={<CreateAccountPage />} />
-                <Route path="/book-flow/flower-plan/:planId/recipient" element={<RecipientPage />} />
-                <Route path="/book-flow/flower-plan/:planId/structure" element={<StructurePage />} />
-                <Route path="/book-flow/flower-plan/:planId/preferences" element={<PreferenceSelectionPage />} />
-                <Route path="/book-flow/flower-plan/:planId/add-message" element={<CustomMessagePage />} />
-                <Route path="/book-flow/flower-plan/:planId/confirmation" element={<BookingConfirmationPage />} />
-                <Route path="/book-flow/flower-plan/:planId/payment" element={<PaymentPage />} />
-
-                <Route path="/payment-status" element={<PaymentStatusPage />} />
+                <Route path="/book-flow/create-account" element={<Step1CreateAccountPage />} />
+                <Route path="/book-flow/flower-plan/:planId/recipient" element={<Step2RecipientPage />} />
+                <Route path="/book-flow/flower-plan/:planId/structure" element={<Step5StructurePage />} />
+                <Route path="/book-flow/flower-plan/:planId/preferences" element={<Step3PreferenceSelectionPage />} />
+                <Route path="/book-flow/flower-plan/:planId/add-message" element={<Step4CustomMessagePage />} />
+                <Route path="/book-flow/flower-plan/:planId/confirmation" element={<Step6BookingConfirmationPage />} />
+                <Route path="/book-flow/flower-plan/:planId/payment" element={<Step7PaymentPage />} />
+                <Route path="/payment-status" element={<Step8PaymentStatusPage />} />
 
                 {/* Admin Section */}
                 <Route path="/admin-dashboard" element={<AdminLayout />}>
