@@ -78,7 +78,7 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
                         amountOwing !== null && (
                         <>
                             <div className="text-2xl font-bold">${amountOwing.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                            <p className="text-xs text-gray-600">Amount to pay for this change</p>
+                            <p className="text-xs text-gray-600">Amount to pay (inc. service free, delivery & tax)</p>
                         </>
                         )
                     )}

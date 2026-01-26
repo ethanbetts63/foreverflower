@@ -106,7 +106,7 @@ const StructurePage: React.FC = () => {
 
         setIsSaving(true);
         try {
-            await updateFlowerPlan(planId, formData);
+            await updateFlowerPlan(planId, { ...formData, total_amount: upfrontPrice });
             navigate(`/book-flow/flower-plan/${planId}/confirmation`);
         } catch (err: any) {
             setError(err.message);
