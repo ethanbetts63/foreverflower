@@ -67,17 +67,17 @@ const NavBar: React.FC = () => {
             <div className={`items-center gap-2 ${screenWidth < BREAKPOINT ? 'flex flex-col absolute top-full left-0 w-full bg-[var(--color3)] p-4 shadow-lg' : 'flex'}`}>
                 {isAuthenticated ? (
                     <>
-                        <Link to="/dashboard">
+                        <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
                             <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-32' : ''}`}>Account</Button>
                         </Link>
-                        <Button onClick={logout} className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-32' : ''}`}>Logout</Button>
+                        <Button onClick={() => { logout(); setMenuOpen(false); }} className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-32' : ''}`}>Logout</Button>
                     </>
                 ) : (
-                    <Link to="/login">
+                    <Link to="/login" onClick={() => setMenuOpen(false)}>
                         <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-32' : ''}`}>Login</Button>
                     </Link>
                 )}
-                <Link to="/event-gate">
+                <Link to="/event-gate" onClick={() => setMenuOpen(false)}>
                     <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-32' : ''}`}>Order</Button>
                 </Link>
             </div>

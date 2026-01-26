@@ -1,5 +1,4 @@
 from django.urls import path, include
-from .views import email_verification_view
 from .views.register_view import RegisterView
 from .views.user_profile_view import UserProfileView
 from .views.delete_user_view import DeleteUserView
@@ -15,16 +14,6 @@ app_name = 'users'
 
 urlpatterns = [
     path('', include(router.urls)),
-    path(
-        'verify-email/<str:uidb64>/<str:token>/',
-        email_verification_view.EmailVerificationView.as_view(),
-        name='email_verify'
-    ),
-    path(
-        'resend-verification/',
-        email_verification_view.ResendVerificationView.as_view(),
-        name='resend_verification'
-    ),
     path('me/', UserProfileView.as_view(), name='user-profile'),
     path('register/', RegisterView.as_view(), name='register'),
     path('delete/', DeleteUserView.as_view(), name='delete-user'),

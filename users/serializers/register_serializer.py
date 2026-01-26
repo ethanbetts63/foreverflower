@@ -40,8 +40,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=password,
             **validated_data
         )
-        
-        # Automatically send the verification email upon registration
-        send_verification_email(user)
+
         
         return user
