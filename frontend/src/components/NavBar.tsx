@@ -78,7 +78,7 @@ const NavBar: React.FC = () => {
                     </Link>
                 )}
                 <Link to="/event-gate">
-                    <Button className="bg-white text-black font-bold hover:bg-gray-100">Order Flowers</Button>
+                    <Button className="bg-white text-black font-bold hover:bg-gray-100">Order</Button>
                 </Link>
             </div>
         )}

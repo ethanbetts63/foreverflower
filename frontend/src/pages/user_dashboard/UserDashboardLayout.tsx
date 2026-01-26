@@ -8,7 +8,7 @@ function UserDashboardLayout() {
         <nav className="flex flex-col space-y-6">
           <Link to="/dashboard" className="text-lg font-semibold hover:text-gray-300">Dashboard</Link>
           <Link to="/event-gate">
-            <Button className="w-full bg-white text-black font-bold hover:bg-gray-100">Order Flowers</Button>
+            <Button className="w-full bg-white text-black font-bold hover:bg-gray-100">Order</Button>
           </Link>
           <Link to="/dashboard/account" className="text-lg hover:text-gray-300">Account Management</Link>
           <Link to="/dashboard/plans" className="text-lg hover:text-gray-300">Flower Plan Management</Link>
