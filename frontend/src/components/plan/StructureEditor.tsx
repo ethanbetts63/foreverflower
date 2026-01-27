@@ -8,7 +8,7 @@ import BackButton from '@/components/BackButton';
 
 interface StructureEditorProps {
     formData: PlanStructureData;
-    onFormChange: (field: keyof PlanStructureData, value: number) => void;
+    onFormChange: (field: keyof PlanStructureData, value: number | string) => void;
     onSave: () => void;
     onCancel?: () => void;
     isSaving: boolean;

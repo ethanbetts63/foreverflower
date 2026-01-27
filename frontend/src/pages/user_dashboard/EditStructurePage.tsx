@@ -19,6 +19,7 @@ const EditStructurePage: React.FC = () => {
         budget: 75,
         deliveries_per_year: 1,
         years: 5,
+        start_date: '',
     });
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -49,6 +50,7 @@ const EditStructurePage: React.FC = () => {
                     budget: plan.budget,
                     deliveries_per_year: plan.deliveries_per_year,
                     years: plan.years,
+                    start_date: plan.start_date || new Date().toISOString().split('T')[0],
                 });
             } catch (err) {
                 toast.error("Failed to load plan data.");
@@ -102,7 +104,7 @@ const EditStructurePage: React.FC = () => {
     }, [formData, isLoading, isSaving, debouncedCalculateModification]);
 
 
-    const handleFormChange = (field: keyof PlanStructureData, value: number) => {
+    const handleFormChange = (field: keyof PlanStructureData, value: number | string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
