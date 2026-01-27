@@ -21,7 +21,7 @@ function UserDashboardLayout() {
 
   return (
     <div className="flex min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
-      <aside className="hidden md:block w-64 flex-shrink-0 bg-gray-800 text-white p-6">
+      <aside className="hidden lg:block w-64 flex-shrink-0 bg-gray-800 text-white p-6">
         <nav className="flex flex-col space-y-6">
           <Link to="/dashboard" className="text-lg font-semibold hover:text-gray-300">Dashboard</Link>
           <Link to="/event-gate">
