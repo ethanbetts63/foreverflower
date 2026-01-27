@@ -5,7 +5,7 @@ import Seo from '@/components/Seo';
 import { toast } from 'sonner';
 import { getFlowerPlan, updateFlowerPlan } from '@/api';
 import type { PlanStructureData } from '@/forms/PlanStructureForm';
-import StructureEditor from '@/components/plan/StructureEditor';
+import StructureEditor from '@/components/StructureEditor';
 import { debounce } from '@/utils/debounce';
 import { authedFetch } from '@/apiClient';
 

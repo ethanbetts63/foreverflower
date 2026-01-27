@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { getFlowerPlan, updateFlowerPlan, type PartialFlowerPlan } from '@/api';
 import type { RecipientData } from '@/forms/RecipientForm';
-import RecipientEditor from '@/components/plan/RecipientEditor';
+import RecipientEditor from '@/components/RecipientEditor';
 import Seo from '@/components/Seo';
 
 const EditRecipientPage: React.FC = () => {

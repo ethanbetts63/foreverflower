@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { getFlowerPlan, updateFlowerPlan, type PartialFlowerPlan } from '@/api';
 import { authedFetch } from '@/apiClient';
 import type { PlanStructureData } from '@/forms/PlanStructureForm';
-import StructureEditor from '@/components/plan/StructureEditor';
+import StructureEditor from '@/components/StructureEditor';
 import { debounce } from '@/utils/debounce';
 
 const getMinDateString = () => {

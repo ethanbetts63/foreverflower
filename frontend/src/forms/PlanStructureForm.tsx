@@ -50,6 +50,7 @@ const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
             value={[formData.budget]}
             onValueChange={handleSliderChange('budget')}
           />
+          <p className="text-sm text-gray-500 mt-1">Adjust the budget for each individual bouquet (inc. delivery & tax).</p>
         </div>
         <div className="grid gap-2">
           <Label htmlFor="deliveries-slider" className="text-sm">Deliveries Per Year: {formData.deliveries_per_year}</Label>
@@ -62,6 +63,7 @@ const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
             value={[formData.deliveries_per_year]}
             onValueChange={handleSliderChange('deliveries_per_year')}
           />
+          <p className="text-sm text-gray-500 mt-1">Adjust how many bouquets are delivered per year. Delivery dates will be evenly spaced from your first delivery date.</p>
         </div>
         <div className="grid gap-2">
           <Label htmlFor="years-slider" className="text-sm">Years: {formData.years}</Label>
@@ -74,6 +76,7 @@ const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
             value={[formData.years]}
             onValueChange={handleSliderChange('years')}
           />
+          <p className="text-sm text-gray-500 mt-1">Adjust the total duration of the plan in years.</p>
         </div>
         <div className="grid gap-2">
             <Label htmlFor="start-date-input" className="text-sm">First Delivery Date</Label>
@@ -85,6 +88,7 @@ const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
                 onChange={(e) => onFormChange('start_date', e.target.value)}
                 className="w-full"
             />
+            <p className="text-sm text-gray-500 mt-1">Select the date for the first bouquet delivery. Must be at least 7 days from today.</p>
         </div>
       </div>
     </div>
