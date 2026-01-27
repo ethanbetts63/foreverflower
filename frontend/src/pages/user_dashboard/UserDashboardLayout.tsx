@@ -14,7 +14,6 @@ function UserDashboardLayout() {
     ];
     setDashboardNavItems(dashboardLinks);
 
-    // Cleanup function to clear the items when leaving the dashboard
     return () => {
       setDashboardNavItems([]);
     };

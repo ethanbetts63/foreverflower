@@ -80,11 +80,6 @@ const UserDashboardPage: React.FC = () => {
           <>
             <UserDetailsSummary user={user} />
             <NextDeliveryCard deliveryInfo={nextDelivery} />
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-3">Flower Plan Status</h2>
-              <p>You have <strong>{plans.length}</strong> active flower plan(s).</p>
-            </div>
-            {/* Replace Recent Activity with FlowerPlanTable */}
             <div className="col-span-1 md:col-span-2">
                 <FlowerPlanTable initialPlans={plans} showTitle={false} />
             </div>
