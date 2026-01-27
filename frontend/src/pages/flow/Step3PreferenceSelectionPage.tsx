@@ -130,7 +130,7 @@ const PreferenceSelectionPage: React.FC = () => {
                             <div>
                                 <CardTitle className="text-3xl">Add Your Preferences (Optional)</CardTitle>
                                 <CardDescription className="text-black">
-                                    Let us know what you love and what you don't. This helps our florists create bouquets you'll adore.
+                                    Let us know what they love and what they don't. This helps our florists create bouquets they'll adore.
                                 </CardDescription>
                             </div>
                              <Button variant="destructive" onClick={handleSkip} className="bg-transparent text-red-500 hover:bg-red-50 ml-4">

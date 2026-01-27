@@ -98,7 +98,7 @@ const RecipientPage: React.FC = () => {
                     isSaving={isSaving}
                     isLoading={isLoading}
                     title="Who is receiving the flowers?"
-                    saveButtonText="Next: Plan Structure"
+                    saveButtonText="Next: Plan Preferences"
                     showCancelButton={true}
                     cancelButtonText="Cancel"
                 />
