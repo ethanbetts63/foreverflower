@@ -76,24 +76,24 @@ const NavBar: React.FC = () => {
                             <>
                                 {dashboardNavItems.map(item => (
                                     <Link to={item.to} key={item.to} onClick={() => setMenuOpen(false)}>
-                                        <Button className="bg-white text-black font-bold hover:bg-gray-100 w-full text-left justify-start pl-4">{item.label}</Button>
+                                        <Button className="bg-white text-black font-bold hover:bg-gray-100 w-1/2">{item.label}</Button>
                                     </Link>
                                 ))}
                             </>
                         ) : (
                             <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
-                                <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-32' : ''}`}>Account</Button>
+                                <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : ''}`}>Account</Button>
                             </Link>
                         )}
-                        <Button onClick={() => { logout(() => navigate('/')); setMenuOpen(false); }} className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-full text-left justify-start pl-4' : 'w-32'}`}>Logout</Button>
+                        <Button onClick={() => { logout(() => navigate('/')); setMenuOpen(false); }} className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : 'w-32'}`}>Logout</Button>
                     </>
                 ) : (
                     <Link to="/login" onClick={() => setMenuOpen(false)}>
-                        <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-32' : ''}`}>Login</Button>
+                        <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : ''}`}>Login</Button>
                     </Link>
                 )}
                 <Link to="/event-gate" onClick={() => setMenuOpen(false)}>
-                    <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT && isAuthenticated ? 'w-full text-left justify-start pl-4' : (screenWidth < BREAKPOINT ? 'w-32' : '')}`}>Order</Button>
+                    <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : ''}`}>Order</Button>
                 </Link>
             </div>
         )}
