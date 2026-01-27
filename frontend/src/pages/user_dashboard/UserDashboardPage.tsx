@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getFlowerPlans, type FlowerPlan, type PlanEvent } from '@/api';
+import { getFlowerPlans, type FlowerPlan } from '@/api';
+import { type Event as PlanEvent } from '@/types';
 import NextDeliveryCard, { type NextDeliveryInfo } from '@/components/NextDeliveryCard';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
@@ -37,7 +38,7 @@ const UserDashboardPage: React.FC = () => {
             const deliveryIndex = sortedEvents.findIndex(e => e.id === event.id);
             upcomingDeliveries.push({
               plan,
-              event,
+              event: event as PlanEvent,
               deliveryIndex: deliveryIndex + 1,
             });
           });

@@ -4,7 +4,7 @@ from django.conf import settings
 from rest_framework import serializers
 from ..models import FlowerPlan, Color, FlowerType
 from .event_serializer import EventSerializer
-from payments.serializers.payment_serializer import PaymentSerializer # New Import
+from payments.serializers.payment_serializer import PaymentSerializer 
 
 class FlowerPlanSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -63,7 +63,7 @@ class FlowerPlanSerializer(serializers.ModelSerializer):
             'events', 'payments',
         ]
         read_only_fields = [
-            'id', 'is_active', 'created_at', 'updated_at' # Removed total_amount and currency
+            'id', 'is_active', 'created_at', 'updated_at'
         ]
 
     def update(self, instance, validated_data):

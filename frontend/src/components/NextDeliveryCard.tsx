@@ -2,7 +2,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Truck, Calendar, Hash, User, MapPin } from 'lucide-react';
-import type { FlowerPlan, Event as PlanEvent } from '@/api';
+import type { FlowerPlan } from '@/api';
+import type { Event as PlanEvent } from '@/types';
 
 export interface NextDeliveryInfo {
     plan: FlowerPlan;
@@ -41,7 +42,7 @@ const NextDeliveryCard: React.FC<NextDeliveryCardProps> = ({ deliveryInfo }) => 
     }
     
     const { plan, event, deliveryIndex } = deliveryInfo;
-    const fullAddress = `${plan.recipient_address_line_1}${plan.recipient_address_line_2 ? `, ${plan.recipient_address_line_2}` : ''}, ${plan.recipient_city}, ${plan.recipient_state} ${plan.recipient_postcode}`;
+    const fullAddress = `${plan.recipient_street_address}${plan.recipient_suburb ? `, ${plan.recipient_suburb}` : ''}, ${plan.recipient_city}, ${plan.recipient_state} ${plan.recipient_postcode}`;
 
     return (
         <Card className="bg-white shadow-md border-none text-black">
@@ -62,7 +63,7 @@ const NextDeliveryCard: React.FC<NextDeliveryCardProps> = ({ deliveryInfo }) => 
                 </div>
                 <div className="flex items-start">
                     <User className="h-4 w-4 mr-3 mt-1 text-gray-500 flex-shrink-0" />
-                    <span>{plan.recipient_name}</span>
+                    <span>{`${plan.recipient_first_name || ''} ${plan.recipient_last_name || ''}`.trim()}</span>
                 </div>
                 <div className="flex items-start">
                     <MapPin className="h-4 w-4 mr-3 mt-1 text-gray-500 flex-shrink-0" />
