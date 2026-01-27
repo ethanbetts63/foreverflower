@@ -44,7 +44,7 @@ const DeleteAccountSection: React.FC = () => {
             <CardContent className="flex justify-between items-center text-black">
                 <div className="flex flex-col">
                     <p className="font-semibold text-black">Delete Your Account</p>
-                    <p className="text-sm text-black">Once you delete your account, there is no going back. All of your data, including events and contacts, will be permanently removed.</p>
+                    <p className="text-sm text-black">Once you delete your account, there is no going back. All of your data, including personal details and flower plans, will be permanently removed.</p>
                 </div>
 
                 <AlertDialog>
