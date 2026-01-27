@@ -7,6 +7,8 @@ import logo192 from '../assets/logo-192w.webp';
 import logo256 from '../assets/logo-256w.webp';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigation } from '@/context/NavigationContext';
+import SettingsIcon from '../assets/settings.svg';
+import LogoutIcon from '../assets/logout.svg';
 
 const BREAKPOINT = 1048; // Custom breakpoint for hamburger menu
 
@@ -70,31 +72,56 @@ const NavBar: React.FC = () => {
 
         {((screenWidth < BREAKPOINT && menuOpen) || screenWidth >= BREAKPOINT) && (
             <div className={`items-center gap-2 ${screenWidth < BREAKPOINT ? 'flex flex-col absolute top-full left-0 w-full bg-[var(--color3)] p-4 shadow-lg' : 'flex'}`}>
+                <Link to="/event-gate" onClick={() => setMenuOpen(false)}>
+                    <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : ''}`}>Order</Button>
+                </Link>
+
                 {isAuthenticated ? (
                     <>
                         {isDashboardMobile ? (
                             <>
                                 {dashboardNavItems.map(item => (
                                     <Link to={item.to} key={item.to} onClick={() => setMenuOpen(false)}>
-                                        <Button className="bg-white text-black font-bold hover:bg-gray-100 w-1/2">{item.label}</Button>
+                                        <Button className="bg-white text-black font-bold hover:bg-gray-100 w-1/2 flex items-center justify-center">
+                                            {item.to === '/dashboard' && <SettingsIcon className="mr-2 w-5 h-5" />}
+                                            {item.label}
+                                        </Button>
                                     </Link>
                                 ))}
                             </>
                         ) : (
                             <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
-                                <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : ''}`}>Account</Button>
+                                <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2 flex items-center justify-center' : ''}`}>
+                                    {screenWidth < BREAKPOINT ? (
+                                        <>
+                                            <SettingsIcon className="mr-2 w-5 h-5" />
+                                            Account
+                                        </>
+                                    ) : (
+                                        <SettingsIcon className="w-5 h-5" />
+                                    )}
+                                </Button>
                             </Link>
                         )}
-                        <Button onClick={() => { logout(() => navigate('/')); setMenuOpen(false); }} className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : 'w-32'}`}>Logout</Button>
+                        <Button
+                            onClick={() => { logout(() => navigate('/')); setMenuOpen(false); }}
+                            className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2 flex items-center justify-center' : ''}`}
+                        >
+                            {screenWidth < BREAKPOINT ? (
+                                <>
+                                    <LogoutIcon className="mr-2 w-5 h-5 text-red-500" />
+                                    Logout
+                                </>
+                            ) : (
+                                <LogoutIcon className="w-5 h-5 text-red-500" />
+                            )}
+                        </Button>
                     </>
                 ) : (
                     <Link to="/login" onClick={() => setMenuOpen(false)}>
                         <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : ''}`}>Login</Button>
                     </Link>
                 )}
-                <Link to="/event-gate" onClick={() => setMenuOpen(false)}>
-                    <Button className={`bg-white text-black font-bold hover:bg-gray-100 ${screenWidth < BREAKPOINT ? 'w-1/2' : ''}`}>Order</Button>
-                </Link>
             </div>
         )}
       </div>
