@@ -1,27 +1,35 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getFlowerPlans, type FlowerPlan } from '@/api';
+import { getFlowerPlans, getUserProfile, type FlowerPlan } from '@/api';
+import { type UserProfile } from '@/types';
 import { type Event as PlanEvent } from '@/types';
 import NextDeliveryCard, { type NextDeliveryInfo } from '@/components/NextDeliveryCard';
+import FlowerPlanTable from '@/components/FlowerPlanTable';
+import UserDetailsSummary from '@/components/UserDetailsSummary';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
 const UserDashboardPage: React.FC = () => {
   const [plans, setPlans] = useState<FlowerPlan[]>([]);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPlans = async () => {
+    const fetchData = async () => {
       try {
-        const plansData = await getFlowerPlans();
+        const [plansData, userData] = await Promise.all([
+          getFlowerPlans(),
+          getUserProfile(),
+        ]);
         setPlans(plansData);
+        setUser(userData);
       } catch (err: any) {
-        toast.error("Failed to load your flower plans.", { description: err.message });
+        toast.error("Failed to load your dashboard.", { description: err.message });
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
-    fetchPlans();
+    fetchData();
   }, []);
 
   const nextDelivery = useMemo((): NextDeliveryInfo | null => {
@@ -70,14 +78,15 @@ const UserDashboardPage: React.FC = () => {
           </div>
         ) : (
           <>
+            <UserDetailsSummary user={user} />
             <NextDeliveryCard deliveryInfo={nextDelivery} />
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold mb-3">Flower Plan Status</h2>
               <p>You have <strong>{plans.length}</strong> active flower plan(s).</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2">
-              <h2 className="text-xl font-semibold mb-3">Recent Activity</h2>
-              <p className="text-muted-foreground">Activity tracking coming soon.</p>
+            {/* Replace Recent Activity with FlowerPlanTable */}
+            <div className="col-span-1 md:col-span-2">
+                <FlowerPlanTable initialPlans={plans} showTitle={false} />
             </div>
           </>
         )}

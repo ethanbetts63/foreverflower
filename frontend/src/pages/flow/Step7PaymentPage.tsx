@@ -57,7 +57,7 @@ const PlanSummary: React.FC<PlanSummaryProps> = ({ originalPlan, newPlan }) => {
         <div className="flex justify-between">
           <span>Budget per Bouquet</span>
            <div className='flex items-center'>
-            {newPlan && newPlan.budget !== Number(originalPlan.budget) && <span className="text-gray-500 line-through mr-2">${Number(originalPlan.budget).toFixed(2)}</span>}
+            {newPlan && newPlan.budget !== originalPlan.budget && <span className="text-gray-500 line-through mr-2">${Number(originalPlan.budget).toFixed(2)}</span>}
             <span>${Number(displayPlan.budget).toFixed(2)}</span>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function PaymentPage() {
         let modificationDetails;
         if (isManagementFlow && budget && deliveries_per_year && years && amount) {
             modificationDetails = {
-                budget: parseFloat(budget),
+                budget: String(parseFloat(budget)),
                 deliveries_per_year: parseInt(deliveries_per_year, 10),
                 years: parseInt(years, 10),
                 amount: parseFloat(amount)
@@ -128,7 +128,7 @@ export default function PaymentPage() {
 
         if (isManagementFlow && modificationDetails) {
             payload.amount = modificationDetails.amount;
-            payload.budget = modificationDetails.budget;
+            payload.budget = Number(modificationDetails.budget);
             payload.years = modificationDetails.years;
             payload.deliveries_per_year = modificationDetails.deliveries_per_year;
         }

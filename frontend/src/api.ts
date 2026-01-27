@@ -147,9 +147,7 @@ export interface FlowerPlan {
     is_active: boolean;
     start_date?: string;
     notes: string | null;
-    created_at: string;
-    updated_at: string;
-    budget: number;
+    budget: string;
     deliveries_per_year: number;
     years: number;
     total_amount: number;

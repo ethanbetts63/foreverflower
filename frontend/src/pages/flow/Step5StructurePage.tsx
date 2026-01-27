@@ -52,7 +52,7 @@ const StructurePage: React.FC = () => {
         getFlowerPlan(planId)
             .then(plan => {
                 setFormData({
-                    budget: plan.budget || 75,
+                    budget: Number(plan.budget) || 75,
                     deliveries_per_year: plan.deliveries_per_year || 1,
                     years: plan.years || 5,
                     start_date: plan.start_date || getMinDateString(),
@@ -114,7 +114,7 @@ const StructurePage: React.FC = () => {
 
         setIsSaving(true);
         try {
-            await updateFlowerPlan(planId, { ...formData, total_amount: upfrontPrice });
+            await updateFlowerPlan(planId, { ...formData, budget: String(formData.budget), total_amount: upfrontPrice });
             navigate(`/book-flow/flower-plan/${planId}/confirmation`);
         } catch (err: any) {
             setError(err.message);

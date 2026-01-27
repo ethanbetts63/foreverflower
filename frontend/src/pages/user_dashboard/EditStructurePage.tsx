@@ -53,7 +53,7 @@ const EditStructurePage: React.FC = () => {
             try {
                 const plan = await getFlowerPlan(planId);
                 setFormData({
-                    budget: plan.budget,
+                    budget: Number(plan.budget),
                     deliveries_per_year: plan.deliveries_per_year,
                     years: plan.years,
                     start_date: plan.start_date || getMinDateString(),
@@ -131,7 +131,7 @@ const EditStructurePage: React.FC = () => {
 
         setIsSaving(true);
         try {
-            const payload: PartialFlowerPlan = { ...formData };
+            const payload: PartialFlowerPlan = { ...formData, budget: String(formData.budget) };
             await updateFlowerPlan(planId, payload);
             toast.success("Plan updated successfully!");
             navigate(`/dashboard/plans/${planId}/overview`);
