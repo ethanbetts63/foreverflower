@@ -15,6 +15,7 @@ import PreferencesCard from '@/components/PreferencesCard';
 import MessagesCard from '@/components/MessagesCard';
 import RecipientCard from '@/components/RecipientCard';
 import PaymentHistoryCard from '@/components/PaymentHistoryCard';
+import PlanActivationBanner from '@/components/PlanActivationBanner';
 
 const PlanOverviewPage = () => {
   const { planId } = useParams<{ planId: string }>();
@@ -81,8 +82,11 @@ const PlanOverviewPage = () => {
   return (
     <>
       <Seo title="Plan Overview | ForeverFlower" />
+                  {!plan.is_active && planId && <PlanActivationBanner planId={planId} />}
+
       <div className="min-h-screen w-full py-8" style={{ backgroundColor: 'var(--color4)' }}>
-        <div className="container mx-auto px-4 max-w-4xl">
+        <div className="container mx-auto max-w-4xl">
+        
         <div className="space-y-8">
           <Card className="w-full bg-white shadow-md border-none text-black">
             <CardHeader>
@@ -94,6 +98,7 @@ const PlanOverviewPage = () => {
           </Card>
 
           <div className="space-y-6">
+          
             <PaymentHistoryCard plan={plan} />
 
             <RecipientCard
