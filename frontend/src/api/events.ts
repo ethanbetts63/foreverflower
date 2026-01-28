@@ -29,7 +29,7 @@ export async function createAuthenticatedEvent(eventData: Partial<DeliveryEvent>
 
 export async function updateEvent(id: number, eventData: Partial<DeliveryEvent>): Promise<DeliveryEvent> {
     const response = await authedFetch(`/api/events/${id}/`, {
-        method: 'PATCH', // PATCH is for partial updates
+        method: 'PATCH', 
         body: JSON.stringify(eventData),
     });
     return handleResponse(response);
