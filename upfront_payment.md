@@ -10,39 +10,39 @@ The user journey begins with account creation and proceeds through a multi-step 
 - **Action:** The user's journey to create a plan starts by navigating to `/event-gate` after they hit any order button across the site. This is the universal entry point for starting a new plan, regardless of whether the user is logged in or not.
 - **`EventGate.tsx`:** This component acts as a gatekeeper for the event creation flow.
     - **Authentication Check:** It verifies if the user is logged in. If not, it redirects them to the account creation page (`/book-flow/create-account`). A new user will register and then be sent back to the `/event-gate` upon login.
-    - **API Call:** If the user is authenticated, it calls the `getOrCreateInactiveFlowerPlan` function. This function sends a `GET` request to the backend endpoint at `/api/events/flower-plans/get-or-create-inactive/`.
+    - **API Call:** If the user is authenticated, it calls the `getOrCreatePendingUpfrontPlan` function. This function sends a `GET` request to the backend endpoint at `/api/events/upfront-plans/get-or-create-pending/`.
 - **`get_or_create_inactive_plan_view.py`:**
-    - **Backend Logic:** This view handles the request from the `EventGate`. It searches for an existing `FlowerPlan` for the authenticated user that is marked as `is_active=False`.
+    - **Backend Logic:** This view handles the request from the `EventGate`. It searches for an existing `UpfrontPlan` for the authenticated user that is marked with `status='pending_payment'`.
     - If an inactive plan is found, it returns that plan's data. This allows a user to pick up where they left off. Inactive essentially just means unpayed for. 
-    - If no inactive plan exists, it creates a new `FlowerPlan` instance, associates it with the user, sets `is_active=False`, and returns the data for the newly created plan.
-- **Navigation:** The `EventGate` receives the plan data from the backend and then navigates the user to the next step of the flow at `/book-flow/flower-plan/${plan.id}/recipient`, ready for them to start filling out the details.
+    - If no such plan exists, it creates a new `UpfrontPlan` instance, associates it with the user, sets `status='pending_payment'`, and returns the data for the newly created plan.
+- **Navigation:** The `EventGate` receives the plan data from the backend and then navigates the user to the next step of the flow at `/book-flow/upfront-plan/${plan.id}/recipient`, ready for them to start filling out the details.
 
 ### Step 2: Recipient Details
-- **File:** `frontend/src/pages/flow/Step2RecipientPage.tsx`
+- **File:** `frontend/src/pages/upfront_flow/Step2RecipientPage.tsx`
 - **Action:** The user enters the recipient's name and address.
-- **API Call:** The `updateFlowerPlan` function is called, sending a `PATCH` request to the backend to update the `FlowerPlan` with the recipient's information.
+- **API Call:** The `updateUpfrontPlan` function is called, sending a `PATCH` request to the backend to update the `UpfrontPlan` with the recipient's information.
 
 ### Step 3: Delivery Preferences
-- **File:** `frontend/src/pages/flow/Step3PreferenceSelectionPage.tsx`
+- **File:** `frontend/src/pages/upfront_flow/Step3PreferenceSelectionPage.tsx`
 - **Action:** The user can optionally select preferred and rejected colors and flower types.
-- **API Call:** `updateFlowerPlan` is called to save these preferences to the `FlowerPlan`.
+- **API Call:** `updateUpfrontPlan` is called to save these preferences to the `UpfrontPlan`.
 
 ### Step 4: Custom Messages
-- **File:** `frontend/src/pages/flow/Step4CustomMessagePage.tsx`
+- **File:** `frontend/src/pages/upfront_flow/Step4CustomMessagePage.tsx`
 - **Action:** The user can write a single message for all deliveries or a custom message for each one.
 - **API Call:** The `updateEvent` function is called for each delivery `Event` associated with the plan to save the messages. This implies the backend has already generated the individual `Event` instances based on a default or previously set plan structure.
 
 ### Step 5: Plan Structure
-- **File:** `frontend/src/pages/flow/Step5StructurePage.tsx`
+- **File:** `frontend/src/pages/upfront_flow/Step5StructurePage.tsx`
 - **Action:** The user defines the core structure of the plan:
     - Budget per delivery
     - Number of deliveries per year
     - Total number of years
-- **API Call (Price Calculation):** As the user adjusts the structure, a debounced `POST` request is sent to `/api/events/calculate-price/`. This backend endpoint calculates the total upfront cost and returns it. Because the payment is upfront and the service is evenly spaced expenditures in the future, its an annuity and therefor we can provide a upfront discount to account for that. 
-- **API Call (Save Structure):** When the user proceeds, `updateFlowerPlan` is called to save the selected structure and the calculated `total_amount` to the `FlowerPlan`.
+- **API Call (Price Calculation):** As the user adjusts the structure, a debounced `POST` request is sent to `/api/events/upfront-plans/<plan_id>/calculate-modification/`. This backend endpoint calculates the total upfront cost and returns it. Because the payment is upfront and the service is evenly spaced expenditures in the future, its an annuity and therefor we can provide a upfront discount to account for that. 
+- **API Call (Save Structure):** When the user proceeds, `updateUpfrontPlan` is called to save the selected structure and the calculated `total_amount` to the `UpfrontPlan`.
 
 ### Step 6: Confirmation
-- **File:** `frontend/src/pages/flow/Step6BookingConfirmationPage.tsx`
+- **File:** `frontend/src/pages/upfront_flow/Step6BookingConfirmationPage.tsx`
 - **Action:** The user reviews a complete summary of their plan, including structure, recipient, preferences, messages, and the final price.
 - **Navigation:** Upon confirmation, the user is taken to the payment page.
 
@@ -50,17 +50,17 @@ The user journey begins with account creation and proceeds through a multi-step 
 This step now involves two distinct payment pages, each serving a specific user flow, but both leveraging a shared processing component for consistency and reusability.
 
 #### Booking Flow Payment
-- **File:** `frontend/src/pages/flow/Step7PaymentPage.tsx`
+- **File:** `frontend/src/pages/upfront_flow/Step7PaymentPage.tsx`
 - **Action:** The user in the initial booking flow is presented with a Stripe Elements payment form.
-- **Shared Component:** This page uses the `FlowerPlanPaymentProcessor.tsx` component with `mode="booking"`.
+- **Shared Component:** This page uses the `UpfrontPlanPaymentProcessor.tsx` component with `mode="booking"`.
 
 #### Dashboard Management Payment
 - **File:** `frontend/src/pages/user_dashboard/UserDashboardPaymentPage.tsx`
 - **Action:** Users modifying an existing plan (e.g., changing its structure) that results in an additional cost are directed here to make a payment.
-- **Shared Component:** This page also uses the `FlowerPlanPaymentProcessor.tsx` component, but with `mode="management"`.
+- **Shared Component:** This page also uses the `UpfrontPlanPaymentProcessor.tsx` component, but with `mode="management"`.
 
-#### `FlowerPlanPaymentProcessor.tsx` (Shared Component)
-- **Location:** `frontend/src/components/FlowerPlanPaymentProcessor.tsx`
+#### `UpfrontPlanPaymentProcessor.tsx` (Shared Component)
+- **Location:** `frontend/src/components/UpfrontPlanPaymentProcessor.tsx`
 - **Purpose:** Encapsulates the core logic for processing flower plan payments using Stripe.
 - **Logic:**
     1. The `createPaymentIntent` function is called, which sends a `POST` request to `/api/payments/create-payment-intent/`.
@@ -88,7 +88,7 @@ The Django backend handles the business logic, data persistence, and communicati
 - **Logic:**
     - Receives the `upfront_plan_id` and, potentially, updated plan details (budget, deliveries, years, amount) from the frontend.
     - Creates a Stripe `PaymentIntent` with the `total_amount` (either the plan's original total or the new calculated amount for modifications). Metadata, including `upfront_plan_id`, `user_id`, and plan structure details (especially for modifications), is attached to the intent.
-    - Creates a `Payment` record in the database, linking it to the user and `UpfrontPlan`, and setting its initial `status` to `'pending'`.
+    - Creates a `Payment` record in the database, linking it to the user and `OrderBase`, and setting its initial `status` to `'pending'`.
     - Returns the `clientSecret` of the `PaymentIntent` to the frontend.
 
 ### `stripe_webhook.py`
@@ -99,7 +99,7 @@ The Django backend handles the business logic, data persistence, and communicati
     - Retrieves the `PaymentIntent` object from the event payload.
     - Finds the local `Payment` record using the `stripe_payment_intent_id`.
     - Updates the `Payment` record's `status` to `'succeeded'`.
-    - Retrieves the `UpfrontPlan` using the `upfront_plan_id` from the webhook metadata.
+    - Retrieves the `UpfrontPlan` using the `upfront_plan_id` from the webhook metadata, and its `OrderBase` parent instance (`orderbase_ptr`).
     - **Activates the plan** by setting `is_active` to `True`.
     - If the payment was for a plan modification, it updates the `UpfrontPlan`'s budget, years, and delivery frequency based on the metadata passed in the `PaymentIntent`.
     - Sends a notification to the site admin about the successful payment.
@@ -125,13 +125,13 @@ The upfront price for a flower plan is not a simple sum of all deliveries. Inste
 These are the core Django models that store the data for the entire flow.
 
 ### `events/models/flower_plan.py`
-- **Model:** `FlowerPlan`
+- **Model:** `UpfrontPlan`
 - **Purpose:** The central model that holds all information for a user's plan.
 - **Key Fields:** `user`, `is_active`, `start_date`, `budget`, `deliveries_per_year`, `years`, `total_amount`, recipient details, and links to preferences.
 
 ### `events/models/event.py`
 - **Model:** `Event`
-- **Purpose:** Represents a single, specific delivery within a `FlowerPlan`.
+- **Purpose:** Represents a single, specific delivery within a `UpfrontPlan`.
 - **Key Fields:** `flower_plan` (foreign key), `delivery_date`, `message`, `status`.
 
 ### `payments/models/payment.py`
@@ -145,10 +145,10 @@ After a successful payment, the user can manage their active plan through the da
 
 ### `UserDashboardPage.tsx`
 - **Purpose:** The main dashboard view.
-- **Features:** Displays a welcome message, user details, and a summary of the next upcoming delivery across all plans. It lists all of the user's plans in the `FlowerPlanTable` component.
+- **Features:** Displays a welcome message, user details, and a summary of the next upcoming delivery across all plans. It lists all of the user's plans in the `UpfrontPlanTable` component.
 
 ### `PlanOverviewPage.tsx`
-- **Purpose:** Provides a comprehensive, detailed view of a single `FlowerPlan`.
+- **Purpose:** Provides a comprehensive, detailed view of a single `UpfrontPlan`.
 - **Features:**
     - Displays all plan details using modular components like `PlanStructureCard`, `DeliveryDatesCard`, `PreferencesCard`, and `RecipientCard`.
     - Shows payment history via the `PaymentHistoryCard`.
@@ -184,8 +184,8 @@ The project extensively uses shared components to abstract common logic and UI e
 - **`StructureEditor`**: Contains the form for the plan's structure (budget, years, etc.) and is used by both `Step5StructurePage.tsx` and `EditStructurePage.tsx`.
 - **`MessagesEditor`**: Manages message input for deliveries, used by both `Step4CustomMessagePage.tsx` and `EditMessagesPage.tsx`.
 - **`PlanDisplay`**: A smart component responsible for fetching and providing core flower plan data (`plan`, `colorMap`, `flowerTypeMap`) to its children, used by `Step6BookingConfirmationPage.tsx` and `PlanOverviewPage.tsx`.
-- **`FlowerPlanPaymentProcessor`**: Encapsulates the logic for initiating Stripe payment intents and rendering the `CheckoutForm`, used by `Step7PaymentPage.tsx` and `UserDashboardPaymentPage.tsx`.
+- **`UpfrontPlanPaymentProcessor`**: Encapsulates the logic for initiating Stripe payment intents and rendering the `CheckoutForm`, used by `Step7PaymentPage.tsx` and `UserDashboardPaymentPage.tsx`.
 - **UI Components:** Standard UI elements from `shadcn/ui` (like `Card`, `Button`, `Spinner`) and custom components like `Seo` and `BackButton` are used consistently across both flows.
 
 ### Component Architecture Philosophy
-Our architectural approach prioritizes maintaining dedicated page components for distinct user flows (e.g., initial booking flow vs. dashboard-based plan management). This explicit separation clearly delineates user journeys and contexts within the application. However, to prevent code duplication and promote maintainability, we consistently extract common logic, data fetching, and UI patterns into robust, context-aware "Editor" or "Processor" components (such as `StructureEditor`, `MessagesEditor`, and `FlowerPlanPaymentProcessor`). These reusable components are then utilized by the dedicated page components, ensuring high code reuse without compromising the clarity of each user flow. This strategy enhances modularity, simplifies testing, and makes the codebase more scalable and easier to understand for developers.
+Our architectural approach prioritizes maintaining dedicated page components for distinct user flows (e.g., initial booking flow vs. dashboard-based plan management). This explicit separation clearly delineates user journeys and contexts within the application. However, to prevent code duplication and promote maintainability, we consistently extract common logic, data fetching, and UI patterns into robust, context-aware "Editor" or "Processor" components (such as `StructureEditor`, `MessagesEditor`, and `UpfrontPlanPaymentProcessor`). These reusable components are then utilized by the dedicated page components, ensuring high code reuse without compromising the clarity of each user flow. This strategy enhances modularity, simplifies testing, and makes the codebase more scalable and easier to understand for developers.

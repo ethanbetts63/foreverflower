@@ -1,4 +1,4 @@
-// foreverflower/frontend/src/components/FlowerPlanPaymentProcessor.tsx
+// foreverflower/frontend/src/components/UpfrontPlanPaymentProcessor.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, Navigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
@@ -83,7 +83,7 @@ const UpfrontPlanPaymentProcessor: React.FC<UpfrontPlanPaymentProcessorProps> = 
     const [error, setError] = useState<string | null>(null);
     const hasCreatedPaymentIntentRef = useRef(false);
     
-    const [newPlanDetails, setNewPlanDetails] = useState<PartialFlowerPlan & { amount: number } | undefined>(undefined);
+    const [newPlanDetails, setNewPlanDetails] = useState<PartialUpfrontPlan & { amount: number } | undefined>(undefined);
 
     useEffect(() => {
         if (!planId) {

@@ -1,8 +1,8 @@
 // foreverflower/frontend/src/components/PlanDisplay.tsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getFlowerPlan, getColors, getFlowerTypes } from '@/api';
-import type { FlowerPlan, Color, FlowerType } from '@/api';
+import { getUpfrontPlan, getColors, getFlowerTypes } from '@/api';
+import type { UpfrontPlan, Color, FlowerType } from '@/api';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils import timezone
 from users.models import User
 from users.utils.hash_value import hash_value
-from events.models import OrderBase, UpfrontPlan
+from events.models import UpfrontPlan
 from events.models.event import Event
 
 
@@ -25,7 +25,7 @@ def anonymize_user(user: User):
         print("Warning: HASHING_SALT not configured in settings. Skipping anonymization.")
         return
 
-    # --- Step 1: Handle Flowerplans and Events ---
+    # --- Step 1: Handle UpfrontPlans and Events ---
     # Delete all non-active flower plans
     UpfrontPlan.objects.filter(user=user, status='pending_payment').delete()
 
@@ -35,7 +35,7 @@ def anonymize_user(user: User):
         # Delete non-completed events for this plan
         plan.events.exclude(status='delivered').delete()
 
-        # Hash and wipe recipient PII on the FlowerPlan
+        # Hash and wipe recipient PII on the upfront plan
         pii_recipient_fields_to_hash = {
             'recipient_first_name': 'hash_recipient_first_name',
             'recipient_last_name': 'hash_recipient_last_name',
