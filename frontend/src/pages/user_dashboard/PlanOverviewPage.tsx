@@ -23,7 +23,7 @@ const PlanOverviewPage = () => {
           <PlanDisplay fallbackNavigationPath="/dashboard/flower-plans">
             {({ plan, colorMap, flowerTypeMap }) => (
               <>
-                {!plan.is_active && planId && <PlanActivationBanner planId={planId} />}
+                {plan.status !== 'active' && planId && <PlanActivationBanner planId={planId} />}
                 <div className="space-y-8 mt-4">
                   <Card className="w-full bg-white shadow-md border-none text-black">
                     <CardHeader>

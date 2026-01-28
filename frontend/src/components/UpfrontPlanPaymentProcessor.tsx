@@ -134,6 +134,9 @@ const UpfrontPlanPaymentProcessor: React.FC<UpfrontPlanPaymentProcessorProps> = 
 
             return createPaymentIntent(payload);
         })
+        .then(data => {
+            setClientSecret(data.clientSecret);
+        })
         .catch(err => {
             console.error(err);
             setError(err.message || 'Failed to load upfront plan details or initialize payment.');
