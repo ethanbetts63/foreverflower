@@ -7,13 +7,13 @@ This document outlines the complete, detailed flow for creating and paying for a
 The user journey begins with account creation and proceeds through a multi-step flow to define and pay for a flower plan.
 
 ### Step 1: Account Creation & Plan Initialization
-- **Action:** The user's journey to create a plan starts by navigating to `/event-gate`. This is the universal entry point for starting a new plan, regardless of whether the user is logged in or not.
+- **Action:** The user's journey to create a plan starts by navigating to `/event-gate` after they hit any order button across the site. This is the universal entry point for starting a new plan, regardless of whether the user is logged in or not.
 - **`EventGate.tsx`:** This component acts as a gatekeeper for the event creation flow.
     - **Authentication Check:** It verifies if the user is logged in. If not, it redirects them to the account creation page (`/book-flow/create-account`). A new user will register and then be sent back to the `/event-gate` upon login.
     - **API Call:** If the user is authenticated, it calls the `getOrCreateInactiveFlowerPlan` function. This function sends a `GET` request to the backend endpoint at `/api/events/flower-plans/get-or-create-inactive/`.
 - **`get_or_create_inactive_plan_view.py`:**
     - **Backend Logic:** This view handles the request from the `EventGate`. It searches for an existing `FlowerPlan` for the authenticated user that is marked as `is_active=False`.
-    - If an inactive plan is found, it returns that plan's data. This allows a user to pick up where they left off.
+    - If an inactive plan is found, it returns that plan's data. This allows a user to pick up where they left off. Inactive essentially just means unpayed for. 
     - If no inactive plan exists, it creates a new `FlowerPlan` instance, associates it with the user, sets `is_active=False`, and returns the data for the newly created plan.
 - **Navigation:** The `EventGate` receives the plan data from the backend and then navigates the user to the next step of the flow at `/book-flow/flower-plan/${plan.id}/recipient`, ready for them to start filling out the details.
 
