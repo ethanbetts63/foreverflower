@@ -1,16 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react';
 import * as api from '@/api';
 import type { AuthResponse, UserProfile } from '@/types';
-
-// --- Type Definitions ---
-interface AuthContextType {
-  user: UserProfile | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  loginWithPassword: (email: string, password: string) => Promise<void>;
-  handleLoginSuccess: (authResponse: AuthResponse) => Promise<void>;
-  logout: (onLogoutSuccess?: () => void) => void;
-}
+import type { AuthContextType } from '../types/context';
 
 // --- Context Creation ---
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

@@ -1,14 +1,6 @@
 import React, { createContext, useState, useContext, type ReactNode } from 'react';
 
-export interface NavItem {
-    to: string;
-    label: string;
-}
-
-interface NavigationContextType {
-    dashboardNavItems: NavItem[];
-    setDashboardNavItems: (items: NavItem[]) => void;
-}
+import type { NavItem, NavigationContextType } from '../types/context';
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 

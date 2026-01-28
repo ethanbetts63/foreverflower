@@ -1,14 +1,9 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import { getAppConfig } from '@/api';
 import type { AppConfig } from '@/types';
+import type { ConfigContextType } from '../types/context';
 
 // --- Type Definitions ---
-interface ConfigContextType {
-  config: AppConfig | null;
-  isLoading: boolean;
-  error: string | null;
-  loadConfig: () => Promise<void>;
-}
 
 // --- Context Creation ---
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);

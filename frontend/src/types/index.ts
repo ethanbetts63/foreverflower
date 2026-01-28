@@ -20,8 +20,3 @@ export type { Color, FlowerType, UpfrontPlan, CreateUpfrontPlanPayload, PartialU
 
 // Export types from users.ts
 export type { UserProfile } from './users';
-
-// ProfileCreationData is assumed to be defined in forms/ProfileCreationForm.ts
-// and will be imported directly where needed, or its definition could be moved here
-// if that file is purely for type definitions and we decide to centralize it.
-// export type { ProfileCreationData } from './users'; // or from a dedicated forms.ts
