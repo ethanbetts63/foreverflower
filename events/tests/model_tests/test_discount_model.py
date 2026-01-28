@@ -56,13 +56,15 @@ def test_discount_ordering():
     Test that discounts are ordered by date_created in descending order.
     """
     # Create discounts with different creation times
-    old_discount = DiscountFactory(date_created=timezone.now() - timedelta(days=5))
-    new_discount = DiscountFactory(date_created=timezone.now() - timedelta(days=1))
-    mid_discount = DiscountFactory(date_created=timezone.now() - timedelta(days=3))
+    now = timezone.now()
+    old_discount = DiscountFactory(date_created=now - timedelta(days=5), code="OLD")
+    mid_discount = DiscountFactory(date_created=now - timedelta(days=3), code="MID")
+    new_discount = DiscountFactory(date_created=now - timedelta(days=1), code="NEW")
 
-    # Retrieve all discounts and check their order
+    # Retrieve all discounts and check their order by code
     discounts = Discount.objects.all()
-    assert list(discounts) == [new_discount, mid_discount, old_discount]
+    # Expecting order: new_discount, mid_discount, old_discount
+    assert [d.code for d in discounts] == [new_discount.code, mid_discount.code, old_discount.code]
 
 @pytest.mark.django_db
 def test_discount_code_uniqueness():

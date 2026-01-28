@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils import timezone
 from users.models import User
 from users.utils.hash_value import hash_value
-from events.models.flower_plan import FlowerPlan
+from events.models import OrderBase, UpfrontPlan
 from events.models.event import Event
 
 
@@ -11,7 +11,7 @@ def anonymize_user(user: User):
     Orchestrates the full user anonymization process.
 
     This function implements the steps defined in the user deletion workflow:
-    1. Deletes all pending Flowerplans and anonymizes active ones.
+    1. Deletes all pending UpfrontPlans and anonymizes active ones.
     2. Hashes all personally identifiable information (PII) into `hash_` fields.
     3. Wipes the original PII fields.
     4. Replaces the unique email field with a placeholder.
@@ -27,10 +27,10 @@ def anonymize_user(user: User):
 
     # --- Step 1: Handle Flowerplans and Events ---
     # Delete all non-active flower plans
-    FlowerPlan.objects.filter(user=user, is_active=False).delete()
+    UpfrontPlan.objects.filter(user=user, status='pending_payment').delete()
 
     # Anonymize active flower plans
-    active_plans = FlowerPlan.objects.filter(user=user, is_active=True)
+    active_plans = UpfrontPlan.objects.filter(user=user, status='active')
     for plan in active_plans:
         # Delete non-completed events for this plan
         plan.events.exclude(status='delivered').delete()
