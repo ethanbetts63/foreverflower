@@ -110,12 +110,12 @@ const BookingConfirmationPage = () => {
               plan={plan}
               colorMap={colorMap}
               flowerTypeMap={flowerTypeMap}
-              editUrl={`/book-flow/flower-plan/${planId}/preferences`}
+              editUrl={`/dashboard/plans/${planId}/edit-preferences`}
             />
 
             <MessagesCard 
               plan={plan}
-              editUrl={`/book-flow/flower-plan/${planId}/add-message`}
+              editUrl={`/dashboard/plans/${planId}/edit-messages`}
             />
 
             {/* Pricing Summary */}
