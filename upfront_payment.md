@@ -100,8 +100,8 @@ The Django backend handles the business logic, data persistence, and communicati
     - Finds the local `Payment` record using the `stripe_payment_intent_id`.
     - Updates the `Payment` record's `status` to `'succeeded'`.
     - Retrieves the `UpfrontPlan` using the `upfront_plan_id` from the webhook metadata, and its `OrderBase` parent instance (`orderbase_ptr`).
-    - **Activates the plan** by setting `is_active` to `True`.
-    - If the payment was for a plan modification, it updates the `UpfrontPlan`'s budget, years, and delivery frequency based on the metadata passed in the `PaymentIntent`.
+    - **Activates the plan** by setting `status` to `'active'`.
+    - If the payment was for a plan modification, it updates the `UpfrontPlan`'s relevant fields (e.g., budget, years, delivery frequency) based on the metadata passed in the `PaymentIntent`).
     - Sends a notification to the site admin about the successful payment.
 
 ## 3. Backend: Pricing Calculation
