@@ -22,13 +22,13 @@ const EditMessagesPage = lazy(() => import('./pages/user_dashboard/EditMessagesP
 const UserDashboardPaymentPage = lazy(() => import('./pages/user_dashboard/UserDashboardPaymentPage'));
 
 const EventGate = lazy(() => import('@/components/EventGate'));
-const Step1CreateAccountPage = lazy(() => import('./pages/flow/Step1CreateAccountPage'));
-const Step2RecipientPage = lazy(() => import('./pages/flow/Step2RecipientPage'));
-const Step3PreferenceSelectionPage = lazy(() => import('./pages/flow/Step3PreferenceSelectionPage'));
-const Step4CustomMessagePage = lazy(() => import('./pages/flow/Step4CustomMessagePage'));
-const Step5StructurePage = lazy(() => import('./pages/flow/Step5StructurePage'));
-const Step6BookingConfirmationPage = lazy(() => import('./pages/flow/Step6BookingConfirmationPage'));
-const Step7PaymentPage = lazy(() => import('./pages/flow/Step7PaymentPage'));
+const Step1CreateAccountPage = lazy(() => import('./pages/upfront_flow/Step1CreateAccountPage'));
+const Step2RecipientPage = lazy(() => import('./pages/upfront_flow/Step2RecipientPage'));
+const Step3PreferenceSelectionPage = lazy(() => import('./pages/upfront_flow/Step3PreferenceSelectionPage'));
+const Step4CustomMessagePage = lazy(() => import('./pages/upfront_flow/Step4CustomMessagePage'));
+const Step5StructurePage = lazy(() => import('./pages/upfront_flow/Step5StructurePage'));
+const Step6BookingConfirmationPage = lazy(() => import('./pages/upfront_flow/Step6BookingConfirmationPage'));
+const Step7PaymentPage = lazy(() => import('./pages/upfront_flow/Step7PaymentPage'));
 
 const PaymentStatusPage = lazy(() => import('./pages/PaymentStatusPage'));
 const BlocklistSuccessPage = lazy(() => import('./pages/BlocklistSuccessPage'));
