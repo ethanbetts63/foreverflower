@@ -10,7 +10,7 @@
  * @param wait The number of milliseconds to delay.
  * @returns A new debounced function with a `cancel` method.
  */
-import { DebouncedFunction } from '../types/utils';
+import type { DebouncedFunction } from '../types/utils';
 
 export function debounce<T extends (...args: any[]) => any>(func: T, wait: number): DebouncedFunction<T> {
     let timeout: ReturnType<typeof setTimeout> | null = null;

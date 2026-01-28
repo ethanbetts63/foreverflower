@@ -3,19 +3,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 
-export interface PlanStructureData {
-  budget: number;
-  deliveries_per_year: number;
-  years: number;
-  start_date: string;
-}
-
-interface PlanStructureFormProps {
-  formData: PlanStructureData;
-  onFormChange: (field: keyof PlanStructureData, value: number | string) => void;
-  setIsDebouncePending?: (isPending: boolean) => void;
-  title?: string;
-}
+import type { PlanStructureData, PlanStructureFormProps } from '../types/forms';
 
 const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
   formData,

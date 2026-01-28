@@ -4,22 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
 // This could be defined in a shared types file later
-export interface RecipientData {
-  recipient_first_name: string;
-  recipient_last_name: string;
-  recipient_street_address: string;
-  recipient_suburb: string;
-  recipient_city: string;
-  recipient_state: string;
-  recipient_postcode: string;
-  recipient_country: string;
-}
-
-interface RecipientFormProps {
-  formData: RecipientData;
-  onFormChange: (field: keyof RecipientData, value: string) => void;
-  title?: string;
-}
+import type { RecipientData, RecipientFormProps } from '../types/forms';
 
 const RecipientForm: React.FC<RecipientFormProps> = ({
   formData,

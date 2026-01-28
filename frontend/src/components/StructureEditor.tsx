@@ -7,9 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import Seo from '@/components/Seo';
 import { toast } from 'sonner';
-import { getUpfrontPlan, updateUpfrontPlan } from '@/api';
+import { getUpfrontPlan, updateUpfrontPlan, calculateUpfrontPriceForPlan } from '@/api';
 import type { UpfrontPlan, PartialUpfrontPlan } from '@/types';
-import { authedFetch } from '@/apiClient';
 import PlanStructureForm, { type PlanStructureData } from '@/forms/PlanStructureForm';
 import BackButton from '@/components/BackButton';
 import { debounce } from '@/utils/debounce';
@@ -95,15 +94,7 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
         setAmountOwing(null);
 
         try {
-            const response = await authedFetch(`/api/events/upfront-plans/${planId}/calc-upfront-price/`, {
-                method: 'POST',
-                body: JSON.stringify({ budget, deliveries_per_year: deliveries, years }),
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Something went wrong during price calculation.');
-            }
-            const data = await response.json();
+            const data = await calculateUpfrontPriceForPlan(planId, { budget, deliveries_per_year: deliveries, years });
             setAmountOwing(data.amount_owing);
         } catch (err: any) {
             setCalculationError(err.message);

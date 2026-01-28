@@ -228,12 +228,94 @@ export async function createUpfrontPlan(planData: CreateUpfrontPlanPayload): Pro
 
 
 export async function updateUpfrontPlan(planId: string, planData: PartialUpfrontPlan): Promise<UpfrontPlan> {
+
+
+
     const response = await authedFetch(`/api/events/upfront-plans/${planId}/`, {
+
+
+
         method: 'PATCH',
+
+
+
         body: JSON.stringify(planData),
+
+
+
     });
+
+
+
     return handleResponse(response);
+
+
+
 }
+
+
+
+
+
+
+
+type CalculateUpfrontPriceForPlanPayload = {
+
+
+
+  budget: number;
+
+
+
+  deliveries_per_year: number;
+
+
+
+  years: number;
+
+
+
+}
+
+
+
+
+
+
+
+export async function calculateUpfrontPriceForPlan(planId: string, payload: CalculateUpfrontPriceForPlanPayload): Promise<{ amount_owing: number }> {
+
+
+
+  const response = await authedFetch(`/api/events/upfront-plans/${planId}/calc-upfront-price/`, {
+
+
+
+    method: 'POST',
+
+
+
+    headers: { 'Content-Type': 'application/json' },
+
+
+
+    body: JSON.stringify(payload),
+
+
+
+  });
+
+
+
+  return handleResponse(response);
+
+
+
+}
+
+
+
+
 
 
 

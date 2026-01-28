@@ -3,10 +3,7 @@ import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
-interface CheckoutFormProps {
-  planId: string;
-  source?: string;
-}
+import type { CheckoutFormProps } from '../types/forms';
 
 const CheckoutForm: React.FC<CheckoutFormProps> = ({ planId, source }) => {
   const stripe = useStripe();
