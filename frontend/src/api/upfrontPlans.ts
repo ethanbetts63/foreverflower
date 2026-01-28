@@ -2,12 +2,7 @@
 import { authedFetch } from './apiClient';
 import { handleResponse } from './helpers';
 import type { UpfrontPlan, CreateUpfrontPlanPayload, PartialUpfrontPlan } from "@/types";
-
-type CalculateUpfrontPriceForPlanPayload = {
-  budget: number;
-  deliveries_per_year: number;
-  years: number;
-}
+import type { CalculatePlanPayload } from '../types/forms';
 
 export async function getUpfrontPlan(planId: string): Promise<UpfrontPlan> {
     const response = await authedFetch(`/api/events/upfront-plans/${planId}/`);
@@ -47,7 +42,7 @@ export async function updateUpfrontPlan(planId: string, planData: PartialUpfront
     return handleResponse(response);
 }
 
-export async function calculateUpfrontPriceForPlan(planId: string, payload: CalculateUpfrontPriceForPlanPayload): Promise<{ amount_owing: number }> {
+export async function calculateUpfrontPriceForPlan(planId: string, payload: CalculatePlanPayload): Promise<{ amount_owing: number }> {
   const response = await authedFetch(`/api/events/upfront-plans/${planId}/calc-upfront-price/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

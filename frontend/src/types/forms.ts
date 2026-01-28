@@ -1,3 +1,5 @@
+import type { UserProfile } from './users';
+
 export interface ProfileCreationData {
     first_name: string;
     last_name: string;
@@ -64,3 +66,9 @@ export interface CheckoutFormProps {
   planId: string;
   source?: string;
 }
+
+export type CalculatePlanPayload = {
+  budget: number;
+  deliveries_per_year: number;
+  years: number;
+};

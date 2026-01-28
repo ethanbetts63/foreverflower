@@ -1,6 +1,6 @@
 // frontend/src/components/flow/EventCreationForm.tsx
 import React from 'react';
-import { useForm, type Resolver, type FieldErrors } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from '@/components/ui/textarea';
@@ -11,7 +11,6 @@ import type { EventCreationData, EventCreationFormProps } from '../types/forms';
 
 export const EventCreationForm: React.FC<EventCreationFormProps> = ({ initialData, onSubmit }) => {
     const form = useForm<EventCreationData>({
-        resolver: eventFormResolver,
         defaultValues: {
             weeks_in_advance: 4,
             ...initialData,

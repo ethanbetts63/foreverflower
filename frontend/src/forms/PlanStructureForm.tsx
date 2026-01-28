@@ -3,7 +3,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 
-import type { PlanStructureData, PlanStructureFormProps } from '../types/forms';
+import type { PlanStructureFormProps } from '../types/forms';
 
 const PlanStructureForm: React.FC<PlanStructureFormProps> = ({
   formData,

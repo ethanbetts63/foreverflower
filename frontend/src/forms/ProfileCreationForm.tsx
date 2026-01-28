@@ -1,6 +1,6 @@
 // frontend/src/components/flow/ProfileCreationForm.tsx
 import React from 'react';
-import { useForm, type Resolver, type FieldErrors } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -9,7 +9,6 @@ import type { ProfileCreationData, ProfileCreationFormProps } from '../types/for
 
 export const ProfileCreationForm: React.FC<ProfileCreationFormProps> = ({ initialData, onSubmit }) => {
     const form = useForm<ProfileCreationData>({
-        resolver: profileFormResolver, // Use the custom resolver
         defaultValues: initialData,
     });
 

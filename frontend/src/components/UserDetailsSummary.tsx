@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { UserProfile } from '@/types';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import EditButton from '@/components/EditButton';
 
