@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { authedFetch } from '@/apiClient';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'; // Card is not used inside renderContent, but in the original component, so we keep it if the component might be wrapped in a card. For now, we will not wrap it in a card.
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { showErrorToast } from '@/utils/utils';
 import { Button } from '@/components/ui/button';
 import { Eye } from 'lucide-react';
+import { getUpfrontPlans } from '@/api'; // Import getUpfrontPlans
 
 import { type UpfrontPlan } from '@/types';
 
@@ -24,11 +24,7 @@ const UpfrontPlanTable: React.FC<UpfrontPlanTableProps> = ({ showTitle = true, i
     if (!initialPlans) { // Only fetch if initialPlans are not provided
       const fetchPlans = async () => {
         try {
-          const response = await authedFetch('/api/events/upfront-plans/');
-          if (!response.ok) {
-            throw new Error('Failed to fetch upfront plans.');
-          }
-          const data: UpfrontPlan[] = await response.json();
+          const data: UpfrontPlan[] = await getUpfrontPlans(); // Use the imported function
           setPlans(data);
         } catch (err: any) {
           setError(err.message || 'An unexpected error occurred.');

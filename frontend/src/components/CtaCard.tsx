@@ -7,15 +7,10 @@ import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { debounce } from '@/utils/debounce'; // Import debounce utility
+import { calculatePrice, PriceBreakdown } from '@/api';
 
 // Define a type for the breakdown for better type safety
-type Breakdown = {
-  fee_per_delivery: number;
-  years: number;
-  deliveries_per_year: number;
-  upfront_savings_percentage: number;
-  // include other properties if needed
-};
+type Breakdown = PriceBreakdown;
 
 export const CtaCard: React.FC = () => {
   const [view, setView] = useState<'upfront' | 'subscription'>('upfront');
@@ -59,17 +54,11 @@ export const CtaCard: React.FC = () => {
     setBreakdown(null);
 
     try {
-      const response = await fetch('/api/events/calculate-price/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          budget: currentBudget,
-          deliveries_per_year: currentDeliveries,
-          years: currentYears,
-        }),
+      const data = await calculatePrice({
+        budget: currentBudget,
+        deliveries_per_year: currentDeliveries,
+        years: currentYears,
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Something went wrong');
       setUpfrontPrice(data.upfront_price);
       setBreakdown(data.breakdown);
     } catch (err: any) {

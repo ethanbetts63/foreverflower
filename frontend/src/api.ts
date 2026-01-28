@@ -65,6 +65,29 @@ export async function claimAccount(password: string): Promise<{ detail: string }
   return handleResponse(response);
 }
 
+type PasswordResetConfirmPayload = {
+  password: string;
+  password_confirm: string;
+}
+
+export async function confirmPasswordReset(uid: string, token: string, passwordData: PasswordResetConfirmPayload): Promise<{ detail: string }> {
+  const response = await fetch(`/api/users/password-reset/confirm/${uid}/${token}/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(passwordData),
+  });
+  return handleResponse(response);
+}
+
+export async function requestPasswordReset(email: string): Promise<{ detail: string }> {
+  const response = await fetch('/api/users/password-reset/request/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+  return handleResponse(response);
+}
+
 // --- Legal Endpoints ---
 
 export async function getLatestTermsAndConditions(): Promise<TermsAndConditions> {
@@ -126,6 +149,30 @@ export async function activateFreeEvent(eventId: number): Promise<DeliveryEvent>
         method: 'POST',
     });
     return handleResponse(response);
+}
+
+// Define type for breakdown structure from API response
+type PriceBreakdown = {
+  fee_per_delivery: number;
+  years: number;
+  deliveries_per_year: number;
+  upfront_savings_percentage: number;
+  // include other properties if needed
+};
+
+type CalculatePricePayload = {
+  budget: number;
+  deliveries_per_year: number;
+  years: number;
+}
+
+export async function calculatePrice(payload: CalculatePricePayload): Promise<{ upfront_price: number; breakdown: PriceBreakdown }> {
+  const response = await fetch('/api/events/calculate-price/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  return handleResponse(response);
 }
 
 // --- UpfrontPlan Endpoints ---
