@@ -17,4 +17,4 @@ class EventViewSet(viewsets.ModelViewSet):
         authenticated user, accessed via their flower plans.
         """
         user = self.request.user
-        return Event.objects.filter(flower_plan__user=user)
+        return Event.objects.filter(order__user=user)

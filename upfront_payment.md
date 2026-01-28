@@ -86,10 +86,9 @@ The Django backend handles the business logic, data persistence, and communicati
 - **View:** `CreatePaymentIntentView`
 - **Endpoint:** `/api/payments/create-payment-intent/`
 - **Logic:**
-    - Receives the `flower_plan_id` and, potentially, updated plan details (budget, deliveries, years, amount) from the frontend.
-    - Finds the corresponding `FlowerPlan`.
-    - Creates a Stripe `PaymentIntent` with the `total_amount` (either the plan's original total or the new calculated amount for modifications). Metadata, including `flower_plan_id`, `user_id`, and plan structure details (especially for modifications), is attached to the intent.
-    - Creates a `Payment` record in the database, linking it to the user and `FlowerPlan`, and setting its initial `status` to `'pending'`.
+    - Receives the `upfront_plan_id` and, potentially, updated plan details (budget, deliveries, years, amount) from the frontend.
+    - Creates a Stripe `PaymentIntent` with the `total_amount` (either the plan's original total or the new calculated amount for modifications). Metadata, including `upfront_plan_id`, `user_id`, and plan structure details (especially for modifications), is attached to the intent.
+    - Creates a `Payment` record in the database, linking it to the user and `UpfrontPlan`, and setting its initial `status` to `'pending'`.
     - Returns the `clientSecret` of the `PaymentIntent` to the frontend.
 
 ### `stripe_webhook.py`
@@ -100,9 +99,9 @@ The Django backend handles the business logic, data persistence, and communicati
     - Retrieves the `PaymentIntent` object from the event payload.
     - Finds the local `Payment` record using the `stripe_payment_intent_id`.
     - Updates the `Payment` record's `status` to `'succeeded'`.
-    - Retrieves the `FlowerPlan` using the `flower_plan_id` from the webhook metadata.
+    - Retrieves the `UpfrontPlan` using the `upfront_plan_id` from the webhook metadata.
     - **Activates the plan** by setting `is_active` to `True`.
-    - If the payment was for a plan modification, it updates the `FlowerPlan`'s budget, years, and delivery frequency based on the metadata passed in the `PaymentIntent`.
+    - If the payment was for a plan modification, it updates the `UpfrontPlan`'s budget, years, and delivery frequency based on the metadata passed in the `PaymentIntent`.
     - Sends a notification to the site admin about the successful payment.
 
 ## 3. Backend: Pricing Calculation

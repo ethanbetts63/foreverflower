@@ -75,9 +75,9 @@ class TestForeverFlowerUpfrontPrice:
 class TestCalculateFinalPlanCost:
     """Tests for the calculate_final_plan_cost function."""
 
-    def test_new_plan_no_flower_plan(self):
+    def test_new_plan_no_upfront_plan(self):
         new_structure = {'budget': 100, 'deliveries_per_year': 4, 'years': 5}
-        result = calculate_final_plan_cost(None, new_structure) # Passing None for flower_plan
+        result = calculate_final_plan_cost(None, new_structure) # Passing None for upfront_plan
 
         expected_new_total_price, _ = forever_flower_upfront_price(**new_structure)
 
@@ -88,7 +88,7 @@ class TestCalculateFinalPlanCost:
     def test_existing_inactive_plan_no_payments(self):
         upfront_plan = UpfrontPlanFactory(status='pending_payment')
         new_structure = {'budget': 100, 'deliveries_per_year': 4, 'years': 5}
-        result = calculate_final_plan_cost(flower_plan, new_structure)
+        result = calculate_final_plan_cost(upfront_plan, new_structure)
 
         expected_new_total_price, _ = forever_flower_upfront_price(**new_structure)
 

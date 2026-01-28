@@ -148,11 +148,11 @@ const StructureEditor: React.FC<StructureEditorProps> = ({
 
         setIsSaving(true);
         try {
-            const payload: PartialFlowerPlan = { ...formData, budget: String(formData.budget) };
+            const payload: PartialUpfrontPlan = { ...formData, budget: String(formData.budget) };
             if (mode === 'create') {
                 payload.total_amount = amountOwing ?? undefined;
             }
-            await updateFlowerPlan(planId, payload);
+            await updateUpfrontPlan(planId, payload);
             if (mode === 'edit') {
                 toast.success("Plan structure updated successfully!");
             }

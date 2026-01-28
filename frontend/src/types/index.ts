@@ -24,7 +24,7 @@ export interface EventCreationResponse {
 
 export interface Event {
     id: number;
-    flower_plan: number;
+    order: number;
     delivery_date: string;
     message: string | null;
     bouquet_preference: string | null;

@@ -10,7 +10,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = [
             'id',
-            'flower_plan',
+            'order',
             'delivery_date',
             'message',
             'bouquet_preference',
@@ -20,7 +20,7 @@ class EventSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             'id',
-            'flower_plan',
+            'order',
             'delivery_date',
             'status',
             'created_at',

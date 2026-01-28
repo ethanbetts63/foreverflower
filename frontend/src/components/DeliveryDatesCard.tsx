@@ -6,7 +6,7 @@ import EditButton from '@/components/EditButton';
 import type { UpfrontPlan } from '@/api';
 
 interface DeliveryDatesCardProps {
-    plan: FlowerPlan;
+    plan: UpfrontPlan;
     editUrl: string;
 }
 
