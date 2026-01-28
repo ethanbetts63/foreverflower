@@ -120,12 +120,12 @@ const PlanOverviewPage = () => {
               plan={plan}
               colorMap={colorMap}
               flowerTypeMap={flowerTypeMap}
-              editUrl={`/book-flow/flower-plan/${planId}/preferences?source=management`}
+              editUrl={`/dashboard/plans/${planId}/edit-preferences`}
             />
 
             <MessagesCard
               plan={plan}
-              editUrl={`/book-flow/flower-plan/${planId}/add-message?source=management`}
+              editUrl={`/dashboard/plans/${planId}/edit-messages`}
             />
 
             

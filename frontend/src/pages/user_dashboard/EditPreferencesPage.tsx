@@ -1,4 +1,4 @@
-// foreverflower/frontend/src/pages/flow/Step3PreferenceSelectionPage.tsx
+// foreverflower/frontend/src/pages/user_dashboard/EditPreferencesPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -13,15 +13,15 @@ import { ColorSwatch, SelectableTag } from '@/components/preferences';
 import { Separator } from '@/components/ui/separator';
 import BackButton from '@/components/BackButton';
 
-const Step3PreferenceSelectionPage: React.FC = () => {
+const EditPreferencesPage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
 
-    // Hard-coded values for creation context
-    const redirectPath = `/book-flow/flower-plan/${planId}/add-message`;
-    const backPath = `/book-flow/flower-plan/${planId}/structure`;
-    const saveButtonText = 'Save & Continue';
+    // Hard-coded values for editing context
+    const redirectPath = `/dashboard/plans/${planId}/overview`;
+    const backPath = `/dashboard/plans/${planId}/overview`;
+    const saveButtonText = 'Save Changes';
 
     // Data fetching state
     const [colors, setColors] = useState<Color[]>([]);
@@ -38,13 +38,13 @@ const Step3PreferenceSelectionPage: React.FC = () => {
 
     useEffect(() => {
         if (!isAuthenticated) {
-            toast.error("You must be logged in to create a plan.");
+            toast.error("You must be logged in to manage preferences.");
             navigate('/login');
             return;
         }
         if (!planId) {
             toast.error("No flower plan specified.");
-            navigate('/book-flow');
+            navigate('/dashboard'); // Redirect to dashboard if no planId
             return;
         }
 
@@ -95,6 +95,7 @@ const Step3PreferenceSelectionPage: React.FC = () => {
                 preferred_flower_types: preferredFlowerTypes.map(String),
                 rejected_flower_types: rejectedFlowerTypes.map(String),
             });
+            toast.success("Preferences saved successfully!");
             navigate(redirectPath); 
         } catch (err) {
             toast.error("Failed to save preferences. Please try again.");
@@ -102,11 +103,6 @@ const Step3PreferenceSelectionPage: React.FC = () => {
             setIsSaving(false);
         }
     };
-    
-    const handleSkip = () => {
-        toast.info("You can add preferences later from your dashboard.");
-        navigate(redirectPath);
-    }
 
     if (!isAuthenticated) return null;
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
@@ -115,26 +111,23 @@ const Step3PreferenceSelectionPage: React.FC = () => {
     return (
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-4xl py-12">
-                <Seo title="Select Preferences | ForeverFlower" />
+                <Seo title="Edit Preferences | ForeverFlower" />
                 <Card className="bg-white text-black border-none shadow-md">
                     <CardHeader>
                          <div className="flex justify-between items-start">
                             <div>
-                                <CardTitle className="text-3xl">Add Your Preferences (Optional)</CardTitle>
+                                <CardTitle className="text-3xl">Edit Your Preferences</CardTitle>
                                 <CardDescription className="text-black">
-                                    Let us know what they love and what they don't. This helps our florists create bouquets they'll adore.
+                                    Update the preferences for this plan. This helps our florists create bouquets they'll adore.
                                 </CardDescription>
                             </div>
-                             <Button variant="destructive" onClick={handleSkip} className="bg-transparent text-red-500 hover:bg-red-50 ml-4">
-                                Skip for Now
-                            </Button>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-8">
                         {/* Colors Section */}
                         <div>
                             <h3 className="text-xl font-semibold mb-2">Colors</h3>
-                            <p className="text-sm text-gray-600 mb-4">Optionally, choose colors you'd like to see more of in the bouquet, and any you'd like to avoid.</p>
+                            <p className="text-sm text-gray-600 mb-4">Choose colors you'd like to see more of in the bouquet, and any you'd like to avoid.</p>
                             <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                                 <div>
                                     <h4 className="font-medium mb-3 text-center">I'd love these colors</h4>
@@ -214,4 +207,4 @@ const Step3PreferenceSelectionPage: React.FC = () => {
     );
 };
 
-export default Step3PreferenceSelectionPage;
+export default EditPreferencesPage;

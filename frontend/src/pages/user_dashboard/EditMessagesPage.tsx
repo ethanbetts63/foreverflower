@@ -1,4 +1,4 @@
-// foreverflower/frontend/src/pages/flow/Step4CustomMessagePage.tsx
+// foreverflower/frontend/src/pages/user_dashboard/EditMessagesPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -14,15 +14,15 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from '@/components/ui/label';
 import BackButton from '@/components/BackButton';
 
-const Step4CustomMessagePage: React.FC = () => {
+const EditMessagesPage: React.FC = () => {
     const { planId } = useParams<{ planId: string }>();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
 
-    // Hard-coded values for creation context
-    const redirectPath = `/book-flow/flower-plan/${planId}/confirmation`;
-    const backPath = `/book-flow/flower-plan/${planId}/preferences`;
-    const saveButtonText = 'Next';
+    // Hard-coded values for editing context
+    const redirectPath = `/dashboard/plans/${planId}/overview`;
+    const backPath = `/dashboard/plans/${planId}/overview`;
+    const saveButtonText = 'Save Changes';
     
     // Core State
     const [flowerPlan, setFlowerPlan] = useState<FlowerPlan | null>(null);
@@ -44,7 +44,7 @@ const Step4CustomMessagePage: React.FC = () => {
         }
         if (!planId) {
             toast.error("No flower plan specified.");
-            navigate('/book-flow');
+            navigate('/dashboard');
             return;
         }
 
@@ -109,6 +109,7 @@ const Step4CustomMessagePage: React.FC = () => {
             }
             
             await Promise.all(promises);
+            toast.success("Messages saved successfully!");
             navigate(redirectPath);
         } catch (err: any) {
             toast.error("Failed to save messages.", { description: err.message });
@@ -117,30 +118,22 @@ const Step4CustomMessagePage: React.FC = () => {
         }
     };
 
-    const handleSkip = () => {
-        toast.info("You can add messages later from your dashboard.");
-        navigate(redirectPath);
-    };
-
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spinner className="h-12 w-12" /></div>;
     if (error) return <div className="text-center py-12 text-red-500">{error}</div>;
 
     return (
         <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--color4)' }}>
             <div className="container mx-auto max-w-4xl py-12">
-                <Seo title="Add Custom Messages | ForeverFlower" />
+                <Seo title="Edit Custom Messages | ForeverFlower" />
                 <Card className="bg-white text-black border-none shadow-md">
                     <CardHeader>
                         <div className="flex justify-between items-start">
                             <div>
-                                <CardTitle className="text-3xl">Add Custom Messages (Optional)</CardTitle>
+                                <CardTitle className="text-3xl">Edit Custom Messages</CardTitle>
                                 <CardDescription className="text-black">
-                                    Add a personal touch to your deliveries. You can write one message for all, or customize each one.
+                                    Update the personal messages for your deliveries. You can write one message for all, or customize each one.
                                 </CardDescription>
                             </div>
-                             <Button variant="destructive" onClick={handleSkip} className="bg-transparent text-red-500 hover:bg-red-50 ml-4">
-                                Skip for Now
-                            </Button>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-8">
@@ -201,4 +194,4 @@ const Step4CustomMessagePage: React.FC = () => {
     );
 };
 
-export default Step4CustomMessagePage;
+export default EditMessagesPage;
