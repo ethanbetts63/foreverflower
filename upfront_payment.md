@@ -124,20 +124,20 @@ The upfront price for a flower plan is not a simple sum of all deliveries. Inste
 
 These are the core Django models that store the data for the entire flow.
 
-### `events/models/flower_plan.py`
+### `events/models/orders.py`
 - **Model:** `UpfrontPlan`
-- **Purpose:** The central model that holds all information for a user's plan.
-- **Key Fields:** `user`, `is_active`, `start_date`, `budget`, `deliveries_per_year`, `years`, `total_amount`, recipient details, and links to preferences.
+- **Purpose:** The `UpfrontPlan` model inherits from `OrderBase`. `OrderBase` is the central model for all order-related information. `UpfrontPlan` holds information specific to upfront payment plans.
+- **Key Fields:** `user`, `status`, `start_date`, `budget`, `deliveries_per_year`, `years`, `total_amount`, recipient details, and links to preferences.
 
 ### `events/models/event.py`
 - **Model:** `Event`
-- **Purpose:** Represents a single, specific delivery within a `UpfrontPlan`.
-- **Key Fields:** `flower_plan` (foreign key), `delivery_date`, `message`, `status`.
+- **Purpose:** Represents a single, specific delivery within an `OrderBase` (specifically, an `UpfrontPlan` in this context).
+- **Key Fields:** `order` (foreign key), `delivery_date`, `message`, `status`.
 
 ### `payments/models/payment.py`
 - **Model:** `Payment`
 - **Purpose:** Records a payment transaction.
-- **Key Fields:** `user`, `flower_plan` (foreign key), `stripe_payment_intent_id`, `amount`, `status` (`pending`, `succeeded`, `failed`).
+- **Key Fields:** `user`, `order` (foreign key), `stripe_payment_intent_id`, `amount`, `status` (`pending`, `succeeded`, `failed`).
 
 ## 5. User Dashboard: Post-Payment Experience
 
