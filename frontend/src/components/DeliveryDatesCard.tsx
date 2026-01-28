@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarDays } from 'lucide-react';
 import EditButton from '@/components/EditButton';
-import type { UpfrontPlan } from '@/api';
+import type { UpfrontPlan, Event } from '@/types';
 
 interface DeliveryDatesCardProps {
     plan: UpfrontPlan;
@@ -11,7 +11,7 @@ interface DeliveryDatesCardProps {
 }
 
 const DeliveryDatesCard: React.FC<DeliveryDatesCardProps> = ({ plan, editUrl }) => {
-    const deliveryDates = plan.events?.map(e => e.delivery_date).sort((a, b) => new Date(a).getTime() - new Date(b).getTime()) || [];
+    const deliveryDates = plan.events?.map((e: Event) => e.delivery_date).sort((a: string, b: string) => new Date(a).getTime() - new Date(b).getTime()) || [];
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -33,7 +33,7 @@ const DeliveryDatesCard: React.FC<DeliveryDatesCardProps> = ({ plan, editUrl }) 
             <CardContent>
                 {deliveryDates.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm">
-                        {deliveryDates.map((date, index) => (
+                        {deliveryDates.map((date: string, index: number) => (
                             <div key={index} className="flex justify-between items-center py-1 border-b border-gray-100">
                                 <span className="font-semibold text-gray-600">Delivery {index + 1}</span>
                                 <span className="text-gray-800">{formatDate(date)}</span>

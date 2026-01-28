@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquareText, Repeat } from 'lucide-react';
 import EditButton from '@/components/EditButton';
-import type { UpfrontPlan } from '@/api';
+import type { UpfrontPlan, Event } from '@/types';
 
 interface MessagesCardProps {
     plan: UpfrontPlan;
@@ -12,7 +12,7 @@ interface MessagesCardProps {
 
 const MessagesCard: React.FC<MessagesCardProps> = ({ plan, editUrl }) => {
     // Get a list of all non-empty messages
-    const allMessages = plan.events?.map(e => e.message).filter((m): m is string => !!m) || [];
+    const allMessages = plan.events?.map((e: Event) => e.message).filter((m): m is string => !!m) || [];
     const uniqueMessages = new Set(allMessages);
 
     const hasMessages = allMessages.length > 0;
@@ -24,7 +24,7 @@ const MessagesCard: React.FC<MessagesCardProps> = ({ plan, editUrl }) => {
         }
 
         if (isSingleMessageForAll) {
-            const singleMessage = uniqueMessages.values().next().value;
+            const singleMessage: string = uniqueMessages.values().next().value;
             return (
                 <div className="p-4 bg-gray-50 rounded-lg">
                     <p className="font-semibold text-sm text-gray-800 flex items-center mb-2">
@@ -39,7 +39,7 @@ const MessagesCard: React.FC<MessagesCardProps> = ({ plan, editUrl }) => {
         // Default case: multiple different messages
         return (
             <ul className="space-y-4">
-                {plan.events.filter(e => e.message).map((event) => (
+                {plan.events.filter((e: Event) => e.message).map((event: Event) => (
                     <li key={event.id} className="p-4 bg-gray-50 rounded-lg">
                         <p className="font-semibold text-sm text-gray-800">
                             Delivery on {new Date(event.delivery_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

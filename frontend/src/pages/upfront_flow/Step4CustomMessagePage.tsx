@@ -12,7 +12,7 @@ const Step4CustomMessagePage: React.FC = () => {
             title="Add Custom Messages (Optional)"
             description="Add a personal touch to each delivery. You can use one message for all, or write a unique one for each occasion."
             saveButtonText="Save & Continue"
-            onSaveNavigateTo={`/book-flow/upfront-plan/${planId}/confirmation`}
+            onSaveNavigateTo={`/book-flow/upfront-plan/${planId}/structure`}
             backPath={`/book-flow/upfront-plan/${planId}/preferences`}
             showSkipButton={true}
         />
